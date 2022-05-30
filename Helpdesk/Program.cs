@@ -1,6 +1,8 @@
 using Helpdesk.Data;
+using Helpdesk.Infrastructure;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 using NETCore.MailKit.Extensions;
 using NETCore.MailKit.Infrastructure.Internal;
@@ -38,7 +40,7 @@ builder.Services.Configure<IdentityOptions>(options =>
     options.User.RequireUniqueEmail = true;
 });
 
-// Add authorization to the pipeline
+// Add authorization to the pipeline with a fallback to require logging in for everything.
 builder.Services.AddAuthorization(options =>
 {
     options.FallbackPolicy = new AuthorizationPolicyBuilder()
@@ -48,6 +50,8 @@ builder.Services.AddAuthorization(options =>
 
 // Add mailkit for easy email sending. Be sure to configure these settings in teh appsettings.json in the section "Email"
 builder.Services.AddMailKit(config => config.UseMailKit(builder.Configuration.GetSection("Email").Get<MailKitOptions>()));
+
+builder.Services.AddScoped<IEmailSender, EmailSender>();
 
 var app = builder.Build();
 
