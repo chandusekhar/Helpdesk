@@ -1,22 +1,23 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Helpdesk.Data;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Helpdesk.Pages
 {
     [AllowAnonymous]
-    public class IndexModel : PageModel
+    public class IndexModel : DI_BasePageModel
     {
-        private readonly ILogger<IndexModel> _logger;
-
-        public IndexModel(ILogger<IndexModel> logger)
+        public IndexModel(ApplicationDbContext dbContext,
+            ILogger<IndexModel> logger)
+            :base(dbContext, logger)
         {
-            _logger = logger;
+            
         }
 
-        public void OnGet()
+        public async Task OnGet()
         {
-
+            await LoadBranding(ViewData);
         }
     }
 }

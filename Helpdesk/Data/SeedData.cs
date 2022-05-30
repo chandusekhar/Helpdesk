@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Helpdesk.Infrastructure;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace Helpdesk.Data
@@ -11,6 +12,8 @@ namespace Helpdesk.Data
             using (var context = new ApplicationDbContext(
                 serviceProvider.GetRequiredService<DbContextOptions<ApplicationDbContext>>()))
             {
+                await EnsureConfigurationOptions(context);
+
                 // Manager
                 //var managerUid = await EnsureUser(serviceProvider, "manager@demo.com", password);
                 //await EnsureRole(serviceProvider, managerUid, Constants.InvoiceManagersRole);
@@ -20,6 +23,97 @@ namespace Helpdesk.Data
             }
 
         }
+
+        /// <summary>
+        /// Iterate over the Rollups until all patches have been applied, as identified by
+        /// there being no rollup index for the current database version.
+        /// </summary>
+        /// <param name="context"></param>
+        /// <returns></returns>
+        private static async Task EnsureConfigurationOptions(ApplicationDbContext context)
+        {
+            bool Done = false;
+            while (!Done)
+            {
+                ConfigOpt? dbVersion = await context.ConfigOpts
+                    .Where(x => x.Category == ConfigOptConsts.System_Version.Category &&
+                                x.Key == ConfigOptConsts.System_Version.Key)
+                    .FirstOrDefaultAsync();
+                if (dbVersion == null)
+                {
+                    dbVersion = new ConfigOpt()
+                    {
+                        Category = ConfigOptConsts.System_Version.Category,
+                        Key = ConfigOptConsts.System_Version.Key,
+                        Value = string.Empty
+                    };
+                }
+
+                // find a rollup index that matches this database version
+                var rollup = ConfigOptRollupCatalog.RollupIndex.Where(x => x.Version == dbVersion.Value).FirstOrDefault();
+                if (rollup == null)
+                {
+                    Done = true;
+                    break;
+                }
+
+                foreach (var item in rollup.Deletions)
+                {
+                    ConfigOpt? delOpt = await context.ConfigOpts
+                        .Where(x => x.Category == item.Category &&
+                                    x.Key == item.Key)
+                    .FirstOrDefaultAsync();
+                    if (delOpt != null)
+                    {
+                        context.ConfigOpts.Remove(delOpt);
+
+                    }
+                }
+                await context.SaveChangesAsync();
+                foreach (var item in rollup.Additions)
+                {
+                    ConfigOpt? addOpt = await context.ConfigOpts
+                        .Where(x => x.Category == item.Category &&
+                                    x.Key == item.Key).FirstOrDefaultAsync();
+
+                    if (addOpt == null)
+                    {
+                        context.ConfigOpts.Add(new ConfigOpt()
+                        {
+                            Category = item.Category,
+                            Key = item.Key,
+                            Value = item.Value,
+                            Order = item.Order
+                        });
+                    }
+                }
+                await context.SaveChangesAsync();
+                foreach (var item in rollup.Changes)
+                {
+                    ConfigOpt? chgOpt = await context.ConfigOpts
+                        .Where(x => x.Category == item.Category &&
+                                    x.Key == item.Key).FirstOrDefaultAsync();
+                    if (chgOpt == null)
+                    {
+                        context.ConfigOpts.Add(new ConfigOpt()
+                        {
+                            Category = item.Category,
+                            Key = item.Key,
+                            Value = item.Value,
+                            Order = item.Order
+                        });
+                    }
+                    else
+                    {
+                        chgOpt.Value = item.Value;
+                        chgOpt.Order = item.Order;
+                        context.ConfigOpts.Update(chgOpt);
+                    }
+                }
+                await context.SaveChangesAsync();
+            }
+        }
+        
 
         private static async Task<string> EnsureUser(
             IServiceProvider serviceProvider,
