@@ -7,6 +7,8 @@ using System.ComponentModel.DataAnnotations;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
+using Helpdesk.Data;
+using Helpdesk.Infrastructure;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
@@ -17,14 +19,17 @@ using Microsoft.AspNetCore.WebUtilities;
 namespace Helpdesk.Areas.Identity.Pages.Account
 {
     [AllowAnonymous]
-    public class ResendEmailConfirmationModel : PageModel
+    public class ResendEmailConfirmationModel : DI_BasePageModel
     {
-        private readonly UserManager<IdentityUser> _userManager;
         private readonly IEmailSender _emailSender;
 
-        public ResendEmailConfirmationModel(UserManager<IdentityUser> userManager, IEmailSender emailSender)
+        public ResendEmailConfirmationModel(
+            ApplicationDbContext dbContext,
+            UserManager<IdentityUser> userManager,
+            SignInManager<IdentityUser> signInManager,
+            IEmailSender emailSender)
+            : base(dbContext, userManager, signInManager)
         {
-            _userManager = userManager;
             _emailSender = emailSender;
         }
 
@@ -50,12 +55,14 @@ namespace Helpdesk.Areas.Identity.Pages.Account
             public string Email { get; set; }
         }
 
-        public void OnGet()
+        public async Task OnGet()
         {
+            await LoadBranding(ViewData);
         }
 
         public async Task<IActionResult> OnPostAsync()
         {
+            await LoadBranding(ViewData);
             if (!ModelState.IsValid)
             {
                 return Page();

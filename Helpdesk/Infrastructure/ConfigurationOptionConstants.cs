@@ -11,7 +11,8 @@
             new ConfigOptDefault("Login", "MFA QR Code Site Name");
         public static ConfigOptDefault Branding_SiteName =
             new ConfigOptDefault("Branding", "Site Name");
-
+        public static ConfigOptDefault Branding_OrganizationName =
+            new ConfigOptDefault("Branding", "Organization Name");
     }
 
     public class ConfigOptDefault
@@ -59,8 +60,9 @@
                 Additions = new List<ConfigOptDefault>()
                 {
                     new ConfigOptDefault("System", "Version", "1.0"),
-                    new ConfigOptDefault("Login", "MFA QR Code Site Name", "Helpdesk"),
-                    new ConfigOptDefault("Branding", "Site Name", "Helpdesk")
+                    new ConfigOptDefault("Login", "MFA QR Code Site Name", "Helpdesk", 1),
+                    new ConfigOptDefault("Branding", "Organization Name", "Our Organization", 0),
+                    new ConfigOptDefault("Branding", "Site Name", "Helpdesk", 1),
                 }
             }
         };

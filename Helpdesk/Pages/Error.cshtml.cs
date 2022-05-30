@@ -1,3 +1,6 @@
+using Helpdesk.Data;
+using Helpdesk.Infrastructure;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using System.Diagnostics;
@@ -6,21 +9,22 @@ namespace Helpdesk.Pages
 {
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
     [IgnoreAntiforgeryToken]
-    public class ErrorModel : PageModel
+    public class ErrorModel : DI_BasePageModel
     {
         public string? RequestId { get; set; }
 
         public bool ShowRequestId => !string.IsNullOrEmpty(RequestId);
 
-        private readonly ILogger<ErrorModel> _logger;
 
-        public ErrorModel(ILogger<ErrorModel> logger)
-        {
-            _logger = logger;
-        }
+        public ErrorModel(ApplicationDbContext dbContext,
+            UserManager<IdentityUser> userManager,
+            SignInManager<IdentityUser> signInManager)
+            : base(dbContext, userManager, signInManager)
+        { }
 
-        public void OnGet()
+        public async Task OnGet()
         {
+            await LoadBranding(ViewData);
             RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier;
         }
     }

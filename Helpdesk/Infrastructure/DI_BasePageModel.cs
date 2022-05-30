@@ -23,13 +23,13 @@ namespace Helpdesk.Infrastructure
 
         protected async Task LoadBranding(ViewDataDictionary viewData)
         {
-            ConfigOpt? siteName = await _context.ConfigOpts
+            ConfigOpt? opt = await _context.ConfigOpts
                 .Where(x => x.Category == ConfigOptConsts.Branding_SiteName.Category &&
                             x.Key == ConfigOptConsts.Branding_SiteName.Key)
                 .FirstOrDefaultAsync();
-            if (siteName == null)
+            if (opt == null)
             {
-                siteName = new ConfigOpt()
+                opt = new ConfigOpt()
                 {
                     Category = ConfigOptConsts.Branding_SiteName.Category,
                     Key = ConfigOptConsts.Branding_SiteName.Key,
@@ -37,8 +37,23 @@ namespace Helpdesk.Infrastructure
                     Order = null
                 };
             }
-            viewData["SiteName"] = siteName.Value;
+            viewData[BrandingStrings.Brand_SiteName] = opt.Value;
 
+            opt = await _context.ConfigOpts
+                .Where(x => x.Category == ConfigOptConsts.Branding_OrganizationName.Category &&
+                            x.Key == ConfigOptConsts.Branding_OrganizationName.Key)
+                .FirstOrDefaultAsync();
+            if (opt == null)
+            {
+                opt = new ConfigOpt()
+                {
+                    Category = ConfigOptConsts.Branding_OrganizationName.Category,
+                    Key = ConfigOptConsts.Branding_OrganizationName.Key,
+                    Value = "Our Organization",
+                    Order = null
+                };
+            }
+            viewData[BrandingStrings.Brand_OrganizationName] = opt.Value;
         }
     }
 }

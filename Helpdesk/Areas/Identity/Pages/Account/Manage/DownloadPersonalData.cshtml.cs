@@ -8,6 +8,8 @@ using System.Linq;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using Helpdesk.Data;
+using Helpdesk.Infrastructure;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -15,26 +17,24 @@ using Microsoft.Extensions.Logging;
 
 namespace Helpdesk.Areas.Identity.Pages.Account.Manage
 {
-    public class DownloadPersonalDataModel : PageModel
+    public class DownloadPersonalDataModel : DI_BasePageModel
     {
-        private readonly UserManager<IdentityUser> _userManager;
-        private readonly ILogger<DownloadPersonalDataModel> _logger;
 
-        public DownloadPersonalDataModel(
+        public DownloadPersonalDataModel(ApplicationDbContext dbContext,
             UserManager<IdentityUser> userManager,
-            ILogger<DownloadPersonalDataModel> logger)
-        {
-            _userManager = userManager;
-            _logger = logger;
-        }
+            SignInManager<IdentityUser> signInManager)
+            : base(dbContext, userManager, signInManager)
+        { }
 
-        public IActionResult OnGet()
+        public async Task<IActionResult> OnGet()
         {
+            await LoadBranding(ViewData);
             return NotFound();
         }
 
         public async Task<IActionResult> OnPostAsync()
         {
+            await LoadBranding(ViewData);
             return NotFound();
             //var user = await _userManager.GetUserAsync(User);
             //if (user == null)

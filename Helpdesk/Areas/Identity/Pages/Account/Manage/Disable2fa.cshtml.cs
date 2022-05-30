@@ -4,6 +4,8 @@
 
 using System;
 using System.Threading.Tasks;
+using Helpdesk.Data;
+using Helpdesk.Infrastructure;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -11,28 +13,21 @@ using Microsoft.Extensions.Logging;
 
 namespace Helpdesk.Areas.Identity.Pages.Account.Manage
 {
-    public class Disable2faModel : PageModel
+    public class Disable2faModel : DI_BasePageModel
     {
-        private readonly UserManager<IdentityUser> _userManager;
-        private readonly ILogger<Disable2faModel> _logger;
 
-        public Disable2faModel(
+        public Disable2faModel(ApplicationDbContext dbContext,
             UserManager<IdentityUser> userManager,
-            ILogger<Disable2faModel> logger)
-        {
-            _userManager = userManager;
-            _logger = logger;
-        }
+            SignInManager<IdentityUser> signInManager)
+            : base(dbContext, userManager, signInManager)
+        { }
 
-        /// <summary>
-        ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
-        ///     directly from your code. This API may change or be removed in future releases.
-        /// </summary>
         [TempData]
         public string StatusMessage { get; set; }
 
         public async Task<IActionResult> OnGet()
         {
+            await LoadBranding(ViewData);
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {
@@ -49,6 +44,7 @@ namespace Helpdesk.Areas.Identity.Pages.Account.Manage
 
         public async Task<IActionResult> OnPostAsync()
         {
+            await LoadBranding(ViewData);
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {
@@ -61,7 +57,6 @@ namespace Helpdesk.Areas.Identity.Pages.Account.Manage
                 throw new InvalidOperationException($"Unexpected error occurred disabling 2FA.");
             }
 
-            _logger.LogInformation("User with ID '{UserId}' has disabled 2fa.", _userManager.GetUserId(User));
             StatusMessage = "2fa has been disabled. You can reenable 2fa when you setup an authenticator app";
             return RedirectToPage("./TwoFactorAuthentication");
         }

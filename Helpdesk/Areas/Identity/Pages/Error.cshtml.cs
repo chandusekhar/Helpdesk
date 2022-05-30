@@ -3,7 +3,10 @@
 #nullable disable
 
 using System.Diagnostics;
+using Helpdesk.Data;
+using Helpdesk.Infrastructure;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
@@ -15,8 +18,13 @@ namespace Helpdesk.Areas.Identity.Pages
     /// </summary>
     [AllowAnonymous]
     [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-    public class ErrorModel : PageModel
+    public class ErrorModel : DI_BasePageModel
     {
+        public ErrorModel(ApplicationDbContext dbContext,
+            UserManager<IdentityUser> userManager,
+            SignInManager<IdentityUser> signInManager)
+            : base(dbContext, userManager, signInManager)
+        { }
         /// <summary>
         ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
         ///     directly from your code. This API may change or be removed in future releases.
@@ -33,8 +41,9 @@ namespace Helpdesk.Areas.Identity.Pages
         ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
         ///     directly from your code. This API may change or be removed in future releases.
         /// </summary>
-        public void OnGet()
+        public async Task OnGet()
         {
+            await LoadBranding(ViewData);
             RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier;
         }
     }

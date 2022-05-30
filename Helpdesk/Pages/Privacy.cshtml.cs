@@ -1,21 +1,24 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Helpdesk.Data;
+using Helpdesk.Infrastructure;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Helpdesk.Pages
 {
     [AllowAnonymous]
-    public class PrivacyModel : PageModel
+    public class PrivacyModel : DI_BasePageModel
     {
-        private readonly ILogger<PrivacyModel> _logger;
+        public PrivacyModel(ApplicationDbContext dbContext,
+            UserManager<IdentityUser> userManager,
+            SignInManager<IdentityUser> signInManager)
+            : base(dbContext, userManager, signInManager)
+        { }
 
-        public PrivacyModel(ILogger<PrivacyModel> logger)
+        public async Task OnGet()
         {
-            _logger = logger;
-        }
-
-        public void OnGet()
-        {
+            await LoadBranding(ViewData);
         }
     }
 }

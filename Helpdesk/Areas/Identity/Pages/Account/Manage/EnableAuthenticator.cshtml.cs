@@ -9,78 +9,46 @@ using System.Linq;
 using System.Text;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
+using Helpdesk.Data;
 using Helpdesk.Infrastructure;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
 namespace Helpdesk.Areas.Identity.Pages.Account.Manage
 {
-    public class EnableAuthenticatorModel : PageModel
+    public class EnableAuthenticatorModel : DI_BasePageModel
     {
-        private readonly UserManager<IdentityUser> _userManager;
-        private readonly ILogger<EnableAuthenticatorModel> _logger;
         private readonly UrlEncoder _urlEncoder;
-        private readonly IMfaQRCodeSettings _mfaSettings;
 
         private const string AuthenticatorUriFormat = "otpauth://totp/{0}:{1}?secret={2}&issuer={0}&digits=6";
 
-        public EnableAuthenticatorModel(
+        public EnableAuthenticatorModel(ApplicationDbContext dbContext,
             UserManager<IdentityUser> userManager,
-            ILogger<EnableAuthenticatorModel> logger,
-            UrlEncoder urlEncoder,
-            IMfaQRCodeSettings mfaSettings)
+            SignInManager<IdentityUser> signInManager,
+            UrlEncoder urlEncoder)
+            : base(dbContext, userManager, signInManager)
         {
-            _userManager = userManager;
-            _logger = logger;
             _urlEncoder = urlEncoder;
-            _mfaSettings = mfaSettings;
         }
 
-        /// <summary>
-        ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
-        ///     directly from your code. This API may change or be removed in future releases.
-        /// </summary>
         public string SharedKey { get; set; }
 
-        /// <summary>
-        ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
-        ///     directly from your code. This API may change or be removed in future releases.
-        /// </summary>
         public string AuthenticatorUri { get; set; }
 
-        /// <summary>
-        ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
-        ///     directly from your code. This API may change or be removed in future releases.
-        /// </summary>
         [TempData]
         public string[] RecoveryCodes { get; set; }
 
-        /// <summary>
-        ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
-        ///     directly from your code. This API may change or be removed in future releases.
-        /// </summary>
         [TempData]
         public string StatusMessage { get; set; }
 
-        /// <summary>
-        ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
-        ///     directly from your code. This API may change or be removed in future releases.
-        /// </summary>
         [BindProperty]
         public InputModel Input { get; set; }
 
-        /// <summary>
-        ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
-        ///     directly from your code. This API may change or be removed in future releases.
-        /// </summary>
         public class InputModel
         {
-            /// <summary>
-            ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
-            ///     directly from your code. This API may change or be removed in future releases.
-            /// </summary>
             [Required]
             [StringLength(7, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
             [DataType(DataType.Text)]
@@ -90,6 +58,7 @@ namespace Helpdesk.Areas.Identity.Pages.Account.Manage
 
         public async Task<IActionResult> OnGetAsync()
         {
+            await LoadBranding(ViewData);
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {
@@ -103,6 +72,7 @@ namespace Helpdesk.Areas.Identity.Pages.Account.Manage
 
         public async Task<IActionResult> OnPostAsync()
         {
+            await LoadBranding(ViewData);
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {
@@ -130,7 +100,6 @@ namespace Helpdesk.Areas.Identity.Pages.Account.Manage
 
             await _userManager.SetTwoFactorEnabledAsync(user, true);
             var userId = await _userManager.GetUserIdAsync(user);
-            _logger.LogInformation("User with ID '{UserId}' has enabled 2FA with an authenticator app.", userId);
 
             StatusMessage = "Your authenticator app has been verified.";
 
@@ -148,6 +117,7 @@ namespace Helpdesk.Areas.Identity.Pages.Account.Manage
 
         private async Task LoadSharedKeyAndQrCodeUriAsync(IdentityUser user)
         {
+            await LoadBranding(ViewData);
             // Load the authenticator key & QR code URI to display on the form
             var unformattedKey = await _userManager.GetAuthenticatorKeyAsync(user);
             if (string.IsNullOrEmpty(unformattedKey))
@@ -159,7 +129,7 @@ namespace Helpdesk.Areas.Identity.Pages.Account.Manage
             SharedKey = FormatKey(unformattedKey);
 
             var email = await _userManager.GetEmailAsync(user);
-            AuthenticatorUri = GenerateQrCodeUri(email, unformattedKey);
+            AuthenticatorUri = await GenerateQrCodeUri(email, unformattedKey);
         }
 
         private string FormatKey(string unformattedKey)
@@ -179,12 +149,32 @@ namespace Helpdesk.Areas.Identity.Pages.Account.Manage
             return result.ToString().ToLowerInvariant();
         }
 
-        private string GenerateQrCodeUri(string email, string unformattedKey)
+        private async Task<string> GetMFAQrCodeSiteName()
         {
+            var opt = await _context.ConfigOpts
+                .Where(x => x.Category == ConfigOptConsts.Login_MfaQrCodeSitename.Category &&
+                            x.Key == ConfigOptConsts.Login_MfaQrCodeSitename.Key)
+                .FirstOrDefaultAsync();
+            if (opt == null)
+            {
+                opt = new ConfigOpt()
+                {
+                    Category = ConfigOptConsts.Login_MfaQrCodeSitename.Category,
+                    Key = ConfigOptConsts.Login_MfaQrCodeSitename.Key,
+                    Value = "Helpdesk",
+                    Order = null
+                };
+            }
+            return opt.Value;
+        }
+
+        private async Task<string> GenerateQrCodeUri(string email, string unformattedKey)
+        {
+            string mfaName = await GetMFAQrCodeSiteName();
             return string.Format(
                 CultureInfo.InvariantCulture,
                 AuthenticatorUriFormat,
-                _urlEncoder.Encode(_mfaSettings.SiteName),
+                _urlEncoder.Encode(mfaName),
                 _urlEncoder.Encode(email),
                 unformattedKey);
         }

@@ -1,0 +1,19 @@
+﻿DI_BasePageModel
+
+(ApplicationDbContext dbContext,
+            UserManager<IdentityUser> userManager,
+            SignInManager<IdentityUser> signInManager)
+            :base(dbContext, userManager, signInManager)
+        { }
+		
+(ApplicationDbContext dbContext,
+            UserManager<IdentityUser> userManager,
+            SignInManager<IdentityUser> signInManager,
+            IEmailSender emailSender)
+            : base(dbContext, userManager, signInManager)
+        {
+            _emailSender = emailSender;
+        }
+		
+async Task
+await LoadBranding(ViewData);

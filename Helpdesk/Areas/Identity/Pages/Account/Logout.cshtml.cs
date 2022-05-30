@@ -4,6 +4,8 @@
 
 using System;
 using System.Threading.Tasks;
+using Helpdesk.Data;
+using Helpdesk.Infrastructure;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -12,21 +14,24 @@ using Microsoft.Extensions.Logging;
 
 namespace Helpdesk.Areas.Identity.Pages.Account
 {
-    public class LogoutModel : PageModel
+    public class LogoutModel : DI_BasePageModel
     {
-        private readonly SignInManager<IdentityUser> _signInManager;
-        private readonly ILogger<LogoutModel> _logger;
 
-        public LogoutModel(SignInManager<IdentityUser> signInManager, ILogger<LogoutModel> logger)
+        public LogoutModel(ApplicationDbContext dbContext,
+            UserManager<IdentityUser> userManager,
+            SignInManager<IdentityUser> signInManager)
+            : base(dbContext, userManager, signInManager)
+        { }
+
+        public async Task OnGet()
         {
-            _signInManager = signInManager;
-            _logger = logger;
+            await LoadBranding(ViewData);
         }
 
         public async Task<IActionResult> OnPost(string returnUrl = null)
         {
+            await LoadBranding(ViewData);
             await _signInManager.SignOutAsync();
-            _logger.LogInformation("User logged out.");
             if (returnUrl != null)
             {
                 return LocalRedirect(returnUrl);

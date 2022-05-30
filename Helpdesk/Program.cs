@@ -53,10 +53,6 @@ builder.Services.AddMailKit(config => config.UseMailKit(builder.Configuration.Ge
 
 builder.Services.AddScoped<IEmailSender, EmailSender>();
 
-// Add our settings for MFA.
-var mfaSettings = builder.Configuration.GetSection("MfaQRCodeSettings").Get<MfaQRCodeSettings>();
-builder.Services.AddSingleton(typeof(IMfaQRCodeSettings), mfaSettings);
-
 var app = builder.Build();
 
 // Init Database and Initial Data Seeding functionality.
