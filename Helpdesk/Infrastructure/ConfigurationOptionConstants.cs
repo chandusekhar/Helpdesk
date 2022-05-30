@@ -13,6 +13,8 @@
             new ConfigOptDefault("Branding", "Site Name");
         public static ConfigOptDefault Branding_OrganizationName =
             new ConfigOptDefault("Branding", "Organization Name");
+        public static ConfigOptDefault Branding_SiteURL =
+            new ConfigOptDefault("Branding", "Site URL");
     }
 
     public class ConfigOptDefault
@@ -63,6 +65,7 @@
                     new ConfigOptDefault("Login", "MFA QR Code Site Name", "Helpdesk", 1),
                     new ConfigOptDefault("Branding", "Organization Name", "Our Organization", 0),
                     new ConfigOptDefault("Branding", "Site Name", "Helpdesk", 1),
+                    new ConfigOptDefault("Branding", "Site URL", "helpdesk.localhost", 2),
                 }
             }
         };

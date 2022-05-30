@@ -54,6 +54,22 @@ namespace Helpdesk.Infrastructure
                 };
             }
             viewData[BrandingStrings.Brand_OrganizationName] = opt.Value;
+
+            opt = await _context.ConfigOpts
+                .Where(x => x.Category == ConfigOptConsts.Branding_SiteURL.Category &&
+                            x.Key == ConfigOptConsts.Branding_SiteURL.Key)
+                .FirstOrDefaultAsync();
+            if (opt == null)
+            {
+                opt = new ConfigOpt()
+                {
+                    Category = ConfigOptConsts.Branding_SiteURL.Category,
+                    Key = ConfigOptConsts.Branding_SiteURL.Key,
+                    Value = "helpdesk.localhost",
+                    Order = null
+                };
+            }
+            viewData[BrandingStrings.Brand_SiteURL] = opt.Value;
         }
     }
 }
