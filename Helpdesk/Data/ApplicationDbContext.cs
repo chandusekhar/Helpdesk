@@ -9,5 +9,7 @@ namespace Helpdesk.Data
             : base(options)
         {
         }
+
+        public DbSet<HelpdeskUser> HelpdeskUsers { get; set; }
     }
 }
