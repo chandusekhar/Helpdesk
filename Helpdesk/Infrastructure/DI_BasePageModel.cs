@@ -1,20 +1,24 @@
 ﻿using Helpdesk.Data;
-using Helpdesk.Infrastructure;
+using Helpdesk.Pages;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.EntityFrameworkCore;
 
-namespace Helpdesk.Pages
+namespace Helpdesk.Infrastructure
 {
     public class DI_BasePageModel : PageModel
     {
         protected readonly ApplicationDbContext _context;
-        private readonly ILogger<IndexModel> _logger;
-        public DI_BasePageModel(ApplicationDbContext dbContext, 
-            ILogger<IndexModel> logger)
+        protected readonly UserManager<IdentityUser> _userManager;
+        protected readonly SignInManager<IdentityUser> _signInManager;
+        public DI_BasePageModel(ApplicationDbContext dbContext,
+            UserManager<IdentityUser> userManager,
+            SignInManager<IdentityUser> signInManager)
         {
             _context = dbContext;
-            _logger = logger;
+            _userManager = userManager;
+            _signInManager = signInManager;
         }
 
         protected async Task LoadBranding(ViewDataDictionary viewData)

@@ -6,75 +6,68 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
+using Helpdesk.Data;
+using Helpdesk.Infrastructure;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.EntityFrameworkCore;
 
 namespace Helpdesk.Areas.Identity.Pages.Account.Manage
 {
-    public class IndexModel : PageModel
+    public class IndexModel : DI_BasePageModel
     {
-        private readonly UserManager<IdentityUser> _userManager;
-        private readonly SignInManager<IdentityUser> _signInManager;
 
         public IndexModel(
+            ApplicationDbContext dbContext,
             UserManager<IdentityUser> userManager,
             SignInManager<IdentityUser> signInManager)
+            :base(dbContext, userManager, signInManager)
         {
-            _userManager = userManager;
-            _signInManager = signInManager;
         }
 
-        /// <summary>
-        ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
-        ///     directly from your code. This API may change or be removed in future releases.
-        /// </summary>
         public string Username { get; set; }
 
-        /// <summary>
-        ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
-        ///     directly from your code. This API may change or be removed in future releases.
-        /// </summary>
         [TempData]
         public string StatusMessage { get; set; }
 
-        /// <summary>
-        ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
-        ///     directly from your code. This API may change or be removed in future releases.
-        /// </summary>
         [BindProperty]
         public InputModel Input { get; set; }
 
-        /// <summary>
-        ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
-        ///     directly from your code. This API may change or be removed in future releases.
-        /// </summary>
         public class InputModel
         {
-            /// <summary>
-            ///     This API supports the ASP.NET Core Identity default UI infrastructure and is not intended to be used
-            ///     directly from your code. This API may change or be removed in future releases.
-            /// </summary>
             [Phone]
             [Display(Name = "Phone number")]
             public string PhoneNumber { get; set; }
+
+            public string GivenName { get; set; }
+
+            public string Surname { get; set; }
+            public string JobTitle { get; set; }
+            public string Company { get; set; }
         }
 
         private async Task LoadAsync(IdentityUser user)
         {
             var userName = await _userManager.GetUserNameAsync(user);
             var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
+            var huser = await _context.HelpdeskUsers.Where(x => x.IdentityUserId == user.Id).FirstOrDefaultAsync();
 
             Username = userName;
 
             Input = new InputModel
             {
-                PhoneNumber = phoneNumber
+                PhoneNumber = phoneNumber,
+                GivenName = huser?.GivenName ?? "",
+                Surname = huser?.Surname ?? "",
+                JobTitle = huser?.JobTitle ?? "",
+                Company = huser?.Company ?? ""
             };
         }
 
         public async Task<IActionResult> OnGetAsync()
         {
+            await LoadBranding(ViewData);
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {
@@ -87,6 +80,7 @@ namespace Helpdesk.Areas.Identity.Pages.Account.Manage
 
         public async Task<IActionResult> OnPostAsync()
         {
+            await LoadBranding(ViewData);
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {
@@ -99,6 +93,27 @@ namespace Helpdesk.Areas.Identity.Pages.Account.Manage
                 return Page();
             }
 
+            var huser = await _context.HelpdeskUsers.Where(x => x.IdentityUserId == user.Id).FirstOrDefaultAsync();
+            if (huser == null)
+            {
+                huser = new HelpdeskUser()
+                {
+                    IdentityUserId = user.Id,
+                    GivenName = Input.GivenName,
+                    Surname = Input.Surname,
+                    JobTitle = Input.JobTitle,
+                    Company = Input.Company
+                };
+                _context.HelpdeskUsers.Add(huser);
+            }
+            else
+            {
+                huser.GivenName = Input.GivenName;
+                huser.Surname = Input.Surname;
+                huser.JobTitle = Input.JobTitle;
+                huser.Company = Input.Company;
+                _context.HelpdeskUsers.Update(huser);
+            }
             var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
             if (Input.PhoneNumber != phoneNumber)
             {
@@ -109,7 +124,7 @@ namespace Helpdesk.Areas.Identity.Pages.Account.Manage
                     return RedirectToPage();
                 }
             }
-
+            await _context.SaveChangesAsync();
             await _signInManager.RefreshSignInAsync(user);
             StatusMessage = "Your profile has been updated";
             return RedirectToPage();

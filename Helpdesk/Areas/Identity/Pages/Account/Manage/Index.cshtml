@@ -16,6 +16,26 @@
                 <label asp-for="Username" class="form-label"></label>
             </div>
             <div class="form-floating">
+                <input asp-for="Input.GivenName" class="form-control" />
+                <label asp-for="Input.GivenName" class="form-label"></label>
+                <span asp-validation-for="Input.GivenName" class="text-danger"></span>
+            </div>
+            <div class="form-floating">
+                <input asp-for="Input.Surname" class="form-control" />
+                <label asp-for="Input.Surname" class="form-label"></label>
+                <span asp-validation-for="Input.Surname" class="text-danger"></span>
+            </div>
+            <div class="form-floating">
+                <input asp-for="Input.JobTitle" class="form-control" />
+                <label asp-for="Input.JobTitle" class="form-label"></label>
+                <span asp-validation-for="Input.JobTitle" class="text-danger"></span>
+            </div>
+            <div class="form-floating">
+                <input asp-for="Input.Company" class="form-control" />
+                <label asp-for="Input.Company" class="form-label"></label>
+                <span asp-validation-for="Input.Company" class="text-danger"></span>
+            </div>
+            <div class="form-floating">
                 <input asp-for="Input.PhoneNumber" class="form-control" />
                 <label asp-for="Input.PhoneNumber" class="form-label"></label>
                 <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>

@@ -1,5 +1,7 @@
 ﻿using Helpdesk.Data;
+using Helpdesk.Infrastructure;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
@@ -9,11 +11,10 @@ namespace Helpdesk.Pages
     public class IndexModel : DI_BasePageModel
     {
         public IndexModel(ApplicationDbContext dbContext,
-            ILogger<IndexModel> logger)
-            :base(dbContext, logger)
-        {
-            
-        }
+            UserManager<IdentityUser> userManager,
+            SignInManager<IdentityUser> signInManager)
+            :base(dbContext, userManager, signInManager)
+        { }
 
         public async Task OnGet()
         {
