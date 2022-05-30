@@ -30,7 +30,7 @@ namespace Helpdesk.Areas.Identity.Pages.Account
         public string StatusMessage { get; set; }
         public async Task<IActionResult> OnGetAsync(string userId, string code)
         {
-            await LoadBranding(ViewData);
+            await LoadSiteSettings(ViewData);
             if (userId == null || code == null)
             {
                 return RedirectToPage("/Index");

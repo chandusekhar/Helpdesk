@@ -29,7 +29,7 @@ namespace Helpdesk.Areas.Identity.Pages.Account
 
         public async Task<IActionResult> OnGetAsync(string userId, string email, string code)
         {
-            await LoadBranding(ViewData);
+            await LoadSiteSettings(ViewData);
             if (userId == null || email == null || code == null)
             {
                 return RedirectToPage("/Index");

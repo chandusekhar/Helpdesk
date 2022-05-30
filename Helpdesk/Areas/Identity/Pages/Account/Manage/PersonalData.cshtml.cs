@@ -22,7 +22,7 @@ namespace Helpdesk.Areas.Identity.Pages.Account.Manage
 
         public async Task<IActionResult> OnGet()
         {
-            await LoadBranding(ViewData);
+            await LoadSiteSettings(ViewData);
             return RedirectToPage("./Index");
             var user = await _userManager.GetUserAsync(User);
             if (user == null)

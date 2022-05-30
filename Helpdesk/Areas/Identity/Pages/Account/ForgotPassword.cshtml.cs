@@ -45,12 +45,12 @@ namespace Helpdesk.Areas.Identity.Pages.Account
 
         public async Task OnGet()
         {
-            await LoadBranding(ViewData);
+            await LoadSiteSettings(ViewData);
         }
 
         public async Task<IActionResult> OnPostAsync()
         {
-            await LoadBranding(ViewData);
+            await LoadSiteSettings(ViewData);
             if (ModelState.IsValid)
             {
                 var user = await _userManager.FindByEmailAsync(Input.Email);

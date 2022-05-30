@@ -52,7 +52,7 @@ namespace Helpdesk.Areas.Identity.Pages.Account
 
         public async Task<IActionResult> OnGet(string code = null)
         {
-            await LoadBranding(ViewData);
+            await LoadSiteSettings(ViewData);
             if (code == null)
             {
                 return BadRequest("A code must be supplied for password reset.");
@@ -69,7 +69,7 @@ namespace Helpdesk.Areas.Identity.Pages.Account
 
         public async Task<IActionResult> OnPostAsync()
         {
-            await LoadBranding(ViewData);
+            await LoadSiteSettings(ViewData);
             if (!ModelState.IsValid)
             {
                 return Page();

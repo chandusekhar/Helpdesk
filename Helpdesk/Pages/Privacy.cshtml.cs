@@ -18,7 +18,7 @@ namespace Helpdesk.Pages
 
         public async Task OnGet()
         {
-            await LoadBranding(ViewData);
+            await LoadSiteSettings(ViewData);
         }
     }
 }

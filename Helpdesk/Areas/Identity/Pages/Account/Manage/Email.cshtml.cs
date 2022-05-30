@@ -50,7 +50,7 @@ namespace Helpdesk.Areas.Identity.Pages.Account.Manage
 
         private async Task LoadAsync(IdentityUser user)
         {
-            await LoadBranding(ViewData);
+            await LoadSiteSettings(ViewData);
             var email = await _userManager.GetEmailAsync(user);
             Email = email;
 
@@ -64,7 +64,7 @@ namespace Helpdesk.Areas.Identity.Pages.Account.Manage
 
         public async Task<IActionResult> OnGetAsync()
         {
-            await LoadBranding(ViewData);
+            await LoadSiteSettings(ViewData);
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {
@@ -77,7 +77,7 @@ namespace Helpdesk.Areas.Identity.Pages.Account.Manage
 
         public async Task<IActionResult> OnPostChangeEmailAsync()
         {
-            await LoadBranding(ViewData);
+            await LoadSiteSettings(ViewData);
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {
@@ -116,7 +116,7 @@ namespace Helpdesk.Areas.Identity.Pages.Account.Manage
 
         public async Task<IActionResult> OnPostSendVerificationEmailAsync()
         {
-            await LoadBranding(ViewData);
+            await LoadSiteSettings(ViewData);
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {

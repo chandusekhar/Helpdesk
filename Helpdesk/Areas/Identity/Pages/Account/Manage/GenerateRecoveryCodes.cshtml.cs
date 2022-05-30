@@ -31,7 +31,7 @@ namespace Helpdesk.Areas.Identity.Pages.Account.Manage
 
         public async Task<IActionResult> OnGetAsync()
         {
-            await LoadBranding(ViewData);
+            await LoadSiteSettings(ViewData);
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {
@@ -49,7 +49,7 @@ namespace Helpdesk.Areas.Identity.Pages.Account.Manage
 
         public async Task<IActionResult> OnPostAsync()
         {
-            await LoadBranding(ViewData);
+            await LoadSiteSettings(ViewData);
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {

@@ -25,12 +25,12 @@ namespace Helpdesk.Areas.Identity.Pages.Account
 
         public async Task OnGet()
         {
-            await LoadBranding(ViewData);
+            await LoadSiteSettings(ViewData);
         }
 
         public async Task<IActionResult> OnPost(string returnUrl = null)
         {
-            await LoadBranding(ViewData);
+            await LoadSiteSettings(ViewData);
             await _signInManager.SignOutAsync();
             if (returnUrl != null)
             {

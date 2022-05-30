@@ -98,16 +98,25 @@ namespace Helpdesk.Areas.Identity.Pages.Account
         }
 
 
-        public async Task OnGetAsync(string returnUrl = null)
+        public async Task<IActionResult> OnGetAsync(string returnUrl = null)
         {
-            await LoadBranding(ViewData);
+            await LoadSiteSettings(ViewData);
+            if (!ViewData.ContainsKey(ViewDataStrings.Accounts_ShowRegister))
+            {
+                return RedirectToPage("./Login");
+            }
             ReturnUrl = returnUrl;
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+            return Page();
         }
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
-            await LoadBranding(ViewData);
+            await LoadSiteSettings(ViewData);
+            if (!ViewData.ContainsKey(ViewDataStrings.Accounts_ShowRegister))
+            {
+                return RedirectToPage("./Login");
+            }
             returnUrl ??= Url.Content("~/");
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)

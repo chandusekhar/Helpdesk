@@ -62,7 +62,7 @@ namespace Helpdesk.Areas.Identity.Pages.Account
 
         public async Task<IActionResult> OnPost(string provider, string returnUrl = null)
         {
-            await LoadBranding(ViewData);
+            await LoadSiteSettings(ViewData);
             // Request a redirect to the external login provider.
             var redirectUrl = Url.Page("./ExternalLogin", pageHandler: "Callback", values: new { returnUrl });
             var properties = _signInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl);
@@ -71,7 +71,7 @@ namespace Helpdesk.Areas.Identity.Pages.Account
 
         public async Task<IActionResult> OnGetCallbackAsync(string returnUrl = null, string remoteError = null)
         {
-            await LoadBranding(ViewData);
+            await LoadSiteSettings(ViewData);
             returnUrl = returnUrl ?? Url.Content("~/");
             if (remoteError != null)
             {
@@ -113,7 +113,7 @@ namespace Helpdesk.Areas.Identity.Pages.Account
 
         public async Task<IActionResult> OnPostConfirmationAsync(string returnUrl = null)
         {
-            await LoadBranding(ViewData);
+            await LoadSiteSettings(ViewData);
             returnUrl = returnUrl ?? Url.Content("~/");
             // Get the information about the user from the external login provider
             var info = await _signInManager.GetExternalLoginInfoAsync();

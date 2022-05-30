@@ -24,7 +24,7 @@ namespace Helpdesk.Pages
 
         public async Task OnGet()
         {
-            await LoadBranding(ViewData);
+            await LoadSiteSettings(ViewData);
             RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier;
         }
     }

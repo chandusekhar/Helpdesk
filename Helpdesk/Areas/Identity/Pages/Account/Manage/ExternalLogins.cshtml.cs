@@ -40,7 +40,7 @@ namespace Helpdesk.Areas.Identity.Pages.Account.Manage
 
         public async Task<IActionResult> OnGetAsync()
         {
-            await LoadBranding(ViewData);
+            await LoadSiteSettings(ViewData);
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {
@@ -64,7 +64,7 @@ namespace Helpdesk.Areas.Identity.Pages.Account.Manage
 
         public async Task<IActionResult> OnPostRemoveLoginAsync(string loginProvider, string providerKey)
         {
-            await LoadBranding(ViewData);
+            await LoadSiteSettings(ViewData);
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {
@@ -85,7 +85,7 @@ namespace Helpdesk.Areas.Identity.Pages.Account.Manage
 
         public async Task<IActionResult> OnPostLinkLoginAsync(string provider)
         {
-            await LoadBranding(ViewData);
+            await LoadSiteSettings(ViewData);
             // Clear the existing external cookie to ensure a clean login process
             await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
 
@@ -97,7 +97,7 @@ namespace Helpdesk.Areas.Identity.Pages.Account.Manage
 
         public async Task<IActionResult> OnGetLinkLoginCallbackAsync()
         {
-            await LoadBranding(ViewData);
+            await LoadSiteSettings(ViewData);
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {

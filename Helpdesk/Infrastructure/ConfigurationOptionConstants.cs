@@ -7,8 +7,10 @@
     {
         public static ConfigOptDefault System_Version =
             new ConfigOptDefault("System", "Version");
-        public static ConfigOptDefault Login_MfaQrCodeSitename =
-            new ConfigOptDefault("Login", "MFA QR Code Site Name");
+        public static ConfigOptDefault Accounts_AllowSelfRegistration =
+            new ConfigOptDefault("Accounts", "Allow Self-Registration");
+        public static ConfigOptDefault Accounts_MfaQrCodeSitename =
+            new ConfigOptDefault("Accounts", "MFA QR Code Site Name");
         public static ConfigOptDefault Branding_SiteName =
             new ConfigOptDefault("Branding", "Site Name");
         public static ConfigOptDefault Branding_OrganizationName =
@@ -62,7 +64,8 @@
                 Additions = new List<ConfigOptDefault>()
                 {
                     new ConfigOptDefault("System", "Version", "1.0"),
-                    new ConfigOptDefault("Login", "MFA QR Code Site Name", "Helpdesk", 1),
+                    new ConfigOptDefault("Accounts", "Allow Self-Registration", "true", 0),
+                    new ConfigOptDefault("Accounts", "MFA QR Code Site Name", "Helpdesk", 1),
                     new ConfigOptDefault("Branding", "Organization Name", "Our Organization", 0),
                     new ConfigOptDefault("Branding", "Site Name", "Helpdesk", 1),
                     new ConfigOptDefault("Branding", "Site URL", "helpdesk.localhost", 2),

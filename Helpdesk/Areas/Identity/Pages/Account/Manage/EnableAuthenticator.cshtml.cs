@@ -58,7 +58,7 @@ namespace Helpdesk.Areas.Identity.Pages.Account.Manage
 
         public async Task<IActionResult> OnGetAsync()
         {
-            await LoadBranding(ViewData);
+            await LoadSiteSettings(ViewData);
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {
@@ -72,7 +72,7 @@ namespace Helpdesk.Areas.Identity.Pages.Account.Manage
 
         public async Task<IActionResult> OnPostAsync()
         {
-            await LoadBranding(ViewData);
+            await LoadSiteSettings(ViewData);
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {
@@ -117,7 +117,7 @@ namespace Helpdesk.Areas.Identity.Pages.Account.Manage
 
         private async Task LoadSharedKeyAndQrCodeUriAsync(IdentityUser user)
         {
-            await LoadBranding(ViewData);
+            await LoadSiteSettings(ViewData);
             // Load the authenticator key & QR code URI to display on the form
             var unformattedKey = await _userManager.GetAuthenticatorKeyAsync(user);
             if (string.IsNullOrEmpty(unformattedKey))
@@ -152,15 +152,15 @@ namespace Helpdesk.Areas.Identity.Pages.Account.Manage
         private async Task<string> GetMFAQrCodeSiteName()
         {
             var opt = await _context.ConfigOpts
-                .Where(x => x.Category == ConfigOptConsts.Login_MfaQrCodeSitename.Category &&
-                            x.Key == ConfigOptConsts.Login_MfaQrCodeSitename.Key)
+                .Where(x => x.Category == ConfigOptConsts.Accounts_MfaQrCodeSitename.Category &&
+                            x.Key == ConfigOptConsts.Accounts_MfaQrCodeSitename.Key)
                 .FirstOrDefaultAsync();
             if (opt == null)
             {
                 opt = new ConfigOpt()
                 {
-                    Category = ConfigOptConsts.Login_MfaQrCodeSitename.Category,
-                    Key = ConfigOptConsts.Login_MfaQrCodeSitename.Key,
+                    Category = ConfigOptConsts.Accounts_MfaQrCodeSitename.Category,
+                    Key = ConfigOptConsts.Accounts_MfaQrCodeSitename.Key,
                     Value = "Helpdesk",
                     Order = null
                 };

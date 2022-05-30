@@ -26,7 +26,7 @@ namespace Helpdesk.Areas.Identity.Pages.Account.Manage
 
         public async Task<IActionResult> OnGet()
         {
-            await LoadBranding(ViewData);
+            await LoadSiteSettings(ViewData);
             if (RecoveryCodes == null || RecoveryCodes.Length == 0)
             {
                 return RedirectToPage("./TwoFactorAuthentication");

@@ -20,7 +20,7 @@ namespace Helpdesk.Areas.Identity.Pages.Account
         { }
         public async Task OnGet()
         {
-            await LoadBranding(ViewData);
+            await LoadSiteSettings(ViewData);
         }
     }
 }

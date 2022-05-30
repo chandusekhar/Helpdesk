@@ -55,7 +55,7 @@ namespace Helpdesk.Areas.Identity.Pages.Account
 
         public async Task OnGetAsync(string returnUrl = null)
         {
-            await LoadBranding(ViewData);
+            await LoadSiteSettings(ViewData);
             if (!string.IsNullOrEmpty(ErrorMessage))
             {
                 ModelState.AddModelError(string.Empty, ErrorMessage);
@@ -73,7 +73,7 @@ namespace Helpdesk.Areas.Identity.Pages.Account
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
-            await LoadBranding(ViewData);
+            await LoadSiteSettings(ViewData);
             returnUrl ??= Url.Content("~/");
 
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();

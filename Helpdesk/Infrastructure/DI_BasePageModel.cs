@@ -21,55 +21,34 @@ namespace Helpdesk.Infrastructure
             _signInManager = signInManager;
         }
 
-        protected async Task LoadBranding(ViewDataDictionary viewData)
+        protected async Task LoadSiteSettings(ViewDataDictionary viewData)
         {
             ConfigOpt? opt = await _context.ConfigOpts
                 .Where(x => x.Category == ConfigOptConsts.Branding_SiteName.Category &&
                             x.Key == ConfigOptConsts.Branding_SiteName.Key)
                 .FirstOrDefaultAsync();
-            if (opt == null)
-            {
-                opt = new ConfigOpt()
-                {
-                    Category = ConfigOptConsts.Branding_SiteName.Category,
-                    Key = ConfigOptConsts.Branding_SiteName.Key,
-                    Value = "Helpdesk",
-                    Order = null
-                };
-            }
-            viewData[BrandingStrings.Brand_SiteName] = opt.Value;
+            viewData[ViewDataStrings.Brand_SiteName] = opt?.Value ?? "Helpdesk";
 
             opt = await _context.ConfigOpts
                 .Where(x => x.Category == ConfigOptConsts.Branding_OrganizationName.Category &&
                             x.Key == ConfigOptConsts.Branding_OrganizationName.Key)
                 .FirstOrDefaultAsync();
-            if (opt == null)
-            {
-                opt = new ConfigOpt()
-                {
-                    Category = ConfigOptConsts.Branding_OrganizationName.Category,
-                    Key = ConfigOptConsts.Branding_OrganizationName.Key,
-                    Value = "Our Organization",
-                    Order = null
-                };
-            }
-            viewData[BrandingStrings.Brand_OrganizationName] = opt.Value;
+            viewData[ViewDataStrings.Brand_OrganizationName] = opt?.Value ?? "Our Organization";
 
             opt = await _context.ConfigOpts
                 .Where(x => x.Category == ConfigOptConsts.Branding_SiteURL.Category &&
                             x.Key == ConfigOptConsts.Branding_SiteURL.Key)
                 .FirstOrDefaultAsync();
-            if (opt == null)
+            viewData[ViewDataStrings.Brand_SiteURL] = opt?.Value ?? "helpdesk.localhost";
+
+            opt = await _context.ConfigOpts
+                .Where(x => x.Category == ConfigOptConsts.Accounts_AllowSelfRegistration.Category &&
+                            x.Key == ConfigOptConsts.Accounts_AllowSelfRegistration.Key)
+               .FirstOrDefaultAsync();
+            if ((opt?.Value ?? "true") == "true")
             {
-                opt = new ConfigOpt()
-                {
-                    Category = ConfigOptConsts.Branding_SiteURL.Category,
-                    Key = ConfigOptConsts.Branding_SiteURL.Key,
-                    Value = "helpdesk.localhost",
-                    Order = null
-                };
+                viewData[ViewDataStrings.Accounts_ShowRegister] = "true";
             }
-            viewData[BrandingStrings.Brand_SiteURL] = opt.Value;
         }
     }
 }
