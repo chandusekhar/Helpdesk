@@ -16,4 +16,4 @@
         }
 		
 async Task
-await LoadBranding(ViewData);
+await LoadSiteSettings(ViewData);

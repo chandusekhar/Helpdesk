@@ -1,0 +1,45 @@
+﻿@page
+@model Helpdesk.Pages.SiteSettings.EditModel
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>Configure Setting</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Input.Id" />
+            <div class="form-group">
+                <label asp-for="Input.Category" class="control-label"></label>
+                <input asp-for="Input.Category" class="form-control" readonly/>
+                <span asp-validation-for="Input.Category" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Input.Key" class="control-label"></label>
+                <input asp-for="Input.Key" class="form-control" readonly/>
+                <span asp-validation-for="Input.Key" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Input.Value" class="control-label"></label>
+                <input asp-for="Input.Value" class="form-control" />
+                <span asp-validation-for="Input.Value" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-page="./Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

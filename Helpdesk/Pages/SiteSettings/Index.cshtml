@@ -1,0 +1,43 @@
+﻿@page
+@model Helpdesk.Pages.SiteSettings.IndexModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.ConfigOpt[0].Category)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ConfigOpt[0].Key)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ConfigOpt[0].Value)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.ConfigOpt) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Category)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Key)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Value)
+            </td>
+            <td>
+                <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a> |
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
