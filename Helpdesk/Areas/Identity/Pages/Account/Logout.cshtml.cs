@@ -14,6 +14,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Helpdesk.Areas.Identity.Pages.Account
 {
+    [AllowAnonymous]
     public class LogoutModel : DI_BasePageModel
     {
 

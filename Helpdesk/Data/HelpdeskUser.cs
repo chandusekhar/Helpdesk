@@ -29,5 +29,9 @@ namespace Helpdesk.Data
         /// </summary>
         public ICollection<TeamMember> TeamMembers { get; set; }
 
+        /// <summary>
+        /// Roles this user has.
+        /// </summary>
+        public ICollection<HelpdeskRole> Roles { get; set; }
     }
 }
