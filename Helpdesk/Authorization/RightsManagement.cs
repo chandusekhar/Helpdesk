@@ -5,22 +5,76 @@ namespace Helpdesk.Authorization
 {
     public static class RightsManagement
     {
-        //    public static async Task<bool> UserIsInRole(ApplicationDbContext context, string userId, string role)
-        //    {
 
-        //        return false;
+        public static async Task<bool> UserIsInRole(ApplicationDbContext context, string userId, string role)
+        {
+            var huser = await context.HelpdeskUsers
+                .Where(x => x.IdentityUserId == userId)
+                .Include(x => x.Roles)
+                .FirstOrDefaultAsync();
+            if (huser == null)
+            {
+                return false;
+            }
+            return huser.Roles.Any(x => x.Name == role);
+        }
 
-        //    }
+        public static async Task<bool> UserHasClaim(ApplicationDbContext context, string userId, string claimName)
+        {
+            var huser = await context.HelpdeskUsers
+                .Where(x => x.IdentityUserId == userId)
+                .Include(x => x.Roles)
+                .ThenInclude(y => y.Claims.Where(z => z.Name == claimName))
+                .FirstOrDefaultAsync();
+            if (huser == null)
+            {
+                return false;
+            }
+            return huser.Roles.Any(x => x.Claims.Any(y => y.Name == claimName));
+        }
 
-        //    public static async Task UserAddRole(ApplicationDbContext context, string userId, string role)
-        //    {
+        public static async Task<bool> UserAddRole(ApplicationDbContext context, string userId, string roleName)
+        {
+            var huser = await context.HelpdeskUsers
+                .Where(x => x.IdentityUserId == userId)
+                .Include(x => x.Roles.Where(y => y.Name == roleName))
+                .FirstOrDefaultAsync();
+            if (huser == null)
+            {
+                return false;
+            }
+            if (huser.Roles.Any(x => x.Name == roleName))
+            {
+                return true;
+            }
+            var role = await context.HelpdeskRoles.Where(x => x.Name == roleName).FirstOrDefaultAsync();
+            if (role == null)
+            {
+                return false;
+            }
+            huser.Roles.Add(role);
+            await context.SaveChangesAsync();
+            return true;
+        }
 
-        //    }
-
-        //    public static async Task UserRemoveRole(ApplicationDbContext context, string userId, string role)
-        //    {
-
-        //    }
+        public static async Task<bool> UserRemoveRole(ApplicationDbContext context, string userId, string roleName)
+        {
+            var huser = await context.HelpdeskUsers
+                .Where(x => x.IdentityUserId == userId)
+                .Include(x => x.Roles.Where(y => y.Name == roleName))
+                .FirstOrDefaultAsync();
+            if (huser == null)
+            {
+                return false;
+            }
+            if (huser.Roles.Count() == 0)
+            {
+                return true;
+            }
+            huser.Roles.Remove(huser.Roles.First());
+            await context.SaveChangesAsync();
+            return true;
+        }
 
         //    public static async Task<List<HelpdeskRole>> UserListRoles(ApplicationDbContext context, string userId)
         //    {
@@ -32,25 +86,16 @@ namespace Helpdesk.Authorization
         //        return new List<HelpdeskClaim>();
         //    }
 
-        //    public static async Task<bool> UserHasClaim(ApplicationDbContext context, HelpdeskUser user, string role)
-        //    {
-
-        //        return false;
-
-        //    }
-
         //    public static async Task<List<HelpdeskRole>> GetAllRoles(ApplicationDbContext context)
         //    {
         //        return new List<HelpdeskRole>();
         //    }
 
-
-
         //    public static async Task<UserAuthorizeContext> GetUserAuthContext(ApplicationDbContext context, string userId)
         //    {
-
         //        return new UserAuthorizeContext();
         //    }
+
         public static async Task<List<HelpdeskClaim>> GetAllClaims(ApplicationDbContext context)
         {
             return await context.HelpdeskClaims.ToListAsync();

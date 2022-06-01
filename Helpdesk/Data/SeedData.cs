@@ -14,13 +14,6 @@ namespace Helpdesk.Data
                 serviceProvider.GetRequiredService<DbContextOptions<ApplicationDbContext>>()))
             {
                 await RollupDatabase(context, serviceProvider);
-
-                // Manager
-                //var managerUid = await EnsureUser(serviceProvider, "manager@demo.com", password);
-                //await EnsureRole(serviceProvider, managerUid, Constants.InvoiceManagersRole);
-                //// Admin
-                //var adminUid = await EnsureUser(serviceProvider, "admin@demo.com", password);
-                //await EnsureRole(serviceProvider, adminUid, Constants.InvoiceAdminsRole);
             }
 
         }

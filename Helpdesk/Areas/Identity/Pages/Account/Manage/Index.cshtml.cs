@@ -6,6 +6,7 @@ using System;
 using System.ComponentModel.DataAnnotations;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
+using Helpdesk.Authorization;
 using Helpdesk.Data;
 using Helpdesk.Infrastructure;
 using Microsoft.AspNetCore.Identity;
@@ -106,6 +107,13 @@ namespace Helpdesk.Areas.Identity.Pages.Account.Manage
                     Company = Input.Company
                 };
                 _context.HelpdeskUsers.Add(huser);
+                // if this is the first user, then give it super admin permissions automatically.
+                bool ExistingUsers = await _context.HelpdeskUsers.AnyAsync();
+                if (!ExistingUsers)
+                {
+                    await _context.SaveChangesAsync();
+                    await RightsManagement.UserAddRole(_context, user.Id, RoleConstantStrings.SuperAdmin);
+                }
             }
             else
             {

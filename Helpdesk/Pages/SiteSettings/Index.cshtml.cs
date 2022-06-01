@@ -8,6 +8,7 @@ using Microsoft.EntityFrameworkCore;
 using Helpdesk.Data;
 using Helpdesk.Infrastructure;
 using Microsoft.AspNetCore.Identity;
+using Helpdesk.Authorization;
 
 namespace Helpdesk.Pages.SiteSettings
 {
@@ -22,13 +23,24 @@ namespace Helpdesk.Pages.SiteSettings
 
         public IList<ConfigOpt> ConfigOpt { get;set; } = default!;
 
-        public async Task OnGetAsync()
+        public async Task<IActionResult> OnGetAsync()
         {
             await LoadSiteSettings(ViewData);
+            if (_currentHelpdeskUser == null)
+            {
+                return Forbid();
+            }
+            bool HasClaim = await RightsManagement.UserHasClaim(_context, _currentHelpdeskUser.IdentityUserId, ClaimConstantStrings.SitewideConfigurationEditor);
+            if (!HasClaim)
+            {
+                return Forbid();
+            }
             if (_context.ConfigOpts != null)
             {
                 ConfigOpt = await _context.ConfigOpts.OrderBy(x => x.Category).ThenBy(y => y.Order).ToListAsync();
             }
+
+            return Page();
         }
     }
 }

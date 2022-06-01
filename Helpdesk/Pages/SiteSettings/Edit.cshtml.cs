@@ -10,6 +10,7 @@ using Helpdesk.Data;
 using Helpdesk.Infrastructure;
 using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
+using Helpdesk.Authorization;
 
 namespace Helpdesk.Pages.SiteSettings
 {
@@ -42,6 +43,15 @@ namespace Helpdesk.Pages.SiteSettings
         public async Task<IActionResult> OnGetAsync(int? id)
         {
             await LoadSiteSettings(ViewData);
+            if (_currentHelpdeskUser == null)
+            {
+                return Forbid();
+            }
+            bool HasClaim = await RightsManagement.UserHasClaim(_context, _currentHelpdeskUser.IdentityUserId, ClaimConstantStrings.SitewideConfigurationEditor);
+            if (!HasClaim)
+            {
+                return Forbid();
+            }
             if (id == null || _context.ConfigOpts == null)
             {
                 return NotFound();
@@ -65,6 +75,15 @@ namespace Helpdesk.Pages.SiteSettings
         public async Task<IActionResult> OnPostAsync()
         {
             await LoadSiteSettings(ViewData);
+            if (_currentHelpdeskUser == null)
+            {
+                return Forbid();
+            }
+            bool HasClaim = await RightsManagement.UserHasClaim(_context, _currentHelpdeskUser.IdentityUserId, ClaimConstantStrings.SitewideConfigurationEditor);
+            if (!HasClaim)
+            {
+                return Forbid();
+            }
             if (!ModelState.IsValid)
             {
                 return Page();
