@@ -15,14 +15,14 @@ namespace Helpdesk.Data
 
         [Required]
         public string IdentityUserId { get; set; }
-
+        [Required]
         public string GivenName { get; set; }
-
+        [Required]
         public string Surname { get; set; }
+        
+        public string? JobTitle { get; set; }
 
-        public string JobTitle { get; set; }
-
-        public string Company { get; set; }
+        public string? Company { get; set; }
 
         /// <summary>
         /// If user is a supervisor, this is a list of employees they manage, and what their responsibilities are.

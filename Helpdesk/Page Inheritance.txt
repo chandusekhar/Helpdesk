@@ -17,3 +17,8 @@
 		
 async Task
 await LoadSiteSettings(ViewData);
+
+// identity username of the user, or First Last name.
+@ViewData["IdentityUserName"]
+// true if the user has not completed their profile and will be directed to fill that in.
+@ViewData["CompleteProfilePrompt"]

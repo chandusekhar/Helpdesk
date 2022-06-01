@@ -10,6 +10,26 @@
 </head>
 <body>
     <header>
+        @if (@ViewData.ContainsKey("CompleteProfilePrompt") && (!@ViewData.ContainsKey("ActivePage") || @ViewData["ActivePage"]?.ToString() != "Index"))
+        {
+            <div class="w-100 p-0" style="background-color: darkred; color: white; text-align: center;">
+                <h4>Please go to your profile page to complete setup of your account. &nbsp;
+                <a class="btn btn-success" asp-area="Identity" asp-page="/Account/Manage/Index">Profile</a></h4>
+            </div>
+        }
+        @if (@ViewData.ContainsKey("CompleteProfilePrompt") && @ViewData.ContainsKey("ActivePage") && @ViewData["ActivePage"]?.ToString() == "Index")
+        {
+            <div class="w-100 p-0" style="background-color: sandybrown; color: black; text-align: center;">
+                <h4>Enter your name below and click Save to complete the setup of your profile.</h4>
+            </div>
+        }
+        @if (@ViewData.ContainsKey("NagMFAEnrollmentBanner"))
+        {
+            <div class="w-100 p-0" style="background-color: darkred; color: white; text-align: center;">
+                <h4>Please enable an authenticator to secure your account and enable site features. &nbsp;
+                <a class="btn btn-success" asp-area="Identity" asp-page="/Account/Manage/TwoFactorAuthentication">Authenticator</a></h4>
+            </div>
+        }
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container">
                 <a class="navbar-brand" asp-area="" asp-page="/Index">@ViewData[Infrastructure.ViewDataStrings.Brand_SiteName]</a>

@@ -12,6 +12,12 @@ namespace Helpdesk.Infrastructure
         protected readonly ApplicationDbContext _context;
         protected readonly UserManager<IdentityUser> _userManager;
         protected readonly SignInManager<IdentityUser> _signInManager;
+
+        protected IdentityUser? _currentIdentityUser = null;
+        protected HelpdeskUser? _currentHelpdeskUser = null;
+
+        private bool LoadSiteSettingsAlreadyDone = false;
+
         public DI_BasePageModel(ApplicationDbContext dbContext,
             UserManager<IdentityUser> userManager,
             SignInManager<IdentityUser> signInManager)
@@ -23,6 +29,40 @@ namespace Helpdesk.Infrastructure
 
         protected async Task LoadSiteSettings(ViewDataDictionary viewData)
         {
+            if (LoadSiteSettingsAlreadyDone)
+            {
+                return;
+            }
+            LoadSiteSettingsAlreadyDone = true;
+
+            // We can build a list of claims the user owns here and prepare some variables for easy use later.
+            if (_signInManager.IsSignedIn(User))
+            {
+                _currentIdentityUser = await _userManager.GetUserAsync(User);
+                _currentHelpdeskUser = await _context.HelpdeskUsers
+                    .Where(x => x.IdentityUserId == _currentIdentityUser.Id)
+                    .FirstOrDefaultAsync();
+                if (_currentHelpdeskUser == null)
+                {
+                    viewData.Add("IdentityUserName", User.Identity?.Name);
+                    viewData.Add("CompleteProfilePrompt", "true");
+                }
+                else
+                {
+                    viewData.Add("IdentityUserName", 
+                        string.Format("{0} {1}", 
+                            _currentHelpdeskUser.GivenName, 
+                            _currentHelpdeskUser.Surname));
+                    if (!_currentIdentityUser.TwoFactorEnabled)
+                    {
+                        viewData.Add("NagMFAEnrollmentBanner", "true");
+                    }
+
+                    // retrieve claims for the user
+
+                }
+            }
+
             ConfigOpt? opt = await _context.ConfigOpts
                 .Where(x => x.Category == ConfigOptConsts.Branding_SiteName.Category &&
                             x.Key == ConfigOptConsts.Branding_SiteName.Key)

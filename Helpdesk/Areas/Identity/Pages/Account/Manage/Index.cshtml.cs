@@ -40,8 +40,9 @@ namespace Helpdesk.Areas.Identity.Pages.Account.Manage
             [Display(Name = "Phone number")]
             public string PhoneNumber { get; set; }
 
+            [Required]
             public string GivenName { get; set; }
-
+            [Required]
             public string Surname { get; set; }
             public string JobTitle { get; set; }
             public string Company { get; set; }
