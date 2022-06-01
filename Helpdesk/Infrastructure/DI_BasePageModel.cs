@@ -41,6 +41,7 @@ namespace Helpdesk.Infrastructure
                 _currentIdentityUser = await _userManager.GetUserAsync(User);
                 _currentHelpdeskUser = await _context.HelpdeskUsers
                     .Where(x => x.IdentityUserId == _currentIdentityUser.Id)
+                    .Include(y => y.SiteNavTemplate)
                     .FirstOrDefaultAsync();
                 if (_currentHelpdeskUser == null)
                 {
@@ -64,8 +65,27 @@ namespace Helpdesk.Infrastructure
                             viewData.Add("NagMFAEnrollmentBanner", "true");
                         }
                     }
-
-                    // retrieve claims for the user
+                    // build navbar
+                    viewData.Add("NavbarSupressPrivacyLink", "true");
+                    if (_currentHelpdeskUser.SiteNavTemplate != null)
+                    {
+                        if (_currentHelpdeskUser.SiteNavTemplate.TicketLink)
+                        {
+                            viewData.Add("NavbarShowTicketLink", "true");
+                        }
+                        if (_currentHelpdeskUser.SiteNavTemplate.AssetLink)
+                        {
+                            viewData.Add("NavbarShowAssetLink", "true");
+                        }
+                        if (_currentHelpdeskUser.SiteNavTemplate.PeopleLink)
+                        {
+                            viewData.Add("NavbarShowPeopleLink", "true");
+                        }
+                        if (_currentHelpdeskUser.SiteNavTemplate.SiteOptionsLink)
+                        {
+                            viewData.Add("NavbarShowSiteSettingsLink", "true");
+                        }
+                    }
 
                 }
             }

@@ -42,9 +42,37 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-page="/Index">Home</a>
                         </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Privacy">Privacy</a>
-                        </li>
+                        @*Add in each nav bar item as specified by the user's nav template*@
+                        @if(@ViewData.ContainsKey("NavbarShowTicketLink"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-page="/Tickets/Index">Tickets</a>
+                            </li>
+                        }
+                        @if(@ViewData.ContainsKey("NavbarShowAssetLink"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-page="/Assets/Index">Assets</a>
+                            </li>
+                        }
+                        @if(@ViewData.ContainsKey("NavbarShowPeopleLink"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-page="/People/Index">People</a>
+                            </li>
+                        }
+                        @if(@ViewData.ContainsKey("NavbarShowSiteSettingsLink"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-page="/SiteSettings/Index">Site Settings</a>
+                            </li>
+                        }
+                        @if (!@ViewData.ContainsKey("NavbarSupressPrivacyLink"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-page="/Privacy">Privacy</a>
+                            </li>
+                        }
                     </ul>
                     <partial name="_LoginPartial" />
                 </div>
