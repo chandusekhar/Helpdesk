@@ -13,6 +13,8 @@ namespace Helpdesk.Infrastructure
             new ConfigOptDefault("Accounts", "Allow Self-Registration");
         public static ConfigOptDefault Accounts_MfaQrCodeSitename =
             new ConfigOptDefault("Accounts", "MFA QR Code Site Name");
+        public static ConfigOptDefault Accounts_ShowMfaBanner =
+            new ConfigOptDefault("Accounts", "Show MFA Banner");
         public static ConfigOptDefault Branding_SiteName =
             new ConfigOptDefault("Branding", "Site Name");
         public static ConfigOptDefault Branding_OrganizationName =

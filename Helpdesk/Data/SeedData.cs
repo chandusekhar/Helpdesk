@@ -55,29 +55,34 @@ namespace Helpdesk.Data
                 {
                     if (item.Version == dbVersion.Value)
                     {
-                        var roleManager = serviceProvider.GetService<RoleManager<IdentityRole>>();
-                        if (roleManager == null)
+                        List<HelpdeskClaim> roleClaims;
+                        List<HelpdeskClaim> allClaims = await RightsManagement.GetAllClaims(context);
+
+                        HelpdeskRole? role = await RightsManagement.GetRoleIfExists(context, item.RoleName);
+                        if (role == null)
                         {
-                            throw new Exception("Role Manager is not registered.");
+                            role = await RightsManagement.CreateRole(context, item.RoleName, item.RoleDescription);
+                            roleClaims = new List<HelpdeskClaim>();
+                        }
+                        else
+                        {
+                            roleClaims = await RightsManagement.GetRoleClaims(context, item.RoleName);
                         }
 
-                        IdentityResult iresult;
-
-                        if (await roleManager.RoleExistsAsync(item.RoleName) == false)
+                        foreach (var rclaim in item.Claims)
                         {
-                            iresult = await roleManager.CreateAsync(new IdentityRole(item.RoleName));
-                            
+                            if (!roleClaims.Any(x => x.Name == rclaim.ClaimName))
+                            {
+                                var cl = allClaims.Where(x => x.Name == rclaim.ClaimName).FirstOrDefault();
+                                if (cl == null)
+                                {
+                                    cl = await RightsManagement.CreateClaim(context, rclaim.ClaimName, rclaim.ClaimDescription);
+                                    allClaims.Add(cl);
+                                }
+                                await RightsManagement.AddClaimToRoll(context, item.RoleName, rclaim.ClaimName);
+                                roleClaims.Add(cl);
+                            }
                         }
-
-                        // TODO: Need to figure out how to add a claim to a role so that I can test for
-                        // posession of that claim throughout the website.
-
-                        //var existingclaims = await roleManager.GetClaimsAsync(item.RoleName);
-
-
-
-
-
 
 
 
@@ -151,69 +156,69 @@ namespace Helpdesk.Data
         }
 
 
-        private static async Task<string> EnsureUser(
-            IServiceProvider serviceProvider,
-            string userName,
-            string initPwd)
-        {
-            var userManager = serviceProvider.GetService<UserManager<IdentityUser>>();
-            if (userManager == null)
-            {
-                throw new Exception("UserManager is not registered.");
-            }
+        //private static async Task<string> EnsureUser(
+        //    IServiceProvider serviceProvider,
+        //    string userName,
+        //    string initPwd)
+        //{
+        //    var userManager = serviceProvider.GetService<UserManager<IdentityUser>>();
+        //    if (userManager == null)
+        //    {
+        //        throw new Exception("UserManager is not registered.");
+        //    }
 
-            var user = await userManager.FindByNameAsync(userName);
-            if (user == null)
-            {
-                user = new IdentityUser
-                {
-                    UserName = userName,
-                    Email = userName,
-                    EmailConfirmed = true
-                };
-                var result = await userManager.CreateAsync(user, initPwd);
-                // maybe need to catch an error here if password is weak.
-            }
+        //    var user = await userManager.FindByNameAsync(userName);
+        //    if (user == null)
+        //    {
+        //        user = new IdentityUser
+        //        {
+        //            UserName = userName,
+        //            Email = userName,
+        //            EmailConfirmed = true
+        //        };
+        //        var result = await userManager.CreateAsync(user, initPwd);
+        //        // maybe need to catch an error here if password is weak.
+        //    }
 
-            if (user == null)
-            {
-                throw new Exception("User did not get created. Check the password policy.");
-            }
+        //    if (user == null)
+        //    {
+        //        throw new Exception("User did not get created. Check the password policy.");
+        //    }
 
-            return user.Id;
-        }
+        //    return user.Id;
+        //}
 
-        private static async Task<IdentityResult> EnsureRole(
-            IServiceProvider serviceProvider,
-            string userId, string role)
-        {
-            var roleManager = serviceProvider.GetService<RoleManager<IdentityRole>>();
-            if (roleManager == null)
-            {
-                throw new Exception("Role Manager is not registered.");
-            }
+        //private static async Task<IdentityResult> EnsureRole(
+        //    IServiceProvider serviceProvider,
+        //    string userId, string role)
+        //{
+        //    var roleManager = serviceProvider.GetService<RoleManager<IdentityRole>>();
+        //    if (roleManager == null)
+        //    {
+        //        throw new Exception("Role Manager is not registered.");
+        //    }
 
-            IdentityResult iresult;
+        //    IdentityResult iresult;
 
-            if (await roleManager.RoleExistsAsync(role) == false)
-            {
-                iresult = await roleManager.CreateAsync(new IdentityRole(role));
-            }
+        //    if (await roleManager.RoleExistsAsync(role) == false)
+        //    {
+        //        iresult = await roleManager.CreateAsync(new IdentityRole(role));
+        //    }
 
-            var userManager = serviceProvider.GetService<UserManager<IdentityUser>>();
-            if (userManager == null)
-            {
-                throw new Exception("UserManager is not registered.");
-            }
+        //    var userManager = serviceProvider.GetService<UserManager<IdentityUser>>();
+        //    if (userManager == null)
+        //    {
+        //        throw new Exception("UserManager is not registered.");
+        //    }
 
-            var user = await userManager.FindByIdAsync(userId);
-            if (user == null)
-            {
-                throw new Exception("User does not exist.");
-            }
-            iresult = await userManager.AddToRoleAsync(user, role);
-            return iresult;
-        }
+        //    var user = await userManager.FindByIdAsync(userId);
+        //    if (user == null)
+        //    {
+        //        throw new Exception("User does not exist.");
+        //    }
+        //    iresult = await userManager.AddToRoleAsync(user, role);
+        //    return iresult;
+        //}
     }
 
 
@@ -264,6 +269,7 @@ namespace Helpdesk.Data
                     new ConfigOptDefault("System", "Version", "1.0"),
                     new ConfigOptDefault("Accounts", "Allow Self-Registration", "true", 0),
                     new ConfigOptDefault("Accounts", "MFA QR Code Site Name", "Helpdesk", 1),
+                    new ConfigOptDefault("Accounts", "Show MFA Banner", "true", 2),
                     new ConfigOptDefault("Branding", "Organization Name", "Our Organization", 0),
                     new ConfigOptDefault("Branding", "Site Name", "Helpdesk", 1),
                     new ConfigOptDefault("Branding", "Site URL", "helpdesk.localhost", 2),
@@ -299,7 +305,20 @@ namespace Helpdesk.Data
         /// </summary>
         public string Version { get; set; }
         public string RoleName { get; set; }
-        public List<string> Claims { get; set; }
+        public string RoleDescription { get; set; }
+        public List<NewRoleClaim> Claims { get; set; }
+
+        public class NewRoleClaim
+        {
+            public NewRoleClaim(string claimName, string claimDescription)
+            {
+                ClaimName = claimName;
+                ClaimDescription = claimDescription;
+            }
+            public string ClaimName { get; set; }
+            public string ClaimDescription { get; set; }
+        }
+
     }
 
     public static class DefaultRoleClaimCatalog
@@ -310,17 +329,40 @@ namespace Helpdesk.Data
             {
                 Version = string.Empty,
                 RoleName = RoleConstantStrings.SuperAdmin,
-                Claims = new List<string>()
+                RoleDescription = "Super Admins can do anything on the site",
+                Claims = new List<DefaultRoleClaim.NewRoleClaim>()
                 {
-                    ClaimConstantStrings.RolesCreateNew,
-                    ClaimConstantStrings.RolesViewClaims,
-                    ClaimConstantStrings.RolesEditClaims,
-                    ClaimConstantStrings.RolesDeleteRole,
-                    ClaimConstantStrings.SitewideConfigurationEditor,
-                    ClaimConstantStrings.UsersAdmin,
-                    ClaimConstantStrings.UsersRolesAdmin,
-                    ClaimConstantStrings.UsersPrivilegedAdmin,
-                    ClaimConstantStrings.UsersPrivilegedRolesAdmin
+                    new DefaultRoleClaim.NewRoleClaim(ClaimConstantStrings.RolesCreateNew,
+                        "Allows creating a new Role. Requires RolesViewClaims, RolesEditClaims"),
+                    new DefaultRoleClaim.NewRoleClaim(ClaimConstantStrings.RolesViewClaims,
+                        "Allows viewing a Role's claims"),
+                    new DefaultRoleClaim.NewRoleClaim(ClaimConstantStrings.RolesEditClaims,
+                        "Allows Editing a Role's claims"),
+                    new DefaultRoleClaim.NewRoleClaim(ClaimConstantStrings.RolesDeleteRole,
+                        "Allows deleting a role"),
+                    new DefaultRoleClaim.NewRoleClaim(ClaimConstantStrings.SitewideConfigurationEditor,
+                        "Allows editing sitewide configuration settings"),
+                    new DefaultRoleClaim.NewRoleClaim(ClaimConstantStrings.UsersAdmin,
+                        "Allows creating users, resetting passwords for users, enabling/disabling users"),
+                    new DefaultRoleClaim.NewRoleClaim(ClaimConstantStrings.UsersRolesAdmin,
+                        "Allows granting/revoking roles for users. Requires UsersAdmin to get to the page to do this"),
+                    new DefaultRoleClaim.NewRoleClaim(ClaimConstantStrings.UsersPrivilegedAdmin,
+                        "Allows password reset, enabling/disabling of users with privileged roles"),
+                    new DefaultRoleClaim.NewRoleClaim(ClaimConstantStrings.UsersPrivilegedRolesAdmin,
+                        "Allows adding a privileged role to a user (super admin, for example). Requires UsersAdmin to get to the page to do this"),
+                }
+            },
+            new DefaultRoleClaim()
+            {
+                Version = string.Empty,
+                RoleName = RoleConstantStrings.UserAdmin,
+                RoleDescription = "User Admins can create users, reset user passwords and security options, and enable/disable accounts",
+                Claims = new List<DefaultRoleClaim.NewRoleClaim>()
+                {
+                    new DefaultRoleClaim.NewRoleClaim(ClaimConstantStrings.UsersAdmin,
+                        "Allows creating users, resetting passwords for users, enabling/disabling users"),
+                    new DefaultRoleClaim.NewRoleClaim(ClaimConstantStrings.UsersRolesAdmin,
+                        "Allows granting/revoking roles for users. Requires UsersAdmin to get to the page to do this")
                 }
             }
         };

@@ -55,7 +55,14 @@ namespace Helpdesk.Infrastructure
                             _currentHelpdeskUser.Surname));
                     if (!_currentIdentityUser.TwoFactorEnabled)
                     {
-                        viewData.Add("NagMFAEnrollmentBanner", "true");
+                        ConfigOpt? showMfaOpt = await _context.ConfigOpts
+                            .Where(x => x.Category == ConfigOptConsts.Accounts_ShowMfaBanner.Category &&
+                                        x.Key == ConfigOptConsts.Accounts_ShowMfaBanner.Key)
+                            .FirstOrDefaultAsync();
+                        if (showMfaOpt?.Value == "true")
+                        {
+                            viewData.Add("NagMFAEnrollmentBanner", "true");
+                        }
                     }
 
                     // retrieve claims for the user

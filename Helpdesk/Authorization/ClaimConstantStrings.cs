@@ -2,28 +2,46 @@
 {
     public static class ClaimConstantStrings
     {
-        // Allows creating a new Role. Requires RolesViewClaims, RolesEditClaims.
+        /// <summary>
+        /// Allows creating a new Role. Requires RolesViewClaims, RolesEditClaims
+        /// </summary>        
         public static readonly string RolesCreateNew = "Roles Create New";
-        // Allows viewing a Role's claims.
+        /// <summary>
+        /// Allows viewing a Role's claims
+        /// </summary>
         public static readonly string RolesViewClaims = "Roles View Claims";
-        // Allows Editing a Role's claims.
+        /// <summary>
+        /// Allows Editing a Role's claims
+        /// </summary>
         public static readonly string RolesEditClaims = "Roles Edit Claims";
-        // Allows deleting a role.
+        /// <summary>
+        /// Allows deleting a role
+        /// </summary>
         public static readonly string RolesDeleteRole = "Roles Delete Role";
         
-        // Allows editing sitewide configuration settings
+        /// <summary>
+        /// Allows editing sitewide configuration settings
+        /// </summary>
         public static readonly string SitewideConfigurationEditor = "Sitewide Configuration Editor";
 
-        // Allows creating users, resetting passwords for users, enabling/disabling users.
+        /// <summary>
+        /// Allows creating users, resetting passwords for users, enabling/disabling users
+        /// </summary>
         public static readonly string UsersAdmin = "Users Admin";
 
-        // Allows granting/revoking roles for users. Requires UsersAdmin to get to the page to do this.
+        /// <summary>
+        /// Allows granting/revoking roles for users. Requires UsersAdmin to get to the page to do this
+        /// </summary>
         public static readonly string UsersRolesAdmin = "Users Roles Admin";
 
-        // Allows password reset, enabling/disabling of users with privileged roles. 
+        /// <summary>
+        /// Allows password reset, enabling/disabling of users with privileged roles
+        /// </summary>
         public static readonly string UsersPrivilegedAdmin = "Users Privileged Admin";
 
-        // Allows adding a privileged role to a user (super admin, for example). Requires UsersAdmin to get to the page to do this.
+        /// <summary>
+        /// Allows adding a privileged role to a user (super admin, for example). Requires UsersAdmin to get to the page to do this
+        /// </summary>
         public static readonly string UsersPrivilegedRolesAdmin = "Users Privileged Roles Admin";
 
     }
