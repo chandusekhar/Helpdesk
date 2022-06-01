@@ -27,11 +27,11 @@ namespace Helpdesk.Infrastructure
             _signInManager = signInManager;
         }
 
-        protected async Task LoadSiteSettings(ViewDataDictionary viewData)
+        protected async Task<bool> LoadSiteSettings(ViewDataDictionary viewData)
         {
             if (LoadSiteSettingsAlreadyDone)
             {
-                return;
+                return true;
             }
             LoadSiteSettingsAlreadyDone = true;
 
@@ -54,6 +54,11 @@ namespace Helpdesk.Infrastructure
                         string.Format("{0} {1}", 
                             _currentHelpdeskUser.GivenName, 
                             _currentHelpdeskUser.Surname));
+                    if (!_currentHelpdeskUser.IsEnabled)
+                    {
+                        await _signInManager.SignOutAsync();
+                        return false;
+                    }
                     if (!_currentIdentityUser.TwoFactorEnabled)
                     {
                         ConfigOpt? showMfaOpt = await _context.ConfigOpts
@@ -116,6 +121,8 @@ namespace Helpdesk.Infrastructure
             {
                 viewData[ViewDataStrings.Accounts_ShowRegister] = "true";
             }
+
+            return true;
         }
     }
 }

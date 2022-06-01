@@ -55,14 +55,21 @@ namespace Helpdesk.Areas.Identity.Pages.Account
             public string Email { get; set; }
         }
 
-        public async Task OnGet()
+        public async Task<IActionResult> OnGet()
         {
-            await LoadSiteSettings(ViewData);
+            if (!await LoadSiteSettings(ViewData))
+            {
+                return RedirectToPage("/Index");
+            }
+            return Page();
         }
 
         public async Task<IActionResult> OnPostAsync()
         {
-            await LoadSiteSettings(ViewData);
+            if (!await LoadSiteSettings(ViewData))
+            {
+                return RedirectToPage("/Index");
+            }
             if (!ModelState.IsValid)
             {
                 return Page();

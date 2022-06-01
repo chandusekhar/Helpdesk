@@ -24,14 +24,21 @@ namespace Helpdesk.Areas.Identity.Pages.Account
             : base(dbContext, userManager, signInManager)
         { }
 
-        public async Task OnGet()
+        public async Task<IActionResult> OnGet()
         {
-            await LoadSiteSettings(ViewData);
+            if (!await LoadSiteSettings(ViewData))
+            {
+                return RedirectToPage("/Index");
+            }
+            return Page();
         }
 
         public async Task<IActionResult> OnPost(string returnUrl = null)
         {
-            await LoadSiteSettings(ViewData);
+            if (!await LoadSiteSettings(ViewData))
+            {
+                return RedirectToPage("/Index");
+            }
             await _signInManager.SignOutAsync();
             if (returnUrl != null)
             {

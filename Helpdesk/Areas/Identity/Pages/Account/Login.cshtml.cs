@@ -16,6 +16,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 using Helpdesk.Infrastructure;
 using Helpdesk.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace Helpdesk.Areas.Identity.Pages.Account
 {
@@ -53,9 +54,12 @@ namespace Helpdesk.Areas.Identity.Pages.Account
             public bool RememberMe { get; set; }
         }
 
-        public async Task OnGetAsync(string returnUrl = null)
+        public async Task<IActionResult> OnGetAsync(string returnUrl = null)
         {
-            await LoadSiteSettings(ViewData);
+            if (!await LoadSiteSettings(ViewData))
+            {
+                return RedirectToPage("/Index");
+            }
             if (!string.IsNullOrEmpty(ErrorMessage))
             {
                 ModelState.AddModelError(string.Empty, ErrorMessage);
@@ -69,20 +73,36 @@ namespace Helpdesk.Areas.Identity.Pages.Account
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
 
             ReturnUrl = returnUrl;
+            return Page();
         }
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
-            await LoadSiteSettings(ViewData);
+            if (!await LoadSiteSettings(ViewData))
+            {
+                return RedirectToPage("/Index");
+            }
             returnUrl ??= Url.Content("~/");
 
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
 
             if (ModelState.IsValid)
             {
+                // check for disabled account
+                var tempIdentity = await _userManager.FindByEmailAsync(Input.Email);
+                if (tempIdentity != null)
+                {
+                    var huser = await _context.HelpdeskUsers
+                        .Where(x => x.IdentityUserId == tempIdentity.Id)
+                        .FirstOrDefaultAsync();
+                    if (huser != null && !huser.IsEnabled)
+                    {
+                        return RedirectToPage("./Lockout");
+                    }
+                }
                 // This doesn't count login failures towards account lockout
                 // To enable password failures to trigger account lockout, set lockoutOnFailure: true
-                var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: false);
+                var result = await _signInManager.PasswordSignInAsync(Input.Email, Input.Password, Input.RememberMe, lockoutOnFailure: true);
                 if (result.Succeeded)
                 {
                     return LocalRedirect(returnUrl);

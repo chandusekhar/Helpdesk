@@ -100,7 +100,10 @@ namespace Helpdesk.Areas.Identity.Pages.Account
 
         public async Task<IActionResult> OnGetAsync(string returnUrl = null)
         {
-            await LoadSiteSettings(ViewData);
+            if (!await LoadSiteSettings(ViewData))
+            {
+                return RedirectToPage("/Index");
+            }
             if (!ViewData.ContainsKey(ViewDataStrings.Accounts_ShowRegister))
             {
                 return RedirectToPage("./Login");
@@ -112,7 +115,10 @@ namespace Helpdesk.Areas.Identity.Pages.Account
 
         public async Task<IActionResult> OnPostAsync(string returnUrl = null)
         {
-            await LoadSiteSettings(ViewData);
+            if (!await LoadSiteSettings(ViewData))
+            {
+                return RedirectToPage("/Index");
+            }
             if (!ViewData.ContainsKey(ViewDataStrings.Accounts_ShowRegister))
             {
                 return RedirectToPage("./Login");

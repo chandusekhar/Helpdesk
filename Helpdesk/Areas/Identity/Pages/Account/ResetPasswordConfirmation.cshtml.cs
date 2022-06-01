@@ -6,6 +6,7 @@ using Helpdesk.Data;
 using Helpdesk.Infrastructure;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace Helpdesk.Areas.Identity.Pages.Account
@@ -24,9 +25,13 @@ namespace Helpdesk.Areas.Identity.Pages.Account
             : base(dbContext, userManager, signInManager)
         { }
         
-        public async Task OnGet()
+        public async Task<IActionResult> OnGet()
         {
-            await LoadSiteSettings(ViewData);
+            if (!await LoadSiteSettings(ViewData))
+            {
+                return RedirectToPage("/Index");
+            }
+            return Page();
         }
     }
 }

@@ -16,9 +16,13 @@ namespace Helpdesk.Pages
             :base(dbContext, userManager, signInManager)
         { }
 
-        public async Task OnGet()
+        public async Task<IActionResult> OnGet()
         {
-            await LoadSiteSettings(ViewData);
+            if (!await LoadSiteSettings(ViewData))
+            {
+                return RedirectToPage("/Index");
+            }
+            return Page();
         }
     }
 }

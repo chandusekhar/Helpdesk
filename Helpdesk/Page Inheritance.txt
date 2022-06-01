@@ -15,8 +15,12 @@
             _emailSender = emailSender;
         }
 		
-async Task
-await LoadSiteSettings(ViewData);
+async Task<IActionResult>
+if (!await LoadSiteSettings(ViewData))
+{
+    return RedirectToPage("/Index");
+}
+// return Page();
 
 // identity username of the user, or First Last name.
 @ViewData["IdentityUserName"]

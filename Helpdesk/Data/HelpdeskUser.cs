@@ -16,6 +16,8 @@ namespace Helpdesk.Data
         [Required]
         public string IdentityUserId { get; set; }
         [Required]
+        public bool IsEnabled { get; set; }
+        [Required]
         public string GivenName { get; set; }
         [Required]
         public string Surname { get; set; }

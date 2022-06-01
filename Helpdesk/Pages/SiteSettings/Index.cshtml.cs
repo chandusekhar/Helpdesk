@@ -25,7 +25,10 @@ namespace Helpdesk.Pages.SiteSettings
 
         public async Task<IActionResult> OnGetAsync()
         {
-            await LoadSiteSettings(ViewData);
+            if (!await LoadSiteSettings(ViewData))
+            {
+                return RedirectToPage("/Index");
+            }
             if (_currentHelpdeskUser == null)
             {
                 return Forbid();

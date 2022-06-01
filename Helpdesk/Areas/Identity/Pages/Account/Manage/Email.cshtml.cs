@@ -48,9 +48,12 @@ namespace Helpdesk.Areas.Identity.Pages.Account.Manage
             public string NewEmail { get; set; }
         }
 
-        private async Task LoadAsync(IdentityUser user)
+        private async Task<IActionResult> LoadAsync(IdentityUser user)
         {
-            await LoadSiteSettings(ViewData);
+            if (!await LoadSiteSettings(ViewData))
+            {
+                return RedirectToPage("/Index");
+            }
             var email = await _userManager.GetEmailAsync(user);
             Email = email;
 
@@ -60,11 +63,15 @@ namespace Helpdesk.Areas.Identity.Pages.Account.Manage
             };
 
             IsEmailConfirmed = await _userManager.IsEmailConfirmedAsync(user);
+            return Page();
         }
 
         public async Task<IActionResult> OnGetAsync()
         {
-            await LoadSiteSettings(ViewData);
+            if (!await LoadSiteSettings(ViewData))
+            {
+                return RedirectToPage("/Index");
+            }
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {
@@ -77,7 +84,10 @@ namespace Helpdesk.Areas.Identity.Pages.Account.Manage
 
         public async Task<IActionResult> OnPostChangeEmailAsync()
         {
-            await LoadSiteSettings(ViewData);
+            if (!await LoadSiteSettings(ViewData))
+            {
+                return RedirectToPage("/Index");
+            }
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {
@@ -116,7 +126,10 @@ namespace Helpdesk.Areas.Identity.Pages.Account.Manage
 
         public async Task<IActionResult> OnPostSendVerificationEmailAsync()
         {
-            await LoadSiteSettings(ViewData);
+            if (!await LoadSiteSettings(ViewData))
+            {
+                return RedirectToPage("/Index");
+            }
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {
