@@ -98,13 +98,30 @@ namespace Helpdesk.Areas.Identity.Pages.Account.Manage
             var huser = await _context.HelpdeskUsers.Where(x => x.IdentityUserId == user.Id).FirstOrDefaultAsync();
             if (huser == null)
             {
+                var templateName = _context.ConfigOpts
+                    .Where(x => x.Category == ConfigOptConsts.Accounts_DefaultNavTemplate.Category &&
+                                x.Key == ConfigOptConsts.Accounts_DefaultNavTemplate.Key)
+                    .FirstOrDefault();
+                if (templateName == null)
+                {
+                    templateName = new ConfigOpt()
+                    {
+                        Category = ConfigOptConsts.Accounts_DefaultNavTemplate.Category,
+                        Key = ConfigOptConsts.Accounts_DefaultNavTemplate.Key,
+                        Value = ConfigOptConsts.Accounts_DefaultNavTemplate.Value
+                    };
+                }
+                var defaultTemplate = await _context.SiteNavTemplates
+                    .Where(x => x.Name == templateName.Value)
+                    .FirstOrDefaultAsync();
                 huser = new HelpdeskUser()
                 {
                     IdentityUserId = user.Id,
                     GivenName = Input.GivenName,
                     Surname = Input.Surname,
                     JobTitle = Input.JobTitle,
-                    Company = Input.Company
+                    Company = Input.Company,
+                    SiteNavTemplate = defaultTemplate
                 };
                 _context.HelpdeskUsers.Add(huser);
                 // if this is the first user, then give it super admin permissions automatically.
@@ -114,6 +131,7 @@ namespace Helpdesk.Areas.Identity.Pages.Account.Manage
                     await _context.SaveChangesAsync();
                     await RightsManagement.UserAddRole(_context, user.Id, RoleConstantStrings.SuperAdmin);
                 }
+                
             }
             else
             {

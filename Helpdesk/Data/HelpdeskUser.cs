@@ -24,6 +24,7 @@ namespace Helpdesk.Data
 
         public string? Company { get; set; }
 
+        public SiteNavTemplate SiteNavTemplate { get; set; }
         /// <summary>
         /// If user is a supervisor, this is a list of employees they manage, and what their responsibilities are.
         /// </summary>

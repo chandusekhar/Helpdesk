@@ -16,8 +16,8 @@ namespace Helpdesk.Data
         public DbSet<HelpdeskClaim> HelpdeskClaims { get; set; }
         public DbSet<TeamMember> TeamMembers { get; set; }
         public DbSet<SupervisorResponsibility> SupervisorResponsibilities { get; set; }
+        public DbSet<SiteNavTemplate> SiteNavTemplates { get; set; }
 
 
-        
     }
 }

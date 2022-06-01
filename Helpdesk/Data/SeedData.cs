@@ -76,10 +76,30 @@ namespace Helpdesk.Data
                                 roleClaims.Add(cl);
                             }
                         }
+                    }
+                }
 
-
-
-
+                foreach (var item in SiteNavTemplateCatalog.Catalog)
+                {
+                    if (item.Version == dbVersion.Value)
+                    {
+                        var temp = await context.SiteNavTemplates
+                            .Where(x => x.Name == item.SiteNavTemplate.Name)
+                            .FirstOrDefaultAsync();
+                        if (temp != null)
+                        {
+                            temp.Description = item.SiteNavTemplate.Description;
+                            temp.TicketLink = item.SiteNavTemplate.TicketLink;
+                            temp.AssetLink = item.SiteNavTemplate.AssetLink;
+                            temp.PeopleLink = item.SiteNavTemplate.PeopleLink;
+                            temp.SiteOptionsLink = item.SiteNavTemplate.SiteOptionsLink;
+                            await context.SaveChangesAsync();
+                        }
+                        else
+                        {
+                            context.SiteNavTemplates.Add(item.SiteNavTemplate);
+                            await context.SaveChangesAsync();
+                        }
                     }
                 }
 
@@ -259,13 +279,14 @@ namespace Helpdesk.Data
                 Version = string.Empty,
                 Additions = new List<ConfigOptDefault>()
                 {
-                    new ConfigOptDefault("System", "Version", "1.0"),
-                    new ConfigOptDefault("Accounts", "Allow Self-Registration", "true", 0),
-                    new ConfigOptDefault("Accounts", "MFA QR Code Site Name", "Helpdesk", 1),
-                    new ConfigOptDefault("Accounts", "Show MFA Banner", "true", 2),
-                    new ConfigOptDefault("Branding", "Organization Name", "Our Organization", 0),
-                    new ConfigOptDefault("Branding", "Site Name", "Helpdesk", 1),
-                    new ConfigOptDefault("Branding", "Site URL", "helpdesk.localhost", 2),
+                    ConfigOptConsts.System_Version,
+                    ConfigOptConsts.Accounts_AllowSelfRegistration,
+                    ConfigOptConsts.Accounts_MfaQrCodeSitename,
+                    ConfigOptConsts.Accounts_ShowMfaBanner,
+                    ConfigOptConsts.Accounts_DefaultNavTemplate,
+                    ConfigOptConsts.Branding_OrganizationName,
+                    ConfigOptConsts.Branding_SiteName,
+                    ConfigOptConsts.Branding_SiteURL
                 }
             }
         };
@@ -356,6 +377,32 @@ namespace Helpdesk.Data
                         "Allows creating users, resetting passwords for users, enabling/disabling users"),
                     new DefaultRoleClaim.NewRoleClaim(ClaimConstantStrings.UsersRolesAdmin,
                         "Allows granting/revoking roles for users. Requires UsersAdmin to get to the page to do this")
+                }
+            }
+        };
+    }
+    
+    public class SiteNavTemplateVersion
+    {
+        public string Version { get; set; }
+        public SiteNavTemplate SiteNavTemplate { get; set; }
+    }
+
+    public static class SiteNavTemplateCatalog
+    {
+        public static List<SiteNavTemplateVersion> Catalog = new List<SiteNavTemplateVersion>()
+        {
+            new SiteNavTemplateVersion()
+            {
+                Version = "",
+                SiteNavTemplate = new SiteNavTemplate()
+                {
+                    Name = "Everything Visible",
+                    Description = "All Navbar links are shown regardless of access level for user",
+                    TicketLink = true,
+                    AssetLink = true,
+                    PeopleLink = true,
+                    SiteOptionsLink = true
                 }
             }
         };
