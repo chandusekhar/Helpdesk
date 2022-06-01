@@ -360,10 +360,12 @@ namespace Helpdesk.Data
                         "Allows creating users, resetting passwords for users, enabling/disabling users"),
                     new DefaultRoleClaim.NewRoleClaim(ClaimConstantStrings.UsersRolesAdmin,
                         "Allows granting/revoking roles for users. Requires UsersAdmin to get to the page to do this"),
-                    new DefaultRoleClaim.NewRoleClaim(ClaimConstantStrings.UsersPrivilegedAdmin,
-                        "Allows password reset, enabling/disabling of users with privileged roles"),
-                    new DefaultRoleClaim.NewRoleClaim(ClaimConstantStrings.UsersPrivilegedRolesAdmin,
-                        "Allows adding a privileged role to a user (super admin, for example). Requires UsersAdmin to get to the page to do this"),
+                    //new DefaultRoleClaim.NewRoleClaim(ClaimConstantStrings.UsersPrivilegedAdmin,
+                    //    "Allows password reset, enabling/disabling of users with privileged roles"),
+                    //new DefaultRoleClaim.NewRoleClaim(ClaimConstantStrings.UsersPrivilegedRolesAdmin,
+                    //    "Allows adding a privileged role to a user (super admin, for example). Requires UsersAdmin to get to the page to do this"),
+                    new DefaultRoleClaim.NewRoleClaim(ClaimConstantStrings.UsersAllowReadAccess,
+                        "Required to access the users screen and view basic user details"),
                 }
             },
             new DefaultRoleClaim()
@@ -376,7 +378,9 @@ namespace Helpdesk.Data
                     new DefaultRoleClaim.NewRoleClaim(ClaimConstantStrings.UsersAdmin,
                         "Allows creating users, resetting passwords for users, enabling/disabling users"),
                     new DefaultRoleClaim.NewRoleClaim(ClaimConstantStrings.UsersRolesAdmin,
-                        "Allows granting/revoking roles for users. Requires UsersAdmin to get to the page to do this")
+                        "Allows granting/revoking roles for users. Requires UsersAdmin to get to the page to do this"),
+                    new DefaultRoleClaim.NewRoleClaim(ClaimConstantStrings.UsersAllowReadAccess,
+                        "Required to access the users screen and view basic user details"),
                 }
             }
         };

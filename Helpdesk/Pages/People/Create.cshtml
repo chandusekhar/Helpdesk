@@ -1,0 +1,59 @@
+﻿@page
+@model Helpdesk.Pages.People.CreateModel
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>HelpdeskUser</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="HelpdeskUser.IdentityUserId" class="control-label"></label>
+                <input asp-for="HelpdeskUser.IdentityUserId" class="form-control" />
+                <span asp-validation-for="HelpdeskUser.IdentityUserId" class="text-danger"></span>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="HelpdeskUser.IsEnabled" /> @Html.DisplayNameFor(model => model.HelpdeskUser.IsEnabled)
+                </label>
+            </div>
+            <div class="form-group">
+                <label asp-for="HelpdeskUser.GivenName" class="control-label"></label>
+                <input asp-for="HelpdeskUser.GivenName" class="form-control" />
+                <span asp-validation-for="HelpdeskUser.GivenName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="HelpdeskUser.Surname" class="control-label"></label>
+                <input asp-for="HelpdeskUser.Surname" class="form-control" />
+                <span asp-validation-for="HelpdeskUser.Surname" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="HelpdeskUser.JobTitle" class="control-label"></label>
+                <input asp-for="HelpdeskUser.JobTitle" class="form-control" />
+                <span asp-validation-for="HelpdeskUser.JobTitle" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="HelpdeskUser.Company" class="control-label"></label>
+                <input asp-for="HelpdeskUser.Company" class="form-control" />
+                <span asp-validation-for="HelpdeskUser.Company" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-page="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

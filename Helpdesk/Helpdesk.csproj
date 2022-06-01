@@ -17,4 +17,9 @@
     <PackageReference Include="NETCore.MailKit" Version="2.1.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Pages\Assets\" />
+    <Folder Include="Pages\Tickets\" />
+  </ItemGroup>
+
 </Project>

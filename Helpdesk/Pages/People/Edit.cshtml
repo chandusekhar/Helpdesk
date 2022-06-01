@@ -1,0 +1,93 @@
+﻿@page
+@model Helpdesk.Pages.People.EditModel
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+
+<br />
+<div class="text-center">
+    <h1 class="display-4">Edit User</h1>
+</div>
+
+<div class="border container col-12" style="padding:30px;">
+    <form method="post" class="row g-3">
+        <div class="col-md-12">
+            <span class="h3">User Profile</span>
+        </div>
+        <div class="col-md-12 text-center">
+            <div class="text-danger text-center" asp-validation-summary="ModelOnly"></div>
+        </div>
+        <input type="hidden" asp-for="UserModel.Id" />
+        <div class="col-md-6">
+            <label asp-for="UserModel.GivenName" class="form-label"></label>
+            <input asp-for="UserModel.GivenName" class="form-control" />
+            <span asp-validation-for="UserModel.GivenName" class="text-danger"></span>
+        </div>
+        <div class="col-md-6">
+            <label asp-for="UserModel.JobTitle" class="form-label"></label>
+            <input asp-for="UserModel.JobTitle" class="form-control" />
+            <span asp-validation-for="UserModel.JobTitle" class="text-danger"></span>
+        </div>
+        <div class="col-md-6">
+            <label asp-for="UserModel.Surname" class="form-label"></label>
+            <input asp-for="UserModel.Surname" class="form-control" />
+            <span asp-validation-for="UserModel.Surname" class="text-danger"></span>
+        </div>
+        <div class="col-md-6">
+            <label asp-for="UserModel.Company" class="form-label"></label>
+            <input asp-for="UserModel.Company" class="form-control" />
+            <span asp-validation-for="UserModel.Company" class="text-danger"></span>
+        </div>
+        <div class="col-md-6">
+            <label asp-for="UserModel.Email" class="form-label"></label>
+            <input asp-for="UserModel.Email" class="form-control" />
+            <span asp-validation-for="UserModel.Email" class="text-danger"></span>
+        </div>
+        <div class="col-md-6">
+            <label asp-for="UserModel.PhoneNumber" class="form-label"></label>
+            <input asp-for="UserModel.PhoneNumber" class="form-control" />
+            <span asp-validation-for="UserModel.PhoneNumber" class="text-danger"></span>
+        </div>
+        <div class="col-md-3">
+            <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" role="switch" asp-for="UserModel.Enabled">
+                <label class="form-check-label" asp-for="UserModel.Enabled"></label>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" role="switch" asp-for="UserModel.EmailVerified" disabled>
+                <label class="form-check-label" asp-for="UserModel.EmailVerified"></label>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" role="switch" asp-for="UserModel.MFAEnabled" disabled>
+                <label class="form-check-label" asp-for="UserModel.MFAEnabled">MFA Enabled</label>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" role="switch" asp-for="UserModel.LockedOut" disabled>
+                <label class="form-check-label" asp-for="UserModel.LockedOut">Locked Out</label>
+            </div>
+        </div>
+
+        <div class="col-md-2">
+            <input type="submit" value="Save" class="btn btn-primary form-control" />
+        </div>
+
+    </form>
+</div>
+
+
+
+<div>
+    <a asp-page="./Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

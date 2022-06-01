@@ -34,15 +34,20 @@
         /// </summary>
         public static readonly string UsersRolesAdmin = "Users Roles Admin";
 
-        /// <summary>
-        /// Allows password reset, enabling/disabling of users with privileged roles
-        /// </summary>
-        public static readonly string UsersPrivilegedAdmin = "Users Privileged Admin";
+        ///// <summary>
+        ///// Allows password reset, enabling/disabling of users with privileged roles
+        ///// </summary>
+        //public static readonly string UsersPrivilegedAdmin = "Users Privileged Admin";
+
+        ///// <summary>
+        ///// Allows adding a privileged role to a user (super admin, for example). Requires UsersAdmin to get to the page to do this
+        ///// </summary>
+        //public static readonly string UsersPrivilegedRolesAdmin = "Users Privileged Roles Admin";
 
         /// <summary>
-        /// Allows adding a privileged role to a user (super admin, for example). Requires UsersAdmin to get to the page to do this
+        /// Required to access the users screen and view basic user details. 
         /// </summary>
-        public static readonly string UsersPrivilegedRolesAdmin = "Users Privileged Roles Admin";
-
+        public static readonly string UsersAllowReadAccess = "Users Allow Read Access";
+            
     }
 }
