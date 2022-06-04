@@ -61,10 +61,22 @@
                                 <a class="nav-link text-dark" asp-area="" asp-page="/People/Index">People</a>
                             </li>
                         }
-                        @if(@ViewData.ContainsKey("NavbarShowSiteSettingsLink"))
+                        @if (@ViewData.ContainsKey("NavbarShowConfigurationMenu"))
                         {
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-page="/SiteSettings/Index">Site Settings</a>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle text-dark" href="#" id="navbarConfigDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Configuration
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="navbarConfigDropdown">
+                                    @if (@ViewData.ContainsKey("NavbarShowSiteSettingsLink"))
+                                    {
+                                        <li><a class="dropdown-item" asp-area="" asp-page="/SiteSettings/Index">Site Settings</a></li>
+                                    }
+                                    @if (@ViewData.ContainsKey("NavbarShowLicenseTypeLink"))
+                                    {
+                                        <li><a class="dropdown-item" asp-area="" asp-page="/LicenseTypes/Index">License Types</a></li>
+                                    }
+                                </ul>
                             </li>
                         }
                         @if (!@ViewData.ContainsKey("NavbarSupressPrivacyLink"))

@@ -92,7 +92,15 @@ namespace Helpdesk.Infrastructure
                         {
                             viewData.Add("NavbarShowPeopleLink", "true");
                         }
-                        if (_currentHelpdeskUser.SiteNavTemplate.SiteOptionsLink)
+                        if (_currentHelpdeskUser.SiteNavTemplate.ShowConfigurationMenu)
+                        {
+                            viewData.Add("NavbarShowConfigurationMenu", "true");
+                        }
+                        if (_currentHelpdeskUser.SiteNavTemplate.LicenseTypeLink)
+                        {
+                            viewData.Add("NavbarShowLicenseTypeLink", "true");
+                        }
+                        if (_currentHelpdeskUser.SiteNavTemplate.SiteSettingsLink)
                         {
                             viewData.Add("NavbarShowSiteSettingsLink", "true");
                         }

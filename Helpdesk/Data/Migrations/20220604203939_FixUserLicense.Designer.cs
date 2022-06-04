@@ -4,6 +4,7 @@ using Helpdesk.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Helpdesk.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220604203939_FixUserLicense")]
+    partial class FixUserLicense
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -50,7 +52,7 @@ namespace Helpdesk.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("ConfigOpts", (string)null);
+                    b.ToTable("ConfigOpts");
                 });
 
             modelBuilder.Entity("Helpdesk.Data.HelpdeskClaim", b =>
@@ -71,7 +73,7 @@ namespace Helpdesk.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("HelpdeskClaims", (string)null);
+                    b.ToTable("HelpdeskClaims");
                 });
 
             modelBuilder.Entity("Helpdesk.Data.HelpdeskRole", b =>
@@ -92,7 +94,7 @@ namespace Helpdesk.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("HelpdeskRoles", (string)null);
+                    b.ToTable("HelpdeskRoles");
                 });
 
             modelBuilder.Entity("Helpdesk.Data.HelpdeskUser", b =>
@@ -135,7 +137,7 @@ namespace Helpdesk.Data.Migrations
 
                     b.HasIndex("SiteNavTemplateId");
 
-                    b.ToTable("HelpdeskUsers", (string)null);
+                    b.ToTable("HelpdeskUsers");
                 });
 
             modelBuilder.Entity("Helpdesk.Data.LicenseType", b =>
@@ -171,7 +173,7 @@ namespace Helpdesk.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("LicenseType", (string)null);
+                    b.ToTable("LicenseType");
                 });
 
             modelBuilder.Entity("Helpdesk.Data.SiteNavTemplate", b =>
@@ -189,9 +191,6 @@ namespace Helpdesk.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("LicenseTypeLink")
-                        .HasColumnType("bit");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -199,10 +198,7 @@ namespace Helpdesk.Data.Migrations
                     b.Property<bool>("PeopleLink")
                         .HasColumnType("bit");
 
-                    b.Property<bool>("ShowConfigurationMenu")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("SiteSettingsLink")
+                    b.Property<bool>("SiteOptionsLink")
                         .HasColumnType("bit");
 
                     b.Property<bool>("TicketLink")
@@ -210,7 +206,7 @@ namespace Helpdesk.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("SiteNavTemplates", (string)null);
+                    b.ToTable("SiteNavTemplates");
                 });
 
             modelBuilder.Entity("Helpdesk.Data.SupervisorResponsibility", b =>
@@ -236,7 +232,7 @@ namespace Helpdesk.Data.Migrations
 
                     b.HasIndex("TeamMemberId");
 
-                    b.ToTable("SupervisorResponsibilities", (string)null);
+                    b.ToTable("SupervisorResponsibilities");
                 });
 
             modelBuilder.Entity("Helpdesk.Data.TeamMember", b =>
@@ -262,7 +258,7 @@ namespace Helpdesk.Data.Migrations
 
                     b.HasIndex("HelpdeskUserId");
 
-                    b.ToTable("TeamMembers", (string)null);
+                    b.ToTable("TeamMembers");
                 });
 
             modelBuilder.Entity("Helpdesk.Data.UserLicenseAssignment", b =>
@@ -289,7 +285,7 @@ namespace Helpdesk.Data.Migrations
 
                     b.HasIndex("LicenseTypeId");
 
-                    b.ToTable("UserLicenseAssignments", (string)null);
+                    b.ToTable("UserLicenseAssignments");
                 });
 
             modelBuilder.Entity("HelpdeskClaimHelpdeskRole", b =>
@@ -304,7 +300,7 @@ namespace Helpdesk.Data.Migrations
 
                     b.HasIndex("GrantingRolesId");
 
-                    b.ToTable("HelpdeskClaimHelpdeskRole", (string)null);
+                    b.ToTable("HelpdeskClaimHelpdeskRole");
                 });
 
             modelBuilder.Entity("HelpdeskRoleHelpdeskUser", b =>
@@ -319,7 +315,7 @@ namespace Helpdesk.Data.Migrations
 
                     b.HasIndex("UsersId");
 
-                    b.ToTable("HelpdeskRoleHelpdeskUser", (string)null);
+                    b.ToTable("HelpdeskRoleHelpdeskUser");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>

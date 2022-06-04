@@ -1,0 +1,65 @@
+﻿@page
+@model Helpdesk.Pages.LicenseTypes.EditModel
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>LicenseType</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="LicenseType.Id" />
+            <div class="form-group">
+                <label asp-for="LicenseType.Name" class="control-label"></label>
+                <input asp-for="LicenseType.Name" class="form-control" />
+                <span asp-validation-for="LicenseType.Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="LicenseType.Description" class="control-label"></label>
+                <input asp-for="LicenseType.Description" class="form-control" />
+                <span asp-validation-for="LicenseType.Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="LicenseType.Seats" class="control-label"></label>
+                <input asp-for="LicenseType.Seats" class="form-control" />
+                <span asp-validation-for="LicenseType.Seats" class="text-danger"></span>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="LicenseType.IsDeviceLicense" /> @Html.DisplayNameFor(model => model.LicenseType.IsDeviceLicense)
+                </label>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="LicenseType.IsUserLicense" /> @Html.DisplayNameFor(model => model.LicenseType.IsUserLicense)
+                </label>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="LicenseType.DeviceRequireProductCode" /> @Html.DisplayNameFor(model => model.LicenseType.DeviceRequireProductCode)
+                </label>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="LicenseType.UserRequireProductCode" /> @Html.DisplayNameFor(model => model.LicenseType.UserRequireProductCode)
+                </label>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-page="./Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -26,10 +26,19 @@ namespace Helpdesk.Data
         [Required] 
         public bool PeopleLink { get; set; }
         /// <summary>
-        /// Shows SiteSettings link in the Navbar
+        /// Show the Configuration Menu on the NavBar
         /// </summary>
         [Required]
-        public bool SiteOptionsLink { get; set; }
-
+        public bool ShowConfigurationMenu { get; set; }
+        /// <summary>
+        /// Show LicenseType link in the Configuration Menu
+        /// </summary>
+        [Required]
+        public bool LicenseTypeLink { get; set; }
+        /// <summary>
+        /// Shows SiteSettings link in the Configuration Menu
+        /// </summary>
+        [Required]
+        public bool SiteSettingsLink { get; set; }
     }
 }

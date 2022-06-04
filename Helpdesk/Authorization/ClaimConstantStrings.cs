@@ -25,6 +25,11 @@
         public static readonly string SitewideConfigurationEditor = "Sitewide Configuration Editor";
 
         /// <summary>
+        /// Allows creating/editing/removing License types
+        /// </summary>
+        public static readonly string LicenseTypeAdmin = "License Type Admin";
+
+        /// <summary>
         /// Allows creating users, resetting passwords for users, enabling/disabling users
         /// </summary>
         public static readonly string UsersAdmin = "Users Admin";

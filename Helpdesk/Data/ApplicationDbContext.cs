@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Helpdesk.Data;
 
 namespace Helpdesk.Data
 {
@@ -17,7 +18,7 @@ namespace Helpdesk.Data
         public DbSet<TeamMember> TeamMembers { get; set; }
         public DbSet<SupervisorResponsibility> SupervisorResponsibilities { get; set; }
         public DbSet<SiteNavTemplate> SiteNavTemplates { get; set; }
-
-
+        public DbSet<LicenseType> LicenseType { get; set; }
+        public DbSet<UserLicenseAssignment> UserLicenseAssignments { get; set; }
     }
 }

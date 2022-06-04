@@ -96,7 +96,9 @@ namespace Helpdesk.Data
                             temp.TicketLink = item.SiteNavTemplate.TicketLink;
                             temp.AssetLink = item.SiteNavTemplate.AssetLink;
                             temp.PeopleLink = item.SiteNavTemplate.PeopleLink;
-                            temp.SiteOptionsLink = item.SiteNavTemplate.SiteOptionsLink;
+                            temp.ShowConfigurationMenu = item.SiteNavTemplate.ShowConfigurationMenu;
+                            temp.LicenseTypeLink = item.SiteNavTemplate.LicenseTypeLink;
+                            temp.SiteSettingsLink = item.SiteNavTemplate.SiteSettingsLink;
                             
                             await context.SaveChangesAsync();
                         }
@@ -243,8 +245,6 @@ namespace Helpdesk.Data
         //    return iresult;
         //}
     }
-
-
     public class ConfigOptDefault
     {
         public ConfigOptDefault(string category, string key)
@@ -359,6 +359,8 @@ namespace Helpdesk.Data
                         "Allows Editing a Role's claims"),
                     new DefaultRoleClaim.NewRoleClaim(ClaimConstantStrings.RolesDeleteRole,
                         "Allows deleting a role"),
+                    new DefaultRoleClaim.NewRoleClaim(ClaimConstantStrings.LicenseTypeAdmin,
+                        "Allows creating, editing, and removing License Types"),
                     new DefaultRoleClaim.NewRoleClaim(ClaimConstantStrings.SitewideConfigurationEditor,
                         "Allows editing sitewide configuration settings"),
                     new DefaultRoleClaim.NewRoleClaim(ClaimConstantStrings.UsersAdmin,
@@ -411,7 +413,9 @@ namespace Helpdesk.Data
                     TicketLink = true,
                     AssetLink = true,
                     PeopleLink = true,
-                    SiteOptionsLink = true
+                    ShowConfigurationMenu = true,
+                    SiteSettingsLink = true,
+                    LicenseTypeLink = true
                 }
             }
         };
