@@ -38,5 +38,10 @@ namespace Helpdesk.Data
         /// Roles this user has.
         /// </summary>
         public ICollection<HelpdeskRole> Roles { get; set; }
+
+        /// <summary>
+        /// Assigned Licenses
+        /// </summary>
+        public ICollection<UserLicenseAssignment> UserLicenses { get; set; }
     }
 }
