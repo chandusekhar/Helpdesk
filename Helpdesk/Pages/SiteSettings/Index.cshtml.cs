@@ -40,7 +40,7 @@ namespace Helpdesk.Pages.SiteSettings
             }
             if (_context.ConfigOpts != null)
             {
-                ConfigOpt = await _context.ConfigOpts.OrderBy(x => x.Category).ThenBy(y => y.Order).ToListAsync();
+                ConfigOpt = await _context.ConfigOpts.Where(w => w.ReferenceType != ReferenceTypes.Hidden).OrderBy(x => x.Category).ThenBy(y => y.Order).ToListAsync();
             }
 
             return Page();

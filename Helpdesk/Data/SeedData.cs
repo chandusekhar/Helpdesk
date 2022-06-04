@@ -29,6 +29,7 @@ namespace Helpdesk.Data
             bool Done = false;
             while (!Done)
             {
+                // Get the current version. Will be null if there is no data at all (new database)
                 ConfigOpt? dbVersion = await context.ConfigOpts
                     .Where(x => x.Category == ConfigOptConsts.System_Version.Category &&
                                 x.Key == ConfigOptConsts.System_Version.Key)
@@ -36,6 +37,7 @@ namespace Helpdesk.Data
                     .FirstOrDefaultAsync();
                 if (dbVersion == null)
                 {
+                    // New database. fake a value of string.Empty, which init database updates will match.
                     dbVersion = new ConfigOpt()
                     {
                         Category = ConfigOptConsts.System_Version.Category,
@@ -44,6 +46,7 @@ namespace Helpdesk.Data
                     };
                 }
 
+                // Roles and claims
                 foreach (var item in DefaultRoleClaimCatalog.Catalog)
                 {
                     if (item.Version == dbVersion.Value)
@@ -79,6 +82,7 @@ namespace Helpdesk.Data
                     }
                 }
 
+                // Site navigation templates
                 foreach (var item in SiteNavTemplateCatalog.Catalog)
                 {
                     if (item.Version == dbVersion.Value)
@@ -93,6 +97,7 @@ namespace Helpdesk.Data
                             temp.AssetLink = item.SiteNavTemplate.AssetLink;
                             temp.PeopleLink = item.SiteNavTemplate.PeopleLink;
                             temp.SiteOptionsLink = item.SiteNavTemplate.SiteOptionsLink;
+                            
                             await context.SaveChangesAsync();
                         }
                         else
@@ -103,14 +108,14 @@ namespace Helpdesk.Data
                     }
                 }
 
-                // find a rollup index that matches this database version
+                // site settings.
                 var rollup = ConfigOptRollupCatalog.RollupIndex.Where(x => x.Version == dbVersion.Value).FirstOrDefault();
                 if (rollup == null)
                 {
                     Done = true;
                     break;
                 }
-
+                // Remove old entries first.
                 foreach (var item in rollup.Deletions)
                 {
                     ConfigOpt? delOpt = await context.ConfigOpts
@@ -124,6 +129,7 @@ namespace Helpdesk.Data
                     }
                 }
                 await context.SaveChangesAsync();
+                // Add new entries
                 foreach (var item in rollup.Additions)
                 {
                     ConfigOpt? addOpt = await context.ConfigOpts
@@ -137,11 +143,13 @@ namespace Helpdesk.Data
                             Category = item.Category,
                             Key = item.Key,
                             Value = item.Value,
-                            Order = item.Order
+                            Order = item.Order,
+                            ReferenceType = item.ReferenceType,
                         });
                     }
                 }
                 await context.SaveChangesAsync();
+                // update existing entries
                 foreach (var item in rollup.Changes)
                 {
                     ConfigOpt? chgOpt = await context.ConfigOpts
@@ -154,13 +162,15 @@ namespace Helpdesk.Data
                             Category = item.Category,
                             Key = item.Key,
                             Value = item.Value,
-                            Order = item.Order
+                            Order = item.Order,
+                            ReferenceType = item.ReferenceType
                         });
                     }
                     else
                     {
                         chgOpt.Value = item.Value;
                         chgOpt.Order = item.Order;
+                        chgOpt.ReferenceType = item.ReferenceType;
                         context.ConfigOpts.Update(chgOpt);
                     }
                 }
@@ -243,28 +253,23 @@ namespace Helpdesk.Data
             Key = key;
             Value = string.Empty;
             Order = null;
+            ReferenceType = ReferenceTypes.Hidden;
         }
 
-        public ConfigOptDefault(string category, string key, string value)
-        {
-            Category = category;
-            Key = key;
-            Value = value;
-            Order = null;
-        }
-
-        public ConfigOptDefault(string category, string key, string value, int order)
+        public ConfigOptDefault(string category, string key, string value, int order, ReferenceTypes type)
         {
             Category = category;
             Key = key;
             Value = value;
             Order = order;
+            ReferenceType = type;
         }
 
         public string Category { get; set; }
         public string Key { get; set; }
         public string Value { get; set; }
         public int? Order { get; set; }
+        public ReferenceTypes ReferenceType { get; set; }
     }
 
     /// <summary>

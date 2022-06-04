@@ -24,11 +24,41 @@
                 <input asp-for="Input.Key" class="form-control" readonly/>
                 <span asp-validation-for="Input.Key" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="Input.Value" class="control-label"></label>
-                <input asp-for="Input.Value" class="form-control" />
-                <span asp-validation-for="Input.Value" class="text-danger"></span>
-            </div>
+            @if (Model.Input.ReferenceType == Infrastructure.ReferenceTypes.String)
+            {
+                <div class="form-group">
+                    <label asp-for="Input.Value" class="control-label"></label>
+                    <input asp-for="Input.Value" class="form-control" />
+                    <span asp-validation-for="Input.Value" class="text-danger"></span>
+                </div>
+            }
+            else if (Model.Input.ReferenceType == Infrastructure.ReferenceTypes.Table_SiteNavTemplate ||
+                     Model.Input.ReferenceType == Infrastructure.ReferenceTypes.Boolean)
+            {
+                <div class="form-group">
+                    <label asp-for="Input.Value" class="control-label"></label>
+                    <select asp-for="Input.Value" class="form-control">
+                        @foreach(var opt in Model.DropDownOptions)
+                        {
+                            if (@opt == @Model.Input.Value)
+                            {
+                                <option value="@opt" selected>@opt</option>
+                            }
+                            else
+                            {
+                                <option value="@opt">@opt</option>
+                            }
+                        }
+                    </select>
+                    <span asp-validation-for="Input.Value" class="text-danger"></span>
+                </div>
+            }
+            else
+            {
+                <p>Bug: The edit screen needs updating to support the option type:</p>
+                <p>@Model.Input.ReferenceType.ToString()</p>
+                <p>Please report this bug so we can fix it!</p>
+            }
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
             </div>

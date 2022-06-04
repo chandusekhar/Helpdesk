@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Helpdesk.Infrastructure;
+using System.ComponentModel.DataAnnotations;
 
 namespace Helpdesk.Data
 {
@@ -8,13 +9,15 @@ namespace Helpdesk.Data
         public int Id { get; set; }
 
         [Required]
-        public string Category { get; set; } = String.Empty;
+        public string Category { get; set; } = string.Empty;
 
         [Required]
-        public string Key { get; set; } = String.Empty;
+        public string Key { get; set; } = string.Empty;
 
-        public string Value { get; set; } = String.Empty;
+        public string Value { get; set; } = string.Empty;
 
         public int? Order { get; set; }
+        [Required]
+        public ReferenceTypes ReferenceType { get; set; }
     }
 }

@@ -35,7 +35,11 @@ namespace Helpdesk.Pages.SiteSettings
             public string Key { get; set; } = String.Empty;
 
             public string Value { get; set; } = String.Empty;
+
+            public ReferenceTypes ReferenceType;
         }
+
+        public List<string> DropDownOptions = new List<string>();
 
         [BindProperty]
         public InputModel Input { get; set; } = default!;
@@ -61,7 +65,7 @@ namespace Helpdesk.Pages.SiteSettings
             }
 
             var configopt =  await _context.ConfigOpts.FirstOrDefaultAsync(m => m.Id == id);
-            if (configopt == null)
+            if (configopt == null || configopt.ReferenceType == ReferenceTypes.Hidden)
             {
                 return NotFound();
             }
@@ -70,8 +74,18 @@ namespace Helpdesk.Pages.SiteSettings
                 Id = configopt.Id,
                 Category = configopt.Category,
                 Key = configopt.Key,
-                Value = configopt.Value
+                Value = configopt.Value,
+                ReferenceType = configopt.ReferenceType,
             };
+            if (configopt.ReferenceType == ReferenceTypes.Table_SiteNavTemplate)
+            {
+                DropDownOptions = await _context.SiteNavTemplates.Select(x => x.Name).ToListAsync();
+            }
+            else if (configopt.ReferenceType == ReferenceTypes.Boolean)
+            {
+                DropDownOptions = new List<string> { "true", "false" };
+            }
+
             return Page();
         }
 
@@ -101,7 +115,7 @@ namespace Helpdesk.Pages.SiteSettings
                     x.Key == Input.Key)
                 .FirstOrDefaultAsync();
 
-            if (opt == null)
+            if (opt == null || opt.ReferenceType == ReferenceTypes.Hidden)
             {
                 return NotFound();
             }
