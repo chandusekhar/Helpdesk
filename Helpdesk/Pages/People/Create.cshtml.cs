@@ -56,7 +56,7 @@ namespace Helpdesk.Pages.People
             [Required]
             public string Surname { get; set; } = string.Empty;
             [Required]
-            [Display(Name = "Dispaly Name")]
+            [Display(Name = "Display Name")]
             public string DisplayName { get; set; } = string.Empty;
             [Display(Name = "Job Title")]
             public string? JobTitle { get; set; }
@@ -165,6 +165,7 @@ namespace Helpdesk.Pages.People
                 SiteNavTemplates = await _context.SiteNavTemplates.Select(x => x.Name).ToListAsync();
                 return Page();
             }
+            // set phone number
             await _userManager.SetPhoneNumberAsync(iUser, Input.PhoneNumber);
 
             // automatically confirm the email now.

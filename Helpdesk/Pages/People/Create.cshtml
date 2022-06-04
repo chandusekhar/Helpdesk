@@ -123,14 +123,14 @@
                 <span asp-validation-for="Input.NotifyUser" class="text-danger"></span>
             </div>
         </div>
-        <div class="form-group">
-            <input type="submit" value="Create" class="btn btn-primary" />
+        <div class="col-md-12">
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+                &nbsp;&nbsp;
+                <a class="btn btn-secondary" asp-page="Index">Cancel</a>
+            </div>
         </div>
     </form>
-</div>
-
-<div>
-    <a asp-page="Index">Back to List</a>
 </div>
 
 @section Scripts {
