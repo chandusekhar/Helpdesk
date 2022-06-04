@@ -50,7 +50,16 @@ namespace Helpdesk.Infrastructure
                 }
                 else
                 {
-                    viewData.Add("IdentityUserName", _currentHelpdeskUser.GivenName);
+                    string displayName = _currentHelpdeskUser.DisplayName;
+                    if (string.IsNullOrEmpty(displayName))
+                    {
+                        displayName = _currentHelpdeskUser.GivenName;
+                        if (string.IsNullOrEmpty(displayName))
+                        {
+                            displayName = User.Identity?.Name ?? "Guest";
+                        }
+                    }
+                    viewData.Add("IdentityUserName", displayName);
                     if (!_currentHelpdeskUser.IsEnabled)
                     {
                         await _signInManager.SignOutAsync();

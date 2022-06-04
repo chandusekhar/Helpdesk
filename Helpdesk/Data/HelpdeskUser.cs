@@ -21,6 +21,8 @@ namespace Helpdesk.Data
         public string GivenName { get; set; }
         [Required]
         public string Surname { get; set; }
+
+        public string DisplayName { get; set; }
         
         public string? JobTitle { get; set; }
 

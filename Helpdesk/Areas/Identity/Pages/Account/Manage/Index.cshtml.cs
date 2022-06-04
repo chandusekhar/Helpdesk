@@ -45,6 +45,7 @@ namespace Helpdesk.Areas.Identity.Pages.Account.Manage
             public string GivenName { get; set; }
             [Required]
             public string Surname { get; set; }
+            public string DisplayName { get; set; }
             public string JobTitle { get; set; }
             public string Company { get; set; }
         }
@@ -56,12 +57,18 @@ namespace Helpdesk.Areas.Identity.Pages.Account.Manage
             var huser = await _context.HelpdeskUsers.Where(x => x.IdentityUserId == user.Id).FirstOrDefaultAsync();
 
             Username = userName;
+            string displayName = huser?.DisplayName ?? "";
+            if (string.IsNullOrEmpty(displayName))
+            {
+                displayName = huser?.GivenName ?? "";
+            }
 
             Input = new InputModel
             {
                 PhoneNumber = phoneNumber,
                 GivenName = huser?.GivenName ?? "",
                 Surname = huser?.Surname ?? "",
+                DisplayName = displayName,
                 JobTitle = huser?.JobTitle ?? "",
                 Company = huser?.Company ?? ""
             };
@@ -101,6 +108,11 @@ namespace Helpdesk.Areas.Identity.Pages.Account.Manage
                 return Page();
             }
 
+            if (string.IsNullOrEmpty(Input.DisplayName))
+            {
+                Input.DisplayName = Input.GivenName;
+            }
+
             var huser = await _context.HelpdeskUsers.Where(x => x.IdentityUserId == user.Id).FirstOrDefaultAsync();
             if (huser == null)
             {
@@ -126,6 +138,7 @@ namespace Helpdesk.Areas.Identity.Pages.Account.Manage
                     IsEnabled = true,
                     GivenName = Input.GivenName,
                     Surname = Input.Surname,
+                    DisplayName = Input.DisplayName,
                     JobTitle = Input.JobTitle,
                     Company = Input.Company,
                     SiteNavTemplate = defaultTemplate
@@ -146,6 +159,7 @@ namespace Helpdesk.Areas.Identity.Pages.Account.Manage
                 huser.Surname = Input.Surname;
                 huser.JobTitle = Input.JobTitle;
                 huser.Company = Input.Company;
+                huser.DisplayName = Input.DisplayName;
                 _context.HelpdeskUsers.Update(huser);
             }
             var phoneNumber = await _userManager.GetPhoneNumberAsync(user);
