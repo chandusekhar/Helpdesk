@@ -42,10 +42,13 @@ namespace Helpdesk.Areas.Identity.Pages.Account.Manage
             public string PhoneNumber { get; set; }
 
             [Required]
+            [Display(Name = "Given Name")]
             public string GivenName { get; set; }
             [Required]
             public string Surname { get; set; }
+            [Display(Name = "Display Name")]
             public string DisplayName { get; set; }
+            [Display(Name = "Job Title")]
             public string JobTitle { get; set; }
             public string Company { get; set; }
         }

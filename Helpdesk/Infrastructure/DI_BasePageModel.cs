@@ -105,19 +105,19 @@ namespace Helpdesk.Infrastructure
                 .Where(x => x.Category == ConfigOptConsts.Branding_SiteName.Category &&
                             x.Key == ConfigOptConsts.Branding_SiteName.Key)
                 .FirstOrDefaultAsync();
-            viewData[ViewDataStrings.Brand_SiteName] = opt?.Value ?? "Helpdesk";
+            viewData[ViewDataStrings.Brand_SiteName] = opt?.Value ?? ConfigOptConsts.Branding_SiteName.Value;
 
             opt = await _context.ConfigOpts
                 .Where(x => x.Category == ConfigOptConsts.Branding_OrganizationName.Category &&
                             x.Key == ConfigOptConsts.Branding_OrganizationName.Key)
                 .FirstOrDefaultAsync();
-            viewData[ViewDataStrings.Brand_OrganizationName] = opt?.Value ?? "Our Organization";
+            viewData[ViewDataStrings.Brand_OrganizationName] = opt?.Value ?? ConfigOptConsts.Branding_OrganizationName.Value;
 
             opt = await _context.ConfigOpts
                 .Where(x => x.Category == ConfigOptConsts.Branding_SiteURL.Category &&
                             x.Key == ConfigOptConsts.Branding_SiteURL.Key)
                 .FirstOrDefaultAsync();
-            viewData[ViewDataStrings.Brand_SiteURL] = opt?.Value ?? "helpdesk.localhost";
+            viewData[ViewDataStrings.Brand_SiteURL] = opt?.Value ?? ConfigOptConsts.Branding_SiteURL.Value;
 
             opt = await _context.ConfigOpts
                 .Where(x => x.Category == ConfigOptConsts.Accounts_AllowSelfRegistration.Category &&
