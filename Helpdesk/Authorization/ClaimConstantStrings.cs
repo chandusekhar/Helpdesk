@@ -53,6 +53,6 @@
         /// Required to access the users screen and view basic user details. 
         /// </summary>
         public static readonly string UsersAllowReadAccess = "Users Allow Read Access";
-            
+
     }
 }

@@ -5,8 +5,7 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>License Types</h1>
-
+<h1 class="display-4">Helpdesk Users</h1>
 <p>
     <a class="btn btn-success" asp-page="Create">Create New</a>
 </p>
@@ -26,7 +25,7 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model.Input) {
+        @foreach (var item in Model.Input) {
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.Name)
@@ -38,9 +37,8 @@
                 @Html.DisplayFor(modelItem => item.Seats)
             </td>
             <td>
-                <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-page="./Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-page="./Delete" asp-route-id="@item.Id">Delete</a>
+                <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a>
+                @*<a asp-page="./Delete" asp-route-id="@item.Id">Delete</a>*@
             </td>
         </tr>
 }
