@@ -14,52 +14,28 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.LicenseType[0].Name)
+                @Html.DisplayNameFor(model => model.Input[0].Name)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.LicenseType[0].Description)
+                @Html.DisplayNameFor(model => model.Input[0].Status)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.LicenseType[0].Seats)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.LicenseType[0].IsDeviceLicense)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.LicenseType[0].IsUserLicense)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.LicenseType[0].DeviceRequireProductCode)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.LicenseType[0].UserRequireProductCode)
+                @Html.DisplayNameFor(model => model.Input[0].Seats)
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model.LicenseType) {
+@foreach (var item in Model.Input) {
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.Name)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Description)
+                @Html.DisplayFor(modelItem => item.Status)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Seats)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IsDeviceLicense)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.IsUserLicense)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DeviceRequireProductCode)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.UserRequireProductCode)
             </td>
             <td>
                 <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a> |

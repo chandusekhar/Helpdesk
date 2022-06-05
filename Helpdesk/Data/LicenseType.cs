@@ -19,5 +19,15 @@ namespace Helpdesk.Data
         public bool DeviceRequireProductCode { get; set; }
         [Required]
         public bool UserRequireProductCode { get; set; }
+        [Required]
+        public LicenseStatuses Status { get; set; }
+    }
+
+    public enum LicenseStatuses
+    {
+        Hidden,
+        Active,
+        Expired,
+        Retired
     }
 }

@@ -20,5 +20,6 @@ namespace Helpdesk.Data
         public DbSet<SiteNavTemplate> SiteNavTemplates { get; set; }
         public DbSet<LicenseType> LicenseType { get; set; }
         public DbSet<UserLicenseAssignment> UserLicenseAssignments { get; set; }
+        public DbSet<AssetLicenseAssignment> AssetLicenseAssignments { get; set; }
     }
 }

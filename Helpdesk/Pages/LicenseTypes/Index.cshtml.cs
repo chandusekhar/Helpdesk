@@ -21,7 +21,15 @@ namespace Helpdesk.Pages.LicenseTypes
             : base(dbContext, userManager, signInManager)
         { }
 
-        public IList<LicenseType> LicenseType { get;set; } = default!;
+        public class InputView
+        {
+            public int Id { get; set; }
+            public string Name { get; set; } = string.Empty!;
+            public string Status { get; set; } = string.Empty!;
+            public string Seats { get; set; } = string.Empty!;
+        }
+
+        public IList<InputView> Input { get; set; } = new List<InputView>();
 
         public async Task<IActionResult> OnGetAsync()
         {
@@ -41,7 +49,24 @@ namespace Helpdesk.Pages.LicenseTypes
 
             if (_context.LicenseType != null)
             {
-                LicenseType = await _context.LicenseType.ToListAsync();
+                var licenses = await _context.LicenseType.ToListAsync();
+                foreach (var lic in licenses)
+                {
+                    int ucount = await _context.UserLicenseAssignments.Where(x => x.LicenseType.Id == lic.Id).CountAsync();
+                    int acount = await _context.AssetLicenseAssignments.Where(x => x.LicenseType.Id == lic.Id).CountAsync();
+                    string seat = (ucount + acount).ToString();
+                    if (lic.Seats.HasValue)
+                    {
+                        seat = seat + " / " + lic.Seats.Value.ToString();
+                    }
+                    Input.Add(new InputView()
+                    {
+                        Id = lic.Id,
+                        Name = lic.Name,
+                        Status = lic.Status.ToString(),
+                        Seats = seat
+                    });
+                }
             }
             return Page();
         }

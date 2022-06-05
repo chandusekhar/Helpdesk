@@ -142,7 +142,8 @@ namespace Helpdesk.Data
                                     IsDeviceLicense = lic.IsDeviceLicense,
                                     IsUserLicense = lic.IsUserLicense,
                                     DeviceRequireProductCode = lic.DeviceRequireProductCode,
-                                    UserRequireProductCode = lic.UserRequireProductCode
+                                    UserRequireProductCode = lic.UserRequireProductCode,
+                                    Status = lic.Status
                                 };
                                 context.LicenseType.Add(temp);
                             }
@@ -479,13 +480,14 @@ namespace Helpdesk.Data
                 {
                     new LicenseType()
                     {
-                    Name = "Exchange Online (Plan 1) for GCC",
-                    Description = "Exchange Email license for Government Community Cloud",
-                    Seats = null,
-                    DeviceRequireProductCode = false,
-                    UserRequireProductCode = false,
-                    IsDeviceLicense = false,
-                    IsUserLicense = true
+                        Name = "Exchange Online (Plan 1) for GCC",
+                        Description = "Exchange Email license for Government Community Cloud",
+                        Seats = null,
+                        DeviceRequireProductCode = false,
+                        UserRequireProductCode = false,
+                        IsDeviceLicense = false,
+                        IsUserLicense = true,
+                        Status = LicenseStatuses.Active
                     },
                     new LicenseType()
                     {
@@ -495,7 +497,8 @@ namespace Helpdesk.Data
                         DeviceRequireProductCode = false,
                         UserRequireProductCode = false,
                         IsDeviceLicense = false,
-                        IsUserLicense = true
+                        IsUserLicense = true,
+                        Status = LicenseStatuses.Active
                     },
                     new LicenseType()
                     {
@@ -505,7 +508,8 @@ namespace Helpdesk.Data
                         DeviceRequireProductCode = false,
                         UserRequireProductCode = false,
                         IsDeviceLicense = false,
-                        IsUserLicense = true
+                        IsUserLicense = true,
+                        Status = LicenseStatuses.Active
                     },
                     new LicenseType()
                     {
@@ -515,7 +519,8 @@ namespace Helpdesk.Data
                         DeviceRequireProductCode = false,
                         UserRequireProductCode = false,
                         IsDeviceLicense = false,
-                        IsUserLicense = true
+                        IsUserLicense = true,
+                        Status = LicenseStatuses.Active
                     },
                     new LicenseType()
                     {
@@ -525,7 +530,8 @@ namespace Helpdesk.Data
                         DeviceRequireProductCode = false,
                         UserRequireProductCode = false,
                         IsDeviceLicense = false,
-                        IsUserLicense = true
+                        IsUserLicense = true,
+                        Status = LicenseStatuses.Active
                     },
                     new LicenseType()
                     {
@@ -535,7 +541,8 @@ namespace Helpdesk.Data
                         DeviceRequireProductCode = false,
                         UserRequireProductCode = false,
                         IsDeviceLicense = false,
-                        IsUserLicense = true
+                        IsUserLicense = true,
+                        Status = LicenseStatuses.Active
                     },
                     new LicenseType()
                     {
@@ -545,7 +552,8 @@ namespace Helpdesk.Data
                         DeviceRequireProductCode = false,
                         UserRequireProductCode = false,
                         IsDeviceLicense = false,
-                        IsUserLicense = true
+                        IsUserLicense = true,
+                        Status = LicenseStatuses.Active
                     },
                     new LicenseType()
                     {
@@ -555,7 +563,8 @@ namespace Helpdesk.Data
                         DeviceRequireProductCode = false,
                         UserRequireProductCode = false,
                         IsDeviceLicense = false,
-                        IsUserLicense = true
+                        IsUserLicense = true,
+                        Status = LicenseStatuses.Active
                     },
                     new LicenseType()
                     {
@@ -565,7 +574,8 @@ namespace Helpdesk.Data
                         DeviceRequireProductCode = false,
                         UserRequireProductCode = false,
                         IsDeviceLicense = true,
-                        IsUserLicense = false
+                        IsUserLicense = false,
+                        Status = LicenseStatuses.Active
                     },
                     new LicenseType()
                     {
@@ -575,7 +585,8 @@ namespace Helpdesk.Data
                         DeviceRequireProductCode = false,
                         UserRequireProductCode = false,
                         IsDeviceLicense = true,
-                        IsUserLicense = false
+                        IsUserLicense = false,
+                        Status = LicenseStatuses.Active
                     },
                     new LicenseType()
                     {
@@ -585,7 +596,8 @@ namespace Helpdesk.Data
                         DeviceRequireProductCode = true,
                         UserRequireProductCode = false,
                         IsDeviceLicense = true,
-                        IsUserLicense = false
+                        IsUserLicense = false,
+                        Status = LicenseStatuses.Active
                     },
                     new LicenseType()
                     {
@@ -595,7 +607,8 @@ namespace Helpdesk.Data
                         DeviceRequireProductCode = true,
                         UserRequireProductCode = false,
                         IsDeviceLicense = true,
-                        IsUserLicense = false
+                        IsUserLicense = false,
+                        Status = LicenseStatuses.Active
                     },
                     new LicenseType()
                     {
@@ -605,7 +618,8 @@ namespace Helpdesk.Data
                         DeviceRequireProductCode = true,
                         UserRequireProductCode = false,
                         IsDeviceLicense = true,
-                        IsUserLicense = false
+                        IsUserLicense = false,
+                        Status = LicenseStatuses.Active
                     },
                     new LicenseType()
                     {
@@ -615,7 +629,8 @@ namespace Helpdesk.Data
                         DeviceRequireProductCode = true,
                         UserRequireProductCode = false,
                         IsDeviceLicense = true,
-                        IsUserLicense = false
+                        IsUserLicense = false,
+                        Status = LicenseStatuses.Active
                     }
                 }
             }
