@@ -156,5 +156,28 @@ namespace Helpdesk.Authorization
             await context.SaveChangesAsync();
             return true;
         }
+
+        public static async Task RemoveAllRolesFromUser(ApplicationDbContext context, string userId)
+        {
+            var huser = await context.HelpdeskUsers
+                .Where(x => x.IdentityUserId == userId)
+                .Include(x => x.Roles)
+                .FirstOrDefaultAsync();
+            if (huser == null)
+            {
+                return;
+            }
+            if (huser.Roles.Count() == 0)
+            {
+                return;
+            }
+            foreach (var role in huser.Roles)
+            {
+                huser.Roles.Remove(role);
+            }
+            await context.SaveChangesAsync();
+            return;
+        }
+
     }
 }

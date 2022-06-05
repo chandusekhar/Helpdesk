@@ -7,52 +7,65 @@
 
 <h1>Delete</h1>
 
-<h3>Are you sure you want to delete this?</h3>
+<h3>Are you sure you want to delete this person?</h3>
+<p>This will destroy history tracking for this user, and automatically unassign all tickets, all assets, and all licenses from them.</p>
 <div>
     <h4>HelpdeskUser</h4>
     <hr />
     <dl class="row">
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.HelpdeskUser.IdentityUserId)
+            @Html.DisplayNameFor(model => model.Input.Email)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.HelpdeskUser.IdentityUserId)
+            @Html.DisplayFor(model => model.Input.Email)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.HelpdeskUser.IsEnabled)
+            @Html.DisplayNameFor(model => model.Input.PhoneNumber)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.HelpdeskUser.IsEnabled)
+            @Html.DisplayFor(model => model.Input.PhoneNumber)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.HelpdeskUser.GivenName)
+            @Html.DisplayNameFor(model => model.Input.GivenName)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.HelpdeskUser.GivenName)
+            @Html.DisplayFor(model => model.Input.GivenName)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.HelpdeskUser.Surname)
+            @Html.DisplayNameFor(model => model.Input.Surname)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.HelpdeskUser.Surname)
+            @Html.DisplayFor(model => model.Input.Surname)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.HelpdeskUser.JobTitle)
+            @Html.DisplayNameFor(model => model.Input.DisplayName)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.HelpdeskUser.JobTitle)
+            @Html.DisplayFor(model => model.Input.DisplayName)
         </dd>
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.HelpdeskUser.Company)
+            @Html.DisplayNameFor(model => model.Input.JobTitle)
         </dt>
         <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.HelpdeskUser.Company)
+            @Html.DisplayFor(model => model.Input.JobTitle)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Input.Company)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Input.Company)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Input.Enabled)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Input.Enabled)
         </dd>
     </dl>
     
     <form method="post">
-        <input type="hidden" asp-for="HelpdeskUser.Id" />
-        <input type="submit" value="Delete" class="btn btn-danger" /> |
-        <a asp-page="./Index">Back to List</a>
+        <input type="hidden" asp-for="Input.Id" />
+        <input type="submit" value="Delete" class="btn btn-danger" /> &nbsp;
+        <a class="btn btn-secondary" asp-page="./Index">Back to List</a>
     </form>
 </div>
