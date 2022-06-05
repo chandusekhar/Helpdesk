@@ -76,6 +76,10 @@
                                     {
                                         <li><a class="dropdown-item" asp-area="" asp-page="/LicenseTypes/Index">License Types</a></li>
                                     }
+                                    @if (@ViewData.ContainsKey("NavbarShowGroupsLink"))
+                                    {
+                                        <li><a class="dropdown-item" asp-area="" asp-page="/Groups/Index">Groups</a></li>
+                                    }
                                 </ul>
                             </li>
                         }

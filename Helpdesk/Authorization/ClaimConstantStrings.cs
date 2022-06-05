@@ -30,6 +30,12 @@
         public static readonly string LicenseTypeAdmin = "License Type Admin";
 
         /// <summary>
+        /// Allows creating/editing/removing groups
+        /// </summary>
+        public static readonly string GroupAdmin = "Group Admin";
+
+
+        /// <summary>
         /// Allows creating users, resetting passwords for users, enabling/disabling users
         /// </summary>
         public static readonly string UsersAdmin = "Users Admin";

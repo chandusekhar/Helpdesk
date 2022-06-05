@@ -99,7 +99,7 @@ namespace Helpdesk.Data
                             temp.ShowConfigurationMenu = item.SiteNavTemplate.ShowConfigurationMenu;
                             temp.LicenseTypeLink = item.SiteNavTemplate.LicenseTypeLink;
                             temp.SiteSettingsLink = item.SiteNavTemplate.SiteSettingsLink;
-
+                            temp.GroupsLink = item.SiteNavTemplate.GroupsLink;
                             context.SiteNavTemplates.Update(temp);
                             await context.SaveChangesAsync();
                         }
@@ -149,6 +149,33 @@ namespace Helpdesk.Data
                             }
                             await context.SaveChangesAsync();
                         }
+                    }
+                }
+
+                // groups
+                foreach (var item in GroupCatalog.Catalog)
+                {
+                    if (item.Version == dbVersion.Value)
+                    {
+                        foreach (var g in item.Groups)
+                        {
+                            var group = await context.Groups.Where(x => x.Name == g.Name).FirstOrDefaultAsync();
+                            if (group != null && group.Description != g.Description)
+                            {
+                                group.Description = g.Description;
+                                context.Groups.Update(group);
+                            }
+                            else
+                            {
+                                group = new Group()
+                                {
+                                    Name = g.Name,
+                                    Description = g.Description
+                                };
+                                context.Groups.Add(group);
+                            }
+                        }
+                        await context.SaveChangesAsync();
                     }
                 }
 
@@ -403,6 +430,8 @@ namespace Helpdesk.Data
                         "Allows deleting a role"),
                     new DefaultRoleClaim.NewRoleClaim(ClaimConstantStrings.LicenseTypeAdmin,
                         "Allows creating, editing, and removing License Types"),
+                    new DefaultRoleClaim.NewRoleClaim(ClaimConstantStrings.GroupAdmin,
+                        "Allows creating, editing, and removing groups"),                    
                     new DefaultRoleClaim.NewRoleClaim(ClaimConstantStrings.SitewideConfigurationEditor,
                         "Allows editing sitewide configuration settings"),
                     new DefaultRoleClaim.NewRoleClaim(ClaimConstantStrings.UsersAdmin,
@@ -457,7 +486,53 @@ namespace Helpdesk.Data
                     PeopleLink = true,
                     ShowConfigurationMenu = true,
                     SiteSettingsLink = true,
-                    LicenseTypeLink = true
+                    LicenseTypeLink = true,
+                    GroupsLink = true,
+                }
+            }
+        };
+    }
+
+    public class GroupTemplateVerison
+    {
+        public string Version { get; set; }
+        public List<Group> Groups { get; set; }
+    }
+
+    public static class GroupCatalog
+    {
+        public static List<GroupTemplateVerison> Catalog = new List<GroupTemplateVerison>()
+        {
+            new GroupTemplateVerison()
+            {
+                Version = "",
+                Groups = new List<Group>()
+                {
+                    new Group()
+                    {
+                        Name = "Marketing",
+                        Description = "Coordinates and produces all materials representing the organization"
+                    },
+                    new Group()
+                    {
+                        Name = "Finance",
+                        Description = "Obtains and handles all monies on behalf of the organization"
+                    },
+                    new Group()
+                    {
+                        Name = "Operations Management",
+                        Description = "Administers all business practices in the organization"
+                    },
+                    new Group()
+                    {
+                        Name = "Human Resources",
+                        Description = "Recruits, hires, fires, and handles benefits for all employees in the organization"
+                    },
+                    new Group()
+                    {
+                        Name = "Information Technology",
+                        Description = "Oversees the installation and maintenance of computer network systems"
+                    }
                 }
             }
         };

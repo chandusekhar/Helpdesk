@@ -100,6 +100,10 @@ namespace Helpdesk.Infrastructure
                         {
                             viewData.Add("NavbarShowLicenseTypeLink", "true");
                         }
+                        if (_currentHelpdeskUser.SiteNavTemplate.GroupsLink)
+                        {
+                            viewData.Add("NavbarShowGroupsLink", "true");
+                        }
                         if (_currentHelpdeskUser.SiteNavTemplate.SiteSettingsLink)
                         {
                             viewData.Add("NavbarShowSiteSettingsLink", "true");

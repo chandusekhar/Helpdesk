@@ -40,5 +40,10 @@ namespace Helpdesk.Data
         /// </summary>
         [Required]
         public bool SiteSettingsLink { get; set; }
+        /// <summary>
+        /// Shows the Groups link in the Configuration Menu
+        /// </summary>
+        [Required]
+        public bool GroupsLink { get; set; }
     }
 }
