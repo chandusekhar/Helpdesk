@@ -4,6 +4,7 @@ using Helpdesk.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Helpdesk.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220605025558_AddGroups")]
+    partial class AddGroups
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -157,7 +159,7 @@ namespace Helpdesk.Data.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int?>("GroupId")
+                    b.Property<int>("GroupsId")
                         .HasColumnType("int");
 
                     b.Property<string>("IdentityUserId")
@@ -179,7 +181,7 @@ namespace Helpdesk.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("GroupId");
+                    b.HasIndex("GroupsId");
 
                     b.HasIndex("SiteNavTemplateId");
 
@@ -588,9 +590,11 @@ namespace Helpdesk.Data.Migrations
 
             modelBuilder.Entity("Helpdesk.Data.HelpdeskUser", b =>
                 {
-                    b.HasOne("Helpdesk.Data.Group", "Group")
+                    b.HasOne("Helpdesk.Data.Group", "Groups")
                         .WithMany()
-                        .HasForeignKey("GroupId");
+                        .HasForeignKey("GroupsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Helpdesk.Data.SiteNavTemplate", "SiteNavTemplate")
                         .WithMany()
@@ -598,7 +602,7 @@ namespace Helpdesk.Data.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Group");
+                    b.Navigation("Groups");
 
                     b.Navigation("SiteNavTemplate");
                 });

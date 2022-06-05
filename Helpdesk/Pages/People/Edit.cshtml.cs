@@ -53,10 +53,12 @@ namespace Helpdesk.Pages.People
             [Display(Name = "Account Enabled")]
             public string Enabled { get; set; }
 
+            public string? Group { get; set; }
         }
 
         public List<string> SiteNavTemplates { get; set; } = new List<string>();
         public List<string> EnabledOptions { get; set; } = new List<string> { "Enabled", "Disabled" };
+        public List<string> GroupOptions { get; set; } = new List<string>();
 
         public async Task<IActionResult> OnGetAsync(string? id)
         {
@@ -84,8 +86,7 @@ namespace Helpdesk.Pages.People
                 return NotFound();
             }
 
-            SiteNavTemplates = await _context.SiteNavTemplates.Select(x => x.Name).ToListAsync();
-
+            await PopulateList();
             var hUser = await _context.HelpdeskUsers
                 .Where(x => x.IdentityUserId == id)
                 .Include(y => y.SiteNavTemplate)
@@ -121,13 +122,24 @@ namespace Helpdesk.Pages.People
                 Company = hUser.Company,
                 PhoneNumber = phoneNumber,
                 SiteNavTemplateName = hUser.SiteNavTemplate.Name,
-                Enabled = hUser.IsEnabled ? "Enable" : "Disable"
+                Enabled = hUser.IsEnabled ? "Enable" : "Disable",
+                Group = hUser.Group?.Name
             };
             return Page();
         }
+        
+        private async Task PopulateList()
+        {
+            SiteNavTemplates = await _context.SiteNavTemplates.Select(x => x.Name).ToListAsync();
+            var groups = await _context.Groups.ToListAsync();
+            GroupOptions = new List<string>();
+            GroupOptions.Add("");
+            foreach (var g in groups)
+            {
+                GroupOptions.Add(g.Name);
+            }
+        }
 
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see https://aka.ms/RazorPagesCRUD.
         public async Task<IActionResult> OnPostAsync()
         {
             await LoadSiteSettings(ViewData);
@@ -148,7 +160,7 @@ namespace Helpdesk.Pages.People
                 return Page();
             }
 
-            SiteNavTemplates = await _context.SiteNavTemplates.Select(x => x.Name).ToListAsync();
+            await PopulateList();
             bool failValidation = false;
             // Find existing user objects
             var iUser = await _userManager.FindByIdAsync(Input.Id);
@@ -197,6 +209,10 @@ namespace Helpdesk.Pages.People
 
             bool enabled = Input.Enabled == "Enabled";
 
+            var selectedgroup = await _context.Groups
+                .Where(x => x.Name == Input.Group)
+                .FirstOrDefaultAsync();
+
             if (hUser == null)
             {
                 // we're creating a new user object.
@@ -209,7 +225,8 @@ namespace Helpdesk.Pages.People
                     DisplayName = Input.DisplayName,
                     JobTitle = Input.JobTitle,
                     Company = Input.Company,
-                    SiteNavTemplate = navTemplate
+                    SiteNavTemplate = navTemplate,
+                    Group = selectedgroup
                 };
                 _context.HelpdeskUsers.Add(hUser);
             }
@@ -222,6 +239,7 @@ namespace Helpdesk.Pages.People
                 hUser.JobTitle = Input.JobTitle;
                 hUser.Company = Input.Company;
                 hUser.SiteNavTemplate = navTemplate;
+                hUser.Group = selectedgroup;
                 _context.HelpdeskUsers.Update(hUser);
             }
             await _context.SaveChangesAsync();

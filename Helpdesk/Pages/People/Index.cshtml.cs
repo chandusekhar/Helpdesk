@@ -38,6 +38,7 @@ namespace Helpdesk.Pages.People
             public string? Company { get; set; }
             [Required]
             public bool Enabled { get; set; }
+            public string? Group { get; set; }
         }
 
         public async Task<IActionResult> OnGetAsync()
@@ -58,7 +59,7 @@ namespace Helpdesk.Pages.People
 
             // load user list
             var users = await _context.Users.ToListAsync();
-            var husers = await _context.HelpdeskUsers.ToListAsync();
+            var husers = await _context.HelpdeskUsers.Include(x => x.Group).ToListAsync();
             UserList = new List<InputModel>();
 
             foreach (var u in users)
@@ -83,7 +84,8 @@ namespace Helpdesk.Pages.People
                     Surname = h.Surname,
                     JobTitle = h.JobTitle,
                     Company = h.Company,
-                    Enabled = h.IsEnabled
+                    Enabled = h.IsEnabled,
+                    Group = h.Group?.Name
                 });
             }
 

@@ -73,12 +73,14 @@ namespace Helpdesk.Pages.People
             [Required]
             [Display(Name = "Notify New User")]
             public string NotifyUser { get; set; }
+            public string? Group { get; set; }
         }
 
         public List<string> SiteNavTemplates { get; set; } = new List<string>();
 
         public List<string> EnabledOptions { get; set; } = new List<string> { "Enabled", "Disabled" };
         public List<string> NotifyOptions { get; set; } = new List<string> { "Yes", "No" };
+        public List<string> GroupOptions { get; set; } = new List<string>();
 
         [BindProperty]
         public InputModel Input { get; set; } = default!;
@@ -98,7 +100,8 @@ namespace Helpdesk.Pages.People
             {
                 return Forbid();
             }
-            SiteNavTemplates = await _context.SiteNavTemplates.Select(x => x.Name).ToListAsync();
+            await PopulateList();
+
             var defaultTemplateName = _context.ConfigOpts
                 .Where(x => x.Category == ConfigOptConsts.Accounts_DefaultNavTemplate.Category &&
                             x.Key == ConfigOptConsts.Accounts_DefaultNavTemplate.Key)
@@ -110,6 +113,18 @@ namespace Helpdesk.Pages.People
                 NotifyUser = "Yes"
             };
             return Page();
+        }
+
+        private async Task PopulateList()
+        {
+            SiteNavTemplates = await _context.SiteNavTemplates.Select(x => x.Name).ToListAsync();
+            var groups = await _context.Groups.ToListAsync();
+            GroupOptions = new List<string>();
+            GroupOptions.Add("");
+            foreach (var g in groups)
+            {
+                GroupOptions.Add(g.Name);
+            }
         }
 
         // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
@@ -137,7 +152,7 @@ namespace Helpdesk.Pages.People
             if ((await _userManager.FindByEmailAsync(Input.Email)) != null)
             {
                 ModelState.AddModelError("Input.Email", "That email address is already taken.");
-                SiteNavTemplates = await _context.SiteNavTemplates.Select(x => x.Name).ToListAsync();
+                await PopulateList();
                 return Page();
             }
 
@@ -148,7 +163,7 @@ namespace Helpdesk.Pages.People
             if (navTemplate == null)
             {
                 ModelState.AddModelError("Input.SiteNavTemplateName", "Select a valid Sate Nav Template.");
-                SiteNavTemplates = await _context.SiteNavTemplates.Select(x => x.Name).ToListAsync();
+                await PopulateList();
                 return Page();
             }
 
@@ -162,7 +177,7 @@ namespace Helpdesk.Pages.People
                 {
                     ModelState.AddModelError(string.Empty, error.Description);
                 }
-                SiteNavTemplates = await _context.SiteNavTemplates.Select(x => x.Name).ToListAsync();
+                await PopulateList();
                 return Page();
             }
             // set phone number
@@ -172,6 +187,10 @@ namespace Helpdesk.Pages.People
             string token = await _userManager.GenerateEmailConfirmationTokenAsync(iUser);
             await _userManager.ConfirmEmailAsync(iUser, token);
 
+            var selectedgroup = await _context.Groups
+                .Where(x => x.Name == Input.Group)
+                .FirstOrDefaultAsync();
+            
             // create the HelpdeskUser
             bool enabled = Input.Enabled == "Enabled";
             var hUser = new HelpdeskUser()
@@ -183,7 +202,8 @@ namespace Helpdesk.Pages.People
                 DisplayName = Input.DisplayName,
                 JobTitle = Input.JobTitle,
                 Company = Input.Company,
-                SiteNavTemplate = navTemplate
+                SiteNavTemplate = navTemplate,
+                Group = selectedgroup
             };
             _context.HelpdeskUsers.Add(hUser);
             await _context.SaveChangesAsync();
