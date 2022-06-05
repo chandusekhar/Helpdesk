@@ -99,12 +99,53 @@ namespace Helpdesk.Data
                             temp.ShowConfigurationMenu = item.SiteNavTemplate.ShowConfigurationMenu;
                             temp.LicenseTypeLink = item.SiteNavTemplate.LicenseTypeLink;
                             temp.SiteSettingsLink = item.SiteNavTemplate.SiteSettingsLink;
-                            
+
+                            context.SiteNavTemplates.Update(temp);
                             await context.SaveChangesAsync();
                         }
                         else
                         {
                             context.SiteNavTemplates.Add(item.SiteNavTemplate);
+                            await context.SaveChangesAsync();
+                        }
+                    }
+                }
+
+                // License Types
+                foreach (var item in LicenseTypeCatalog.Catalog)
+                {
+                    if (item.Version == dbVersion.Value)
+                    {
+                        foreach (var lic in item.Templates)
+                        {
+                            var temp = await context.LicenseType
+                                .Where(x => x.Name == lic.Name)
+                                .FirstOrDefaultAsync();
+                            if (temp != null)
+                            {
+                                temp.Description = lic.Description;
+                                temp.Seats = lic.Seats;
+                                temp.IsDeviceLicense = lic.IsDeviceLicense;
+                                temp.IsUserLicense = lic.IsUserLicense;
+                                temp.DeviceRequireProductCode = lic.DeviceRequireProductCode;
+                                temp.UserRequireProductCode = lic.UserRequireProductCode;
+
+                                context.LicenseType.Update(temp);
+                            }
+                            else
+                            {
+                                temp = new LicenseType()
+                                {
+                                    Name = lic.Name,
+                                    Description = lic.Description,
+                                    Seats = lic.Seats,
+                                    IsDeviceLicense = lic.IsDeviceLicense,
+                                    IsUserLicense = lic.IsUserLicense,
+                                    DeviceRequireProductCode = lic.DeviceRequireProductCode,
+                                    UserRequireProductCode = lic.UserRequireProductCode
+                                };
+                                context.LicenseType.Add(temp);
+                            }
                             await context.SaveChangesAsync();
                         }
                     }
@@ -416,6 +457,166 @@ namespace Helpdesk.Data
                     ShowConfigurationMenu = true,
                     SiteSettingsLink = true,
                     LicenseTypeLink = true
+                }
+            }
+        };
+    }
+
+    public class LicenseTypeTemplateVersion
+    {
+        public string Version { get; set; }
+        public List<LicenseType> Templates { get; set; }
+    }
+
+    public static class LicenseTypeCatalog
+    {
+        public static List<LicenseTypeTemplateVersion> Catalog = new List<LicenseTypeTemplateVersion>()
+        {
+            new LicenseTypeTemplateVersion()
+            {
+                Version = "",
+                Templates = new List<LicenseType>()
+                {
+                    new LicenseType()
+                    {
+                    Name = "Exchange Online (Plan 1) for GCC",
+                    Description = "Exchange Email license for Government Community Cloud",
+                    Seats = null,
+                    DeviceRequireProductCode = false,
+                    UserRequireProductCode = false,
+                    IsDeviceLicense = false,
+                    IsUserLicense = true
+                    },
+                    new LicenseType()
+                    {
+                        Name = "Office 365 G3 GCC",
+                        Description = "Office Desktop Products, Email, SharePoint, and Teams for Government Community Cloud",
+                        Seats = null,
+                        DeviceRequireProductCode = false,
+                        UserRequireProductCode = false,
+                        IsDeviceLicense = false,
+                        IsUserLicense = true
+                    },
+                    new LicenseType()
+                    {
+                        Name = "Microsoft 365 Audio Conferencing for GCC",
+                        Description = "Teams Audio Conferencing license add-on for Office 365 G3 GCC",
+                        Seats = null,
+                        DeviceRequireProductCode = false,
+                        UserRequireProductCode = false,
+                        IsDeviceLicense = false,
+                        IsUserLicense = true
+                    },
+                    new LicenseType()
+                    {
+                        Name = "Project Plan 3 for GCC",
+                        Description = "Microsoft Project Online desktop software for Government Community Cloud",
+                        Seats = null,
+                        DeviceRequireProductCode = false,
+                        UserRequireProductCode = false,
+                        IsDeviceLicense = false,
+                        IsUserLicense = true
+                    },
+                    new LicenseType()
+                    {
+                        Name = "Visio Plan 2 for GCC",
+                        Description = "Microsoft Visio desktop software for Government Community Cloud",
+                        Seats = null,
+                        DeviceRequireProductCode = false,
+                        UserRequireProductCode = false,
+                        IsDeviceLicense = false,
+                        IsUserLicense = true
+                    },
+                    new LicenseType()
+                    {
+                        Name = "Adobe Creative Cloud",
+                        Description = "Adobe Photoshop, Acrobat Pro, Premiere Pro, Illustrator, Lightroom, and InDesign",
+                        Seats = null,
+                        DeviceRequireProductCode = false,
+                        UserRequireProductCode = false,
+                        IsDeviceLicense = false,
+                        IsUserLicense = true
+                    },
+                    new LicenseType()
+                    {
+                        Name = "Adobe Creative Cloud",
+                        Description = "Adobe Acrobat Pro DC desktop software",
+                        Seats = null,
+                        DeviceRequireProductCode = false,
+                        UserRequireProductCode = false,
+                        IsDeviceLicense = false,
+                        IsUserLicense = true
+                    },
+                    new LicenseType()
+                    {
+                        Name = "Smartsheet",
+                        Description = "Project management software",
+                        Seats = null,
+                        DeviceRequireProductCode = false,
+                        UserRequireProductCode = false,
+                        IsDeviceLicense = false,
+                        IsUserLicense = true
+                    },
+                    new LicenseType()
+                    {
+                        Name = "Trend Micro Worry-Free Business",
+                        Description = "Antivirus and endpoint protection software",
+                        Seats = null,
+                        DeviceRequireProductCode = false,
+                        UserRequireProductCode = false,
+                        IsDeviceLicense = true,
+                        IsUserLicense = false
+                    },
+                    new LicenseType()
+                    {
+                        Name = "Avast Business Pro",
+                        Description = "Antivirus and endpoint protection software",
+                        Seats = null,
+                        DeviceRequireProductCode = false,
+                        UserRequireProductCode = false,
+                        IsDeviceLicense = true,
+                        IsUserLicense = false
+                    },
+                    new LicenseType()
+                    {
+                        Name = "Windows 10 Professional Upgrade",
+                        Description = "Upgrade license for Windows 10 Home to Professional",
+                        Seats = null,
+                        DeviceRequireProductCode = true,
+                        UserRequireProductCode = false,
+                        IsDeviceLicense = true,
+                        IsUserLicense = false
+                    },
+                    new LicenseType()
+                    {
+                        Name = "Windows 11 Professional Upgrade",
+                        Description = "Upgrade license for Windows 11 Home to Professional",
+                        Seats = null,
+                        DeviceRequireProductCode = true,
+                        UserRequireProductCode = false,
+                        IsDeviceLicense = true,
+                        IsUserLicense = false
+                    },
+                    new LicenseType()
+                    {
+                        Name = "Windows Server 2019 Standard Volume License",
+                        Description = "Server operating system",
+                        Seats = null,
+                        DeviceRequireProductCode = true,
+                        UserRequireProductCode = false,
+                        IsDeviceLicense = true,
+                        IsUserLicense = false
+                    },
+                    new LicenseType()
+                    {
+                        Name = "Windows Server 2019 Datacenter Volume License",
+                        Description = "Server operating system",
+                        Seats = null,
+                        DeviceRequireProductCode = true,
+                        UserRequireProductCode = false,
+                        IsDeviceLicense = true,
+                        IsUserLicense = false
+                    }
                 }
             }
         };
