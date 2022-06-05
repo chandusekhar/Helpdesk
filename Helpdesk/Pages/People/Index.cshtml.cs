@@ -88,6 +88,64 @@ namespace Helpdesk.Pages.People
                     Group = h.Group?.Name
                 });
             }
+            ViewData["SearchTerm"] = "Search...";
+            return Page();
+        }
+
+        public async Task<IActionResult> OnPostAsync(string search)
+        {
+            await LoadSiteSettings(ViewData);
+            if (_currentHelpdeskUser == null)
+            {
+                // This happens when a user logs in, but hasn't set up their profile yet.
+                return Forbid();
+                // For some pages, it might make sense to redirect to the account profile page so they can immediately enter their details.
+                //return RedirectToPage("/Identity/Account/Manage");
+            }
+            bool HasClaim = await RightsManagement.UserHasClaim(_context, _currentHelpdeskUser.IdentityUserId, ClaimConstantStrings.UsersAllowReadAccess);
+            if (!HasClaim)
+            {
+                return Forbid();
+            }
+
+            if (string.IsNullOrEmpty(search))
+            {
+                return await OnGetAsync();
+            }
+
+            // load user list
+            var users = await _context.Users.ToListAsync();
+            var husers = await _context.HelpdeskUsers
+                .Include(x => x.Group)
+                .Where(y => y.DisplayName.Contains(search) ||
+                            y.GivenName.Contains(search) ||
+                            y.Surname.Contains(search) ||
+                            y.Company.Contains(search) ||
+                            y.Group.Name.Contains(search) ||
+                            y.JobTitle.Contains(search) ||
+                            y.Company.Contains(search))
+                .ToListAsync();
+            UserList = new List<InputModel>();
+            
+            foreach (var u in users)
+            {
+                var h = husers.Where(x => x.IdentityUserId == u.Id).FirstOrDefault();
+                if (h != null)
+                {
+                    UserList.Add(new InputModel()
+                    {
+                        Id = u.Id,
+                        Email = u.Email,
+                        GivenName = h.GivenName,
+                        Surname = h.Surname,
+                        JobTitle = h.JobTitle,
+                        Company = h.Company,
+                        Enabled = h.IsEnabled,
+                        Group = h.Group?.Name
+                    });
+                }
+            }
+            ViewData["SearchTerm"] = search;
 
             return Page();
         }

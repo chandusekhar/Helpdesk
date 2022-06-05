@@ -6,9 +6,12 @@
 }
 
 <h1 class="display-4">Helpdesk Users</h1>
-<p>
-    <a class="btn btn-success" asp-page="Create">Create New</a>
-</p>
+<form method="post" style="float:right">
+  <input type="text" placeholder="@ViewData["SearchTerm"]" name="search">
+  <button type="submit"><i class="fa fa-search"></i></button>
+</form>
+
+<a class="btn btn-success" asp-page="Create">Create New</a>
 <table class="table">
     <thead>
         <tr>
@@ -69,3 +72,7 @@
 }
     </tbody>
 </table>
+
+@section Scripts {
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+}
