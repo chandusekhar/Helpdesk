@@ -4,6 +4,7 @@
     {
         Hidden,
         String,
+        Integer,
         Boolean,
         Table_SiteNavTemplate,
     }

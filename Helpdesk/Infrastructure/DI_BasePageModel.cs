@@ -39,77 +39,84 @@ namespace Helpdesk.Infrastructure
             if (_signInManager.IsSignedIn(User))
             {
                 _currentIdentityUser = await _userManager.GetUserAsync(User);
-                _currentHelpdeskUser = await _context.HelpdeskUsers
-                    .Where(x => x.IdentityUserId == _currentIdentityUser.Id)
-                    .Include(y => y.SiteNavTemplate)
-                    .FirstOrDefaultAsync();
-                if (_currentHelpdeskUser == null)
+                if (_currentIdentityUser == null)
                 {
-                    viewData.Add("IdentityUserName", User.Identity?.Name);
-                    viewData.Add("CompleteProfilePrompt", "true");
+                    await _signInManager.SignOutAsync();
                 }
                 else
                 {
-                    string displayName = _currentHelpdeskUser.DisplayName;
-                    if (string.IsNullOrEmpty(displayName))
+                    _currentHelpdeskUser = await _context.HelpdeskUsers
+                        .Where(x => x.IdentityUserId == _currentIdentityUser.Id)
+                        .Include(y => y.SiteNavTemplate)
+                        .FirstOrDefaultAsync();
+                    if (_currentHelpdeskUser == null)
                     {
-                        displayName = _currentHelpdeskUser.GivenName;
+                        viewData.Add("IdentityUserName", User.Identity?.Name);
+                        viewData.Add("CompleteProfilePrompt", "true");
+                    }
+                    else
+                    {
+                        string displayName = _currentHelpdeskUser.DisplayName;
                         if (string.IsNullOrEmpty(displayName))
                         {
-                            displayName = User.Identity?.Name ?? "Guest";
+                            displayName = _currentHelpdeskUser.GivenName;
+                            if (string.IsNullOrEmpty(displayName))
+                            {
+                                displayName = User.Identity?.Name ?? "Guest";
+                            }
                         }
-                    }
-                    viewData.Add("IdentityUserName", displayName);
-                    if (!_currentHelpdeskUser.IsEnabled)
-                    {
-                        await _signInManager.SignOutAsync();
-                        return false;
-                    }
-                    if (!_currentIdentityUser.TwoFactorEnabled)
-                    {
-                        ConfigOpt? showMfaOpt = await _context.ConfigOpts
-                            .Where(x => x.Category == ConfigOptConsts.Accounts_ShowMfaBanner.Category &&
-                                        x.Key == ConfigOptConsts.Accounts_ShowMfaBanner.Key)
-                            .FirstOrDefaultAsync();
-                        if (showMfaOpt?.Value == "true")
+                        viewData.Add("IdentityUserName", displayName);
+                        if (!_currentHelpdeskUser.IsEnabled)
                         {
-                            viewData.Add("NagMFAEnrollmentBanner", "true");
+                            await _signInManager.SignOutAsync();
+                            return false;
                         }
-                    }
-                    // build navbar
-                    viewData.Add("NavbarSupressPrivacyLink", "true");
-                    if (_currentHelpdeskUser.SiteNavTemplate != null)
-                    {
-                        if (_currentHelpdeskUser.SiteNavTemplate.TicketLink)
+                        if (!_currentIdentityUser.TwoFactorEnabled)
                         {
-                            viewData.Add("NavbarShowTicketLink", "true");
+                            ConfigOpt? showMfaOpt = await _context.ConfigOpts
+                                .Where(x => x.Category == ConfigOptConsts.Accounts_ShowMfaBanner.Category &&
+                                            x.Key == ConfigOptConsts.Accounts_ShowMfaBanner.Key)
+                                .FirstOrDefaultAsync();
+                            if (showMfaOpt?.Value == "true")
+                            {
+                                viewData.Add("NagMFAEnrollmentBanner", "true");
+                            }
                         }
-                        if (_currentHelpdeskUser.SiteNavTemplate.AssetLink)
+                        // build navbar
+                        viewData.Add("NavbarSupressPrivacyLink", "true");
+                        if (_currentHelpdeskUser.SiteNavTemplate != null)
                         {
-                            viewData.Add("NavbarShowAssetLink", "true");
+                            if (_currentHelpdeskUser.SiteNavTemplate.TicketLink)
+                            {
+                                viewData.Add("NavbarShowTicketLink", "true");
+                            }
+                            if (_currentHelpdeskUser.SiteNavTemplate.AssetLink)
+                            {
+                                viewData.Add("NavbarShowAssetLink", "true");
+                            }
+                            if (_currentHelpdeskUser.SiteNavTemplate.PeopleLink)
+                            {
+                                viewData.Add("NavbarShowPeopleLink", "true");
+                            }
+                            if (_currentHelpdeskUser.SiteNavTemplate.ShowConfigurationMenu)
+                            {
+                                viewData.Add("NavbarShowConfigurationMenu", "true");
+                            }
+                            if (_currentHelpdeskUser.SiteNavTemplate.LicenseTypeLink)
+                            {
+                                viewData.Add("NavbarShowLicenseTypeLink", "true");
+                            }
+                            if (_currentHelpdeskUser.SiteNavTemplate.GroupsLink)
+                            {
+                                viewData.Add("NavbarShowGroupsLink", "true");
+                            }
+                            if (_currentHelpdeskUser.SiteNavTemplate.SiteSettingsLink)
+                            {
+                                viewData.Add("NavbarShowSiteSettingsLink", "true");
+                            }
                         }
-                        if (_currentHelpdeskUser.SiteNavTemplate.PeopleLink)
-                        {
-                            viewData.Add("NavbarShowPeopleLink", "true");
-                        }
-                        if (_currentHelpdeskUser.SiteNavTemplate.ShowConfigurationMenu)
-                        {
-                            viewData.Add("NavbarShowConfigurationMenu", "true");
-                        }
-                        if (_currentHelpdeskUser.SiteNavTemplate.LicenseTypeLink)
-                        {
-                            viewData.Add("NavbarShowLicenseTypeLink", "true");
-                        }
-                        if (_currentHelpdeskUser.SiteNavTemplate.GroupsLink)
-                        {
-                            viewData.Add("NavbarShowGroupsLink", "true");
-                        }
-                        if (_currentHelpdeskUser.SiteNavTemplate.SiteSettingsLink)
-                        {
-                            viewData.Add("NavbarShowSiteSettingsLink", "true");
-                        }
-                    }
 
+                    }
                 }
             }
 

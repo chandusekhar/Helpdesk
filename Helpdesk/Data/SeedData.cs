@@ -354,6 +354,9 @@ namespace Helpdesk.Data
                 Additions = new List<ConfigOptDefault>()
                 {
                     ConfigOptConsts.System_Version,
+                    ConfigOptConsts.System_UploadPath,
+                    ConfigOptConsts.System_SaveUploadsToDatabase,
+                    ConfigOptConsts.System_UploadFileSizeLimit,
                     ConfigOptConsts.Accounts_AllowSelfRegistration,
                     ConfigOptConsts.Accounts_MfaQrCodeSitename,
                     ConfigOptConsts.Accounts_ShowMfaBanner,

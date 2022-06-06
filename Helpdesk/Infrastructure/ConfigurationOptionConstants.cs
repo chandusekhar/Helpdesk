@@ -8,7 +8,13 @@ namespace Helpdesk.Infrastructure
     public static class ConfigOptConsts
     {
         public static ConfigOptDefault System_Version =
-            new ConfigOptDefault("System", "Version", "1.0", 1, ReferenceTypes.Hidden);
+            new ConfigOptDefault("System", "Version", "1.0", 9999, ReferenceTypes.Hidden);
+        public static ConfigOptDefault System_UploadPath =
+            new ConfigOptDefault("System", "Uploads dedicated folder", @"c:\HelpdeskUploads", 0, ReferenceTypes.String);
+        public static ConfigOptDefault System_SaveUploadsToDatabase =
+            new ConfigOptDefault("System", "Save Uploads In Database", "false", 1, ReferenceTypes.Boolean);
+        public static ConfigOptDefault System_UploadFileSizeLimit =
+            new ConfigOptDefault("System", "Upload File Size Limit Bytes", "4194304", 1, ReferenceTypes.Integer);
         public static ConfigOptDefault Accounts_AllowSelfRegistration =
             new ConfigOptDefault("Accounts", "Allow Self-Registration", "true", 0, ReferenceTypes.Boolean);
         public static ConfigOptDefault Accounts_MfaQrCodeSitename =

@@ -1,0 +1,241 @@
+﻿@page
+@model Helpdesk.Pages.People.ImportFieldsModel
+@{
+    ViewData["Title"] = "Choose Fields To Import.";
+}
+
+<br />
+<div class="text-center">
+    <h1 class="display-4">Importing Users From CSV</h1>
+</div>
+<div class="broder container col-12" style="padding:30px;">
+    <form method="post" class="row g-3">
+        <div class="col-md-12">
+            <span class="h3">Select Fields To Import</span>
+        </div>
+        <input type="hidden" asp-for="Input.TempFile" />
+        <div class="col-md-12 text-center">
+            <div class="text-danger text-center" asp-validation-summary="ModelOnly"></div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-floating">
+                <select asp-for="Input.EmailField" class="form-control">
+                    @foreach(var opt in Model.FieldNames)
+                    {
+                        if (@opt == @Model.Input.EmailField)
+                        {
+                            <option value="@opt" selected>@opt</option>
+                        }
+                        else
+                        {
+                            <option value="@opt">@opt</option>
+                        }
+                    }
+                </select>
+                <label asp-for="Input.EmailField" class="form-label"></label>
+                <span asp-validation-for="Input.EmailField" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-floating">
+                <select asp-for="Input.DisplayNameField" class="form-control">
+                    @foreach(var opt in Model.FieldNames)
+                    {
+                        if (@opt == @Model.Input.DisplayNameField)
+                        {
+                            <option value="@opt" selected>@opt</option>
+                        }
+                        else
+                        {
+                            <option value="@opt">@opt</option>
+                        }
+                    }
+                </select>
+                <label asp-for="Input.DisplayNameField" class="form-label"></label>
+                <span asp-validation-for="Input.DisplayNameField" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-floating">
+                <select asp-for="Input.GivenNameField" class="form-control">
+                    @foreach(var opt in Model.FieldNames)
+                    {
+                        if (@opt == @Model.Input.GivenNameField)
+                        {
+                            <option value="@opt" selected>@opt</option>
+                        }
+                        else
+                        {
+                            <option value="@opt">@opt</option>
+                        }
+                    }
+                </select>
+                <label asp-for="Input.GivenNameField" class="form-label"></label>
+                <span asp-validation-for="Input.GivenNameField" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-floating">
+                <select asp-for="Input.SurnameField" class="form-control">
+                    @foreach(var opt in Model.FieldNames)
+                    {
+                        if (@opt == @Model.Input.SurnameField)
+                        {
+                            <option value="@opt" selected>@opt</option>
+                        }
+                        else
+                        {
+                            <option value="@opt">@opt</option>
+                        }
+                    }
+                </select>
+                <label asp-for="Input.SurnameField" class="form-label"></label>
+                <span asp-validation-for="Input.SurnameField" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-floating">
+                <select asp-for="Input.JobTitleField" class="form-control">
+                    @foreach(var opt in Model.FieldNames)
+                    {
+                        if (@opt == @Model.Input.JobTitleField)
+                        {
+                            <option value="@opt" selected>@opt</option>
+                        }
+                        else
+                        {
+                            <option value="@opt">@opt</option>
+                        }
+                    }
+                </select>
+                <label asp-for="Input.JobTitleField" class="form-label"></label>
+                <span asp-validation-for="Input.JobTitleField" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-floating">
+                <select asp-for="Input.CompanyField" class="form-control">
+                    @foreach(var opt in Model.FieldNames)
+                    {
+                        if (@opt == @Model.Input.CompanyField)
+                        {
+                            <option value="@opt" selected>@opt</option>
+                        }
+                        else
+                        {
+                            <option value="@opt">@opt</option>
+                        }
+                    }
+                </select>
+                <label asp-for="Input.CompanyField" class="form-label"></label>
+                <span asp-validation-for="Input.CompanyField" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-floating">
+                <select asp-for="Input.PhoneNumberField" class="form-control">
+                    @foreach(var opt in Model.FieldNames)
+                    {
+                        if (@opt == @Model.Input.PhoneNumberField)
+                        {
+                            <option value="@opt" selected>@opt</option>
+                        }
+                        else
+                        {
+                            <option value="@opt">@opt</option>
+                        }
+                    }
+                </select>
+                <label asp-for="Input.PhoneNumberField" class="form-label"></label>
+                <span asp-validation-for="Input.PhoneNumberField" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-floating">
+                <select asp-for="Input.SiteNavTemplateField" class="form-control">
+                    @foreach(var opt in Model.FieldNames)
+                    {
+                        if (@opt == @Model.Input.SiteNavTemplateField)
+                        {
+                            <option value="@opt" selected>@opt</option>
+                        }
+                        else
+                        {
+                            <option value="@opt">@opt</option>
+                        }
+                    }
+                </select>
+                <label asp-for="Input.SiteNavTemplateField" class="form-label"></label>
+                <span asp-validation-for="Input.SiteNavTemplateField" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-floating">
+                <select asp-for="Input.GroupField" class="form-control">
+                    @foreach(var opt in Model.FieldNames)
+                    {
+                        if (@opt == @Model.Input.GroupField)
+                        {
+                            <option value="@opt" selected>@opt</option>
+                        }
+                        else
+                        {
+                            <option value="@opt">@opt</option>
+                        }
+                    }
+                </select>
+                <label asp-for="Input.GroupField" class="form-label"></label>
+                <span asp-validation-for="Input.GroupField" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-floating">
+                <select asp-for="Input.LicenseField" class="form-control">
+                    @foreach(var opt in Model.FieldNames)
+                    {
+                        if (@opt == @Model.Input.LicenseField)
+                        {
+                            <option value="@opt" selected>@opt</option>
+                        }
+                        else
+                        {
+                            <option value="@opt">@opt</option>
+                        }
+                    }
+                </select>
+                <label asp-for="Input.LicenseField" class="form-label"></label>
+                <span asp-validation-for="Input.LicenseField" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-floating">
+                <select asp-for="Input.NotifyUsers" class="form-control">
+                    @foreach(var opt in Model.NotifyOptions)
+                    {
+                        if (@opt == @Model.Input.LicenseField)
+                        {
+                            <option value="@opt" selected>@opt</option>
+                        }
+                        else
+                        {
+                            <option value="@opt">@opt</option>
+                        }
+                    }
+                </select>
+                <label asp-for="Input.NotifyUsers" class="form-label"></label>
+                <span asp-validation-for="Input.NotifyUsers" class="text-danger"></span>
+            </div>
+        </div>
+        <div class="col-md-12">
+            <div class="form-group">
+                <input type="submit" values="Import" class="btn btn-primary" />
+                &nbsp;&nbsp;
+                <a class="btn btn-secondary" asp-page="Index">Back To Index</a>
+            </div>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

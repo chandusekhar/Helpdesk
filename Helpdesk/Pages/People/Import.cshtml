@@ -1,0 +1,34 @@
+﻿@page
+@model Helpdesk.Pages.People.ImportModel
+@{
+    ViewData["Title"] = "Upload CSV For Import";
+}
+
+<br />
+<div class="text-center">
+    <h1 class="display-4">Import Users From CSV</h1>
+</div>
+<div class="border container col-12" style="padding:30px;">
+    <form enctype="multipart/form-data" method="post">
+        <div class="col-md-12">
+            <span class="h3">Select a CSV file to import</span>
+        </div>
+        <dl>
+            <dt>
+                <label asp-for="FileUpload.FormFile"></label>
+            </dt>
+            <dd>
+                <input asp-for="FileUpload.FormFile" type="file" />
+                <span asp-validation-for="FileUpload.FormFile"></span>
+            </dd>
+        </dl>
+        <input asp-page-handler="Upload" class="btn" type="submit" value="Upload" />
+    </form>
+</div>
+<p class="result">
+    @Model.Result
+</p>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

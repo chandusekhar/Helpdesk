@@ -32,6 +32,14 @@
                     <span asp-validation-for="Input.Value" class="text-danger"></span>
                 </div>
             }
+            else if (Model.Input.ReferenceType == Infrastructure.ReferenceTypes.Integer)
+            {
+                <div class="form-group">
+                    <label asp-for="Input.Value" class="control-label"></label>
+                    <input type="number" asp-for="Input.Value" class="form-control" />
+                    <span asp-validation-for="Input.Value" class="text-danger"></span>
+                </div>
+            }
             else if (Model.Input.ReferenceType == Infrastructure.ReferenceTypes.Table_SiteNavTemplate ||
                      Model.Input.ReferenceType == Infrastructure.ReferenceTypes.Boolean)
             {

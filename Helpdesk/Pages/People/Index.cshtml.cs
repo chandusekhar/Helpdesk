@@ -29,16 +29,20 @@ namespace Helpdesk.Pages.People
             public string Id { get; set; }
             [EmailAddress]
             [Required]
-            public string Email { get; set; }
+            public string Email { get; set; } = string.Empty!;
+            [Display(Name ="Given Name")]
             [Required]
-            public string GivenName { get; set; }
+            public string GivenName { get; set; } = string.Empty!;
             [Required]
-            public string Surname { get; set; }
-            public string? JobTitle { get; set; }
-            public string? Company { get; set; }
+            public string Surname { get; set; } = string.Empty!;
+            [Display(Name ="Display Name")]
+            public string DisplayName { get; set; } = string.Empty!;
+            [Display(Name ="Job Title")]
+            public string JobTitle { get; set; } = string.Empty!;
+            public string Company { get; set; } = string.Empty!;
             [Required]
             public bool Enabled { get; set; }
-            public string? Group { get; set; }
+            public string Group { get; set; } = string.Empty!;
         }
 
         public async Task<IActionResult> OnGetAsync()
@@ -82,10 +86,11 @@ namespace Helpdesk.Pages.People
                     Email = u.Email,
                     GivenName = h.GivenName,
                     Surname = h.Surname,
-                    JobTitle = h.JobTitle,
-                    Company = h.Company,
+                    DisplayName = h.DisplayName,
+                    JobTitle = h.JobTitle ?? "",
+                    Company = h.Company ?? "",
                     Enabled = h.IsEnabled,
-                    Group = h.Group?.Name
+                    Group = h.Group?.Name ?? ""
                 });
             }
             ViewData["SearchTerm"] = "Search...";
@@ -115,36 +120,49 @@ namespace Helpdesk.Pages.People
 
             // load user list
             var users = await _context.Users.ToListAsync();
-            var husers = await _context.HelpdeskUsers
-                .Include(x => x.Group)
-                .Where(y => y.DisplayName.Contains(search) ||
-                            y.GivenName.Contains(search) ||
-                            y.Surname.Contains(search) ||
-                            y.Company.Contains(search) ||
-                            y.Group.Name.Contains(search) ||
-                            y.JobTitle.Contains(search) ||
-                            y.Company.Contains(search))
+            var husers = await _context.HelpdeskUsers.Include(x => x.Group)
                 .ToListAsync();
-            UserList = new List<InputModel>();
-            
+            var tempList = new List<InputModel>();
+            // build our searchable list.
             foreach (var u in users)
             {
                 var h = husers.Where(x => x.IdentityUserId == u.Id).FirstOrDefault();
-                if (h != null)
+                if (h == null)
                 {
-                    UserList.Add(new InputModel()
+                    h = new HelpdeskUser()
                     {
-                        Id = u.Id,
-                        Email = u.Email,
-                        GivenName = h.GivenName,
-                        Surname = h.Surname,
-                        JobTitle = h.JobTitle,
-                        Company = h.Company,
-                        Enabled = h.IsEnabled,
-                        Group = h.Group?.Name
-                    });
+                        GivenName = "",
+                        Surname = "",
+                        JobTitle = "",
+                        Company = "",
+                        IsEnabled = true
+                    };
                 }
+                tempList.Add(new InputModel()
+                {
+                    Id = u.Id,
+                    Email = u.Email,
+                    GivenName = h.GivenName,
+                    Surname = h.Surname,
+                    DisplayName = h.DisplayName,
+                    JobTitle = h.JobTitle ?? "",
+                    Company = h.Company ?? "",
+                    Enabled = h.IsEnabled,
+                    Group = h.Group?.Name ?? ""
+                });
             }
+            string sch = search.Trim().ToLower();
+            // find the keyword search term in any of these fields.
+            UserList = tempList.Where(x =>
+                x.DisplayName.ToLower().Contains(sch) ||
+                x.GivenName.ToLower().Contains(sch) ||
+                x.Surname.ToLower().Contains(sch) ||
+                x.Company.ToLower().Contains(sch) ||
+                x.Group.ToLower().Contains(sch) ||
+                x.JobTitle.ToLower().Contains(sch) ||
+                x.Company.ToLower().Contains(sch) ||
+                x.Email.ToLower().Contains(sch)).ToList();
+            
             ViewData["SearchTerm"] = search;
 
             return Page();

@@ -7,8 +7,9 @@
 
 <h1 class="display-4">Helpdesk Users</h1>
 <form method="post" style="float:right">
-  <input type="text" placeholder="@ViewData["SearchTerm"]" name="search">
-  <button type="submit"><i class="fa fa-search"></i></button>
+    <a asp-page="/People/Import" class="btn btn-secondary">Import</a>&nbsp; &nbsp;
+    <input type="text" placeholder="@ViewData["SearchTerm"]" name="search">
+    <button type="submit"><i class="fa fa-search"></i></button>
 </form>
 
 <a class="btn btn-success" asp-page="Create">Create New</a>

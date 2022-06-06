@@ -22,5 +22,7 @@ namespace Helpdesk.Data
         public DbSet<LicenseType> LicenseType { get; set; }
         public DbSet<UserLicenseAssignment> UserLicenseAssignments { get; set; }
         public DbSet<AssetLicenseAssignment> AssetLicenseAssignments { get; set; }
+
+        public DbSet<FileUpload> FileUploads { get; set; }
     }
 }
