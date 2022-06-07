@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
+using System.Net;
 using System.Text;
 using System.Text.Encodings.Web;
 
@@ -408,10 +409,38 @@ namespace Helpdesk.Pages.People
                 LicenseTypeCache.Add(l.Name, l);
             }
 
+            // Get the upload directory where we will be saving the log file to.
+            ConfigOpt? opt = await _context.ConfigOpts
+                .Where(x => x.Category == ConfigOptConsts.System_UploadPath.Category &&
+                            x.Key == ConfigOptConsts.System_UploadPath.Key)
+                .FirstOrDefaultAsync();
+            string targetFilePath = opt?.Value ?? ConfigOptConsts.System_UploadPath.Value;
+            // generate the random file name.
+            var trustedFileNameForFileStorage = Path.GetRandomFileName();
+            var filePath = Path.Combine(
+                targetFilePath, trustedFileNameForFileStorage);
+
+            // create the log file database entry
+            FileUpload ImportLogDB = new FileUpload()
+            {
+                FilePath = filePath,
+                IsTempFile = true,
+                FileLength = 0,
+                OriginalFileName = WebUtility.HtmlEncode(String.Format("User Import Log {0}.txt", DateTime.UtcNow.ToString())),
+                IsDatabaseFile = false,
+                UploadedBy = _currentHelpdeskUser.IdentityUserId,
+                DetectedFileType = "text/plain",
+                FileData = null,
+                WhenUploaded = DateTime.UtcNow
+            };
+
+            _context.FileUploads.Add(ImportLogDB);
+            await _context.SaveChangesAsync();
             string? header = string.Empty;
             try
             {
                 using (StreamReader reader = System.IO.File.OpenText(fileupload.FilePath))
+                using (StreamWriter writer = System.IO.File.CreateText(filePath))
                 {
                     header = await reader.ReadLineAsync();
 
@@ -543,6 +572,7 @@ namespace Helpdesk.Pages.People
                             string? csvJobTitle = JobTitleField == -1 ? null : fields[JobTitleField];
                             string? csvCompany = CompanyField == -1 ? null : fields[CompanyField];
                             string? csvPhoneNumber = PhoneNumberField == -1 ? null : fields[PhoneNumberField];
+                            string? csvLicenses = LicenseField == -1 ? null : fields[LicenseField];
 
                             // got all our required fields.  Create the user now.
                             var iUser = Activator.CreateInstance<IdentityUser>();
@@ -596,26 +626,66 @@ namespace Helpdesk.Pages.People
                                 await SendNewUserEmail(iUser, hUser, csvEmail);
                             }
 
-                            // TODO: Parse user licenses and add them.
-                            throw new NotImplementedException();
+                            if (!string.IsNullOrEmpty(csvLicenses))
+                            {
+                                foreach (var lic in LicenseTypeCache)
+                                {
+                                    if (csvLicenses.Contains(lic.Value.Name, StringComparison.InvariantCultureIgnoreCase))
+                                    {
+                                        var ula = new UserLicenseAssignment()
+                                        {
+                                            HelpdeskUser = hUser,
+                                            LicenseType = lic.Value,
+                                            ProductCode = string.Empty
+                                        };
+                                        _context.UserLicenseAssignments.Add(ula);
+                                        await _context.SaveChangesAsync();
+                                        _context.Entry(ula).State = EntityState.Detached;
+                                    }
+                                } 
+                            }
+
+                            if (Input.NotifyUsers == "Yes")
+                            {
+                                // if Notify is Yes, send new account notification
+                                await SendNewUserEmail(iUser, hUser, csvEmail);
+                            }
+
+                            _context.Entry(hUser).State = EntityState.Detached;
+                            _context.Entry(iUser).State = EntityState.Detached;
+                            hUser = null;
+                            iUser = null;
 
                             CompletedCount++;
 
                         }
                         catch (Exception ex)
                         {
+                            FailImportCount++;
                             log.AppendFormat("Exception processing line {0}: {1}\r\n", LineCount, ex.Message);
                         }
                     }
-                    //TODO: Write out results summary, and then write out the full log.
-                    throw new NotImplementedException();
+                    //Write out results summary, and then write out the full log.
+                    writer.WriteLine("Result of User Import");
+                    writer.WriteLine("CSV Lines Read: {0}", LineCount);
+                    writer.WriteLine("Parse errors: {0}", FailParseCount);
+                    writer.WriteLine("Imports Failed: {0}", FailImportCount);
+                    writer.WriteLine("Imports Successful: {0}", CompletedCount);
+                    writer.WriteLine("/r/nLog:");
+                    writer.Write(log.ToString());
+                    log.Clear();
                 }
+                FileInfo logInfo = new FileInfo(filePath);
+                ImportLogDB.FileLength = (int)Math.Min(Int32.MaxValue, logInfo.Length);
+                _context.FileUploads.Update(ImportLogDB);
+                await _context.SaveChangesAsync();
+                return RedirectToPage("/People/ImportResult", new { fileId = ImportLogDB.Id });
             }
             catch
             {
                 ModelState.AddModelError("", "Failed to process the uploaded file");
             }
-            return RedirectToPage("/People/Index");
+            return Page();
         }
 
         private async Task SendNewUserEmail(IdentityUser iUser, HelpdeskUser hUser, string email)

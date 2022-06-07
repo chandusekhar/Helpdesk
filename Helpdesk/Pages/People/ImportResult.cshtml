@@ -1,0 +1,18 @@
+﻿@page
+@model Helpdesk.Pages.People.ImportResultModel
+@{
+    ViewData["Title"] = "Import Complete";
+}
+
+<br />
+<div class="text-center">
+    <h1 class="display-4">Import Users From CSV</h1>
+</div>
+<div class="border container col-12" style="padding:30px;">
+    <p>The import process is complete.</p>
+    @if (@ViewData.ContainsKey("FileDownloadId"))
+    {
+        <p>Please download and review the log file.</p>
+        <p><a class="btn btn-success" href="/FileDownload?fileid=@ViewData["FileDownloadId"]" download="@ViewData["FileName"]">Download Import Log</a></p>
+    }
+</div>

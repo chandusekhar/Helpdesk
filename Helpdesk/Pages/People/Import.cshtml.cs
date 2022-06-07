@@ -114,7 +114,7 @@ namespace Helpdesk.Pages.People
                 OriginalFileName = WebUtility.HtmlEncode(FileUpload.FormFile.FileName),
                 IsDatabaseFile = false,
                 UploadedBy = _currentHelpdeskUser.IdentityUserId,
-                DetectedFileType = ".csv",
+                DetectedFileType = "text/csv",
                 FileData = null,
                 WhenUploaded = DateTime.UtcNow
             };
