@@ -114,6 +114,10 @@ namespace Helpdesk.Infrastructure
                             {
                                 viewData.Add("NavbarShowSiteSettingsLink", "true");
                             }
+                            if (_currentHelpdeskUser.SiteNavTemplate.ImportExportLink)
+                            {
+                                viewData.Add("NavbarShowImportExportLink", "true");
+                            }
                         }
 
                     }

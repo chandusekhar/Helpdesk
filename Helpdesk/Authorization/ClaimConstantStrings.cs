@@ -60,5 +60,7 @@
         /// </summary>
         public static readonly string UsersAllowReadAccess = "Users Allow Read Access";
 
+        public static readonly string ImportExport = "Import and Export";
+
     }
 }

@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 
-namespace Helpdesk.Pages.People
+namespace Helpdesk.Pages.ImportExport.People
 {
     public class ImportResultModel : DI_BasePageModel
     {
@@ -25,7 +25,7 @@ namespace Helpdesk.Pages.People
                 // For some pages, it might make sense to redirect to the account profile page so they can immediately enter their details.
                 //return RedirectToPage("/Identity/Account/Manage");
             }
-            bool HasClaim = await RightsManagement.UserHasClaim(_context, _currentHelpdeskUser.IdentityUserId, ClaimConstantStrings.UsersAdmin);
+            bool HasClaim = await RightsManagement.UserHasClaim(_context, _currentHelpdeskUser.IdentityUserId, ClaimConstantStrings.ImportExport);
             if (!HasClaim)
             {
                 return Forbid();

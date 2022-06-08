@@ -12,7 +12,7 @@ using System.Net;
 using System.Text;
 using System.Text.Encodings.Web;
 
-namespace Helpdesk.Pages.People
+namespace Helpdesk.Pages.ImportExport.People
 {
     public class ImportFieldsModel : DI_BasePageModel
     {
@@ -91,7 +91,7 @@ namespace Helpdesk.Pages.People
                 // For some pages, it might make sense to redirect to the account profile page so they can immediately enter their details.
                 //return RedirectToPage("/Identity/Account/Manage");
             }
-            bool HasClaim = await RightsManagement.UserHasClaim(_context, _currentHelpdeskUser.IdentityUserId, ClaimConstantStrings.UsersAdmin);
+            bool HasClaim = await RightsManagement.UserHasClaim(_context, _currentHelpdeskUser.IdentityUserId, ClaimConstantStrings.ImportExport);
             if (!HasClaim)
             {
                 return Forbid();
@@ -358,7 +358,7 @@ namespace Helpdesk.Pages.People
                 // For some pages, it might make sense to redirect to the account profile page so they can immediately enter their details.
                 //return RedirectToPage("/Identity/Account/Manage");
             }
-            bool HasClaim = await RightsManagement.UserHasClaim(_context, _currentHelpdeskUser.IdentityUserId, ClaimConstantStrings.UsersAdmin);
+            bool HasClaim = await RightsManagement.UserHasClaim(_context, _currentHelpdeskUser.IdentityUserId, ClaimConstantStrings.ImportExport);
             if (!HasClaim)
             {
                 return Forbid();
@@ -679,7 +679,7 @@ namespace Helpdesk.Pages.People
                 ImportLogDB.FileLength = (int)Math.Min(Int32.MaxValue, logInfo.Length);
                 _context.FileUploads.Update(ImportLogDB);
                 await _context.SaveChangesAsync();
-                return RedirectToPage("/People/ImportResult", new { fileId = ImportLogDB.Id });
+                return RedirectToPage("./ImportResult", new { fileId = ImportLogDB.Id });
             }
             catch
             {

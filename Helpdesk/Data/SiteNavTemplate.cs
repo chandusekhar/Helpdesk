@@ -45,5 +45,10 @@ namespace Helpdesk.Data
         /// </summary>
         [Required]
         public bool GroupsLink { get; set; }
+        /// <summary>
+        /// Shows the Import/Export link in the Configuration menu
+        /// </summary>
+        [Required]
+        public bool ImportExportLink { get; set; }
     }
 }

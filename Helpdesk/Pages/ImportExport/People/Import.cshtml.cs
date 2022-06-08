@@ -8,11 +8,10 @@ using Microsoft.EntityFrameworkCore;
 using System.ComponentModel.DataAnnotations;
 using System.Net;
 
-namespace Helpdesk.Pages.People
+namespace Helpdesk.Pages.ImportExport.People
 {
     public class ImportModel : DI_BasePageModel
     {
-
         public ImportModel(ApplicationDbContext dbContext,
             UserManager<IdentityUser> userManager,
             SignInManager<IdentityUser> signInManager)
@@ -34,7 +33,7 @@ namespace Helpdesk.Pages.People
                 // For some pages, it might make sense to redirect to the account profile page so they can immediately enter their details.
                 //return RedirectToPage("/Identity/Account/Manage");
             }
-            bool HasClaim = await RightsManagement.UserHasClaim(_context, _currentHelpdeskUser.IdentityUserId, ClaimConstantStrings.UsersAdmin);
+            bool HasClaim = await RightsManagement.UserHasClaim(_context, _currentHelpdeskUser.IdentityUserId, ClaimConstantStrings.ImportExport);
             if (!HasClaim)
             {
                 return Forbid();
@@ -53,7 +52,7 @@ namespace Helpdesk.Pages.People
                 // For some pages, it might make sense to redirect to the account profile page so they can immediately enter their details.
                 //return RedirectToPage("/Identity/Account/Manage");
             }
-            bool HasClaim = await RightsManagement.UserHasClaim(_context, _currentHelpdeskUser.IdentityUserId, ClaimConstantStrings.UsersAdmin);
+            bool HasClaim = await RightsManagement.UserHasClaim(_context, _currentHelpdeskUser.IdentityUserId, ClaimConstantStrings.ImportExport);
             if (!HasClaim)
             {
                 return Forbid();
@@ -122,7 +121,7 @@ namespace Helpdesk.Pages.People
             _context.FileUploads.Add(upload);
             await _context.SaveChangesAsync();
 
-            return RedirectToPage("ImportFields", new { fileId = upload.Id });
+            return RedirectToPage("./ImportFields", new { fileId = upload.Id });
         }
 
         public class BufferedSingleFileUploadPhysical

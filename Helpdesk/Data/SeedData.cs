@@ -447,6 +447,8 @@ namespace Helpdesk.Data
                     //    "Allows adding a privileged role to a user (super admin, for example). Requires UsersAdmin to get to the page to do this"),
                     new DefaultRoleClaim.NewRoleClaim(ClaimConstantStrings.UsersAllowReadAccess,
                         "Required to access the users screen and view basic user details"),
+                    new DefaultRoleClaim.NewRoleClaim(ClaimConstantStrings.ImportExport,
+                        "Import and Export data from the site"),
                 }
             },
             new DefaultRoleClaim()
@@ -491,6 +493,7 @@ namespace Helpdesk.Data
                     SiteSettingsLink = true,
                     LicenseTypeLink = true,
                     GroupsLink = true,
+                    ImportExportLink = true,
                 }
             }
         };
