@@ -671,7 +671,7 @@ namespace Helpdesk.Pages.People
                     writer.WriteLine("Parse errors: {0}", FailParseCount);
                     writer.WriteLine("Imports Failed: {0}", FailImportCount);
                     writer.WriteLine("Imports Successful: {0}", CompletedCount);
-                    writer.WriteLine("/r/nLog:");
+                    writer.WriteLine("Error Log:");
                     writer.Write(log.ToString());
                     log.Clear();
                 }

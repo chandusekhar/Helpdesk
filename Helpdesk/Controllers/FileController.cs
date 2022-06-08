@@ -1,33 +1,26 @@
-using Helpdesk.Data;
+﻿using Helpdesk.Data;
 using Helpdesk.Infrastructure;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 
-namespace Helpdesk.Pages
+namespace Helpdesk.Controllers
 {
-    public class FileDownloadPageModel : DI_BasePageModel
+    [ApiController]
+    [Route("[controller]")]
+    public class FileController : DI_BaseController
     {
 
-        public FileDownloadPageModel(ApplicationDbContext dbContext,
+        public FileController(ApplicationDbContext dbContext,
             UserManager<IdentityUser> userManager,
             SignInManager<IdentityUser> signInManager)
             : base(dbContext, userManager, signInManager)
         { }
-        
-        [BindProperty]
-        public string fileid { get; set; }
 
-        public void OnGet()
+        [HttpGet("download")]
+        public async Task<IActionResult> Download([FromQuery] string? fileid)
         {
-
-        }
-
-        public async Task<IActionResult> OnGetAsync()
-        {
-            await LoadSiteSettings(ViewData);
+            await LoadControllerSettings(ViewData);
             if (_currentHelpdeskUser == null)
             {
                 // This happens when a user logs in, but hasn't set up their profile yet.
@@ -35,10 +28,9 @@ namespace Helpdesk.Pages
                 // For some pages, it might make sense to redirect to the account profile page so they can immediately enter their details.
                 //return RedirectToPage("/Identity/Account/Manage");
             }
-
             if (string.IsNullOrEmpty(fileid))
             {
-                return RedirectToPage("./Index");
+                return NotFound();
             }
 
             var file = await _context.FileUploads.Where(x => x.Id == fileid).FirstOrDefaultAsync();
@@ -50,7 +42,7 @@ namespace Helpdesk.Pages
             // perform permission validation.  For now, the uploaded can download their own files.
             if (file.UploadedBy == _currentHelpdeskUser.IdentityUserId)
             {
-                if (!file.IsDatabaseFile)
+                if (file.IsDatabaseFile)
                 {
                     if (file.FileData == null)
                     {
@@ -73,8 +65,6 @@ namespace Helpdesk.Pages
                     {
                         return NotFound();
                     }
-
-
                 }
             }
 

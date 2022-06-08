@@ -20,12 +20,12 @@
         @if (@ViewData.ContainsKey("CompleteProfilePrompt") && @ViewData.ContainsKey("ActivePage") && @ViewData["ActivePage"]?.ToString() == "Index")
         {
             <div class="w-100 p-0" style="background-color: sandybrown; color: black; text-align: center;">
-                <h4>Enter your name below and click Save to complete the setup of your profile.</h4>
+                <h4>Enter your details below and click Save to complete the setup of your profile.</h4>
             </div>
         }
         @if (@ViewData.ContainsKey("NagMFAEnrollmentBanner"))
         {
-            <div class="w-100 p-0" style="background-color: darkred; color: white; text-align: center;">
+            <div class="w-100 p-0" style="background-color: orange; color: white; text-align: center;">
                 <h4>Please enable an authenticator to secure your account and enable site features. &nbsp;
                 <a class="btn btn-success" asp-area="Identity" asp-page="/Account/Manage/TwoFactorAuthentication">Authenticator</a></h4>
             </div>

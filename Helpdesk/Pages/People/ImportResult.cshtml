@@ -13,6 +13,6 @@
     @if (@ViewData.ContainsKey("FileDownloadId"))
     {
         <p>Please download and review the log file.</p>
-        <p><a class="btn btn-success" href="/FileDownload?fileid=@ViewData["FileDownloadId"]" download="@ViewData["FileName"]">Download Import Log</a></p>
+        <p><a class="btn btn-success" href="/File/Download?fileid=@ViewData["FileDownloadId"]" download="@ViewData["FileName"]">Download Import Log</a></p>
     }
 </div>
