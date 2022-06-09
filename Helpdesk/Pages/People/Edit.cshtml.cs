@@ -158,10 +158,10 @@ namespace Helpdesk.Pages.People
                 .Include(y => y.LicenseType)
                 //.OrderBy(z => z.LicenseType.Name)
                 .ToListAsync();
-            //var availLicenses = await _context.LicenseType
-            //    .Where(x => x.IsUserLicense && x.Status == LicenseStatuses.Active)
-            //    //.OrderBy(y => y.Name)
-            //    .ToListAsync();
+            var availLicenses = await _context.LicenseType
+                .Where(x => x.IsUserLicense && x.Status == LicenseStatuses.Active)
+                //.OrderBy(y => y.Name)
+                .ToListAsync();
             foreach (var ul in userLicenses)
             {
                 Input.Licenses.Add(new LicenseItem()
@@ -176,24 +176,24 @@ namespace Helpdesk.Pages.People
                     ShowProductCode = !string.IsNullOrEmpty(ul.ProductCode) || ul.LicenseType.UserRequireProductCode
                 });
             }
-            //foreach (var al in availLicenses)
-            //{
-            //    var ul = Input.Licenses.Where(x => x.LicenseTypeId == al.Id).FirstOrDefault();
-            //    if (ul == null)
-            //    {
-            //        Input.Licenses.Add(new LicenseItem()
-            //        {
-            //            Id = -1,
-            //            LicenseTypeId = al.Id,
-            //            Name = al.Name,
-            //            Description = al.Description,
-            //            Added = false,
-            //            PreviouslyAdded = false,
-            //            ProductCode = "",
-            //            ShowProductCode = al.UserRequireProductCode
-            //        });
-            //    }
-            //}
+            foreach (var al in availLicenses)
+            {
+                var ul = Input.Licenses.Where(x => x.LicenseTypeId == al.Id).FirstOrDefault();
+                if (ul == null)
+                {
+                    Input.Licenses.Add(new LicenseItem()
+                    {
+                        Id = -1,
+                        LicenseTypeId = al.Id,
+                        Name = al.Name,
+                        Description = al.Description,
+                        Added = false,
+                        PreviouslyAdded = false,
+                        ProductCode = "",
+                        ShowProductCode = al.UserRequireProductCode
+                    });
+                }
+            }
             Input.Licenses = Input.Licenses.OrderBy(x => x.Name).ToList();
         }
 
