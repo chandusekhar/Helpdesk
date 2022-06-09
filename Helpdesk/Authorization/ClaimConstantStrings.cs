@@ -60,6 +60,12 @@
         /// </summary>
         public static readonly string UsersAllowReadAccess = "Users Allow Read Access";
 
+        /// <summary>
+        /// In User Details page, this claim will allow them to view the license product code
+        /// Without this claim, they can see that a license is assigned to a user, but the product code is not shown
+        /// </summary>
+        public static readonly string UsersAllowReadLicenseProductCode = "Users Allow Read License Product Code";
+
         public static readonly string ImportExport = "Import and Export";
 
     }

@@ -54,6 +54,27 @@ namespace Helpdesk.Pages.People
             public string Enabled { get; set; }
 
             public string? Group { get; set; }
+
+            public List<LicenseItem> Licenses { get; set; }
+        }
+
+        public class LicenseItem
+        {
+            public int Id { get; set; }
+
+            public bool Added { get; set; }
+
+            public bool PreviouslyAdded { get; set; }
+
+            public int LicenseTypeId { get; set; }
+
+            public string Name { get; set; } = string.Empty;
+
+            public string Description { get; set; } = string.Empty;
+
+            public bool ShowProductCode { get; set; } = true;
+            [Display(Name="Product Code")]
+            public string? ProductCode { get; set; } = string.Empty;
         }
 
         public List<string> SiteNavTemplates { get; set; } = new List<string>();
@@ -125,9 +146,57 @@ namespace Helpdesk.Pages.People
                 Enabled = hUser.IsEnabled ? "Enable" : "Disable",
                 Group = hUser.Group?.Name
             };
+            await PopulateLicenses(iUser);
             return Page();
         }
         
+        private async Task PopulateLicenses(IdentityUser iUser)
+        {
+            Input.Licenses = new List<LicenseItem>();
+            var userLicenses = await _context.UserLicenseAssignments
+                .Where(x => x.HelpdeskUser.IdentityUserId == iUser.Id)
+                .Include(y => y.LicenseType)
+                //.OrderBy(z => z.LicenseType.Name)
+                .ToListAsync();
+            var availLicenses = await _context.LicenseType
+                .Where(x => x.IsUserLicense && x.Status == LicenseStatuses.Active)
+                //.OrderBy(y => y.Name)
+                .ToListAsync();
+            foreach (var ul in userLicenses)
+            {
+                Input.Licenses.Add(new LicenseItem()
+                {
+                    Id = ul.Id,
+                    LicenseTypeId = ul.LicenseType.Id,
+                    Name = ul.LicenseType.Name,
+                    Description = ul.LicenseType.Description,
+                    Added = true,
+                    PreviouslyAdded = true,
+                    ProductCode = ul.ProductCode,
+                    ShowProductCode = !string.IsNullOrEmpty(ul.ProductCode) || ul.LicenseType.UserRequireProductCode
+                });
+            }
+            foreach (var al in availLicenses)
+            {
+                var ul = Input.Licenses.Where(x => x.LicenseTypeId == al.Id).FirstOrDefault();
+                if (ul == null)
+                {
+                    Input.Licenses.Add(new LicenseItem()
+                    {
+                        Id = -1,
+                        LicenseTypeId = al.Id,
+                        Name = al.Name,
+                        Description = al.Description,
+                        Added = false,
+                        PreviouslyAdded = false,
+                        ProductCode = "",
+                        ShowProductCode = al.UserRequireProductCode
+                    });
+                }
+            }
+            Input.Licenses = Input.Licenses.OrderBy(x => x.Name).ToList();
+        }
+
         private async Task PopulateList()
         {
             SiteNavTemplates = await _context.SiteNavTemplates.Select(x => x.Name).ToListAsync();
@@ -166,6 +235,7 @@ namespace Helpdesk.Pages.People
             var iUser = await _userManager.FindByIdAsync(Input.Id);
             if (iUser == null)
             {
+                await PopulateLicenses(iUser);
                 return NotFound();
             }
 
@@ -193,6 +263,7 @@ namespace Helpdesk.Pages.People
 
             if (failValidation)
             {
+                await PopulateLicenses(iUser);
                 return Page();
             }
 
@@ -243,8 +314,79 @@ namespace Helpdesk.Pages.People
                 _context.HelpdeskUsers.Update(hUser);
             }
             await _context.SaveChangesAsync();
-            return Page();
-        }
 
+            // process license selection
+            foreach (var lic in Input.Licenses)
+            {
+                if (lic.Added && lic.PreviouslyAdded)
+                {
+                    // check for updated product key
+                    var dblic = await _context.UserLicenseAssignments
+                        .Where(x => x.Id == lic.Id)
+                        .Include(y => y.LicenseType)
+                        .FirstOrDefaultAsync();
+                    if (dblic != null)
+                    {
+                        if (dblic.ProductCode != lic.ProductCode)
+                        {
+                            dblic.ProductCode = lic.ProductCode ?? "";
+                            _context.UserLicenseAssignments.Update(dblic);
+                            await _context.SaveChangesAsync();
+                        }
+                    }
+                    else
+                    {
+                        // add
+                        var dbtype = await _context.LicenseType
+                            .Where(x => x.Id == lic.LicenseTypeId)
+                            .FirstOrDefaultAsync();
+                        if (dbtype != null)
+                        {
+                            dblic = new UserLicenseAssignment()
+                            {
+                                HelpdeskUser = hUser,
+                                LicenseType = dbtype,
+                                ProductCode = lic.ProductCode ?? ""
+                            };
+                            _context.UserLicenseAssignments.Add(dblic);
+                            await _context.SaveChangesAsync();
+                        }
+                    }
+                }
+                else if (!lic.Added && lic.PreviouslyAdded)
+                {
+                    //delete
+                    var dellic = await _context.UserLicenseAssignments
+                        .Where(x => x.Id == lic.Id)
+                        .FirstOrDefaultAsync();
+                    if (dellic != null)
+                    {
+                        _context.UserLicenseAssignments.Remove(dellic);
+                        await _context.SaveChangesAsync();
+                    }
+                }
+                else if (lic.Added && !lic.PreviouslyAdded)
+                {
+                    // add
+                    var dbtype = await _context.LicenseType
+                        .Where(x => x.Id == lic.LicenseTypeId)
+                        .FirstOrDefaultAsync();
+                    if (dbtype != null)
+                    {
+                        var addlic = new UserLicenseAssignment()
+                        {
+                            HelpdeskUser = hUser,
+                            LicenseType = dbtype,
+                            ProductCode = lic.ProductCode ?? ""
+                        };
+                        _context.UserLicenseAssignments.Add(addlic);
+                        await _context.SaveChangesAsync();
+                    }
+                }
+            }
+
+            //await PopulateLicenses(iUser);
+            return RedirectToPage("/People/Edit", new { id = iUser.Id });
+        }
     }
 }

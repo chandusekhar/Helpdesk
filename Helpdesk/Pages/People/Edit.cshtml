@@ -9,121 +9,132 @@
 <div class="text-center">
     <h1 class="display-4">Edit Helpdesk User</h1>
 </div>
-<div class="border container col-12" style="padding:30px;">
-    <form method="post" class="row g-3">
-        <div class="col-md-12">
+<form method="post" class="g-3">
+    <div class="border container" style="padding:30px;">
+        <div class="row col-md-12">
             <span class="h3">User Profile</span>
         </div>
         <input type="hidden" asp-for="Input.Id" />
-        <div class="col-md-12 text-center">
+        <div class="row col-md-12 text-center">
             <div class="text-danger text-center" asp-validation-summary="ModelOnly"></div>
         </div>
-        <div class="col-md-6">
-            <div class="form-floating">
-                <input asp-for="Input.Email" class="form-control" />
-                <label asp-for="Input.Email" class="form-label"></label>
-                <span asp-validation-for="Input.Email" class="text-danger"></span>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-floating">
+                    <input asp-for="Input.Email" class="form-control" />
+                    <label asp-for="Input.Email" class="form-label"></label>
+                    <span asp-validation-for="Input.Email" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-floating">
+                    <input asp-for="Input.DisplayName" class="form-control" />
+                    <label asp-for="Input.DisplayName" class="form-label"></label>
+                    <span asp-validation-for="Input.DisplayName" class="text-danger"></span>
+                </div>
             </div>
         </div>
-        <div class="col-md-6">
-            <div class="form-floating">
-                <input asp-for="Input.DisplayName" class="form-control" />
-                <label asp-for="Input.DisplayName" class="form-label"></label>
-                <span asp-validation-for="Input.DisplayName" class="text-danger"></span>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-floating">
+                    <input asp-for="Input.GivenName" class="form-control" />
+                    <label asp-for="Input.GivenName" class="form-label"></label>
+                    <span asp-validation-for="Input.GivenName" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-floating">
+                    <input asp-for="Input.Surname" class="form-control" />
+                    <label asp-for="Input.Surname" class="form-label"></label>
+                    <span asp-validation-for="Input.Surname" class="text-danger"></span>
+                </div>
             </div>
         </div>
-        <div class="col-md-6">
-            <div class="form-floating">
-                <input asp-for="Input.GivenName" class="form-control" />
-                <label asp-for="Input.GivenName" class="form-label"></label>
-                <span asp-validation-for="Input.GivenName" class="text-danger"></span>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-floating">
+                    <input asp-for="Input.JobTitle" class="form-control" />
+                    <label asp-for="Input.JobTitle" class="form-label"></label>
+                    <span asp-validation-for="Input.JobTitle" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-floating">
+                    <input asp-for="Input.Company" class="form-control" />
+                    <label asp-for="Input.Company" class="form-label"></label>
+                    <span asp-validation-for="Input.Company" class="text-danger"></span>
+                </div>
             </div>
         </div>
-        <div class="col-md-6">
-            <div class="form-floating">
-                <input asp-for="Input.Surname" class="form-control" />
-                <label asp-for="Input.Surname" class="form-label"></label>
-                <span asp-validation-for="Input.Surname" class="text-danger"></span>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-floating">
+                    <input asp-for="Input.PhoneNumber" class="form-control" />
+                    <label asp-for="Input.PhoneNumber" class="form-label"></label>
+                    <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
+                </div>
             </div>
-        </div>
-        <div class="col-md-6">
-            <div class="form-floating">
-                <input asp-for="Input.JobTitle" class="form-control" />
-                <label asp-for="Input.JobTitle" class="form-label"></label>
-                <span asp-validation-for="Input.JobTitle" class="text-danger"></span>
-            </div>
-        </div>
-        <div class="col-md-6">
-            <div class="form-floating">
-                <input asp-for="Input.Company" class="form-control" />
-                <label asp-for="Input.Company" class="form-label"></label>
-                <span asp-validation-for="Input.Company" class="text-danger"></span>
-            </div>
-        </div>
-        <div class="col-md-6">
-            <div class="form-floating">
-                <input asp-for="Input.PhoneNumber" class="form-control" />
-                <label asp-for="Input.PhoneNumber" class="form-label"></label>
-                <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
-            </div>
-        </div>
-        <div class="col-md-6">
-            <div class="form-floating">
-                <select asp-for="Input.SiteNavTemplateName" class="form-control">
-                    @foreach(var opt in Model.SiteNavTemplates)
-                    {
-                        if (@opt == @Model.Input.SiteNavTemplateName)
+            <div class="col-md-6">
+                <div class="form-floating">
+                    <select asp-for="Input.SiteNavTemplateName" class="form-control">
+                        @foreach (var opt in Model.SiteNavTemplates)
                         {
-                            <option value="@opt" selected>@opt</option>
+                            if (@opt == @Model.Input.SiteNavTemplateName)
+                            {
+                                <option value="@opt" selected>@opt</option>
+                            }
+                            else
+                            {
+                                <option value="@opt">@opt</option>
+                            }
                         }
-                        else
-                        {
-                            <option value="@opt">@opt</option>
-                        }
-                    }
-                </select>
-                <label asp-for="Input.SiteNavTemplateName" class="form-label"></label>
-                <span asp-validation-for="Input.SiteNavTemplateName" class="text-danger"></span>
+                    </select>
+                    <label asp-for="Input.SiteNavTemplateName" class="form-label"></label>
+                    <span asp-validation-for="Input.SiteNavTemplateName" class="text-danger"></span>
+                </div>
             </div>
         </div>
-        <div class="col-md-6">
-            <div class="form-floating">
-                <select asp-for="Input.Enabled" class="form-control">
-                    @foreach(var opt in Model.EnabledOptions)
-                    {
-                        if (@opt == @Model.Input.Enabled)
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-floating">
+                    <select asp-for="Input.Enabled" class="form-control">
+                        @foreach (var opt in Model.EnabledOptions)
                         {
-                            <option value="@opt" selected>@opt</option>
+                            if (@opt == @Model.Input.Enabled)
+                            {
+                                <option value="@opt" selected>@opt</option>
+                            }
+                            else
+                            {
+                                <option value="@opt">@opt</option>
+                            }
                         }
-                        else
+                    </select>
+                    <label asp-for="Input.Enabled" class="form-label"></label>
+                    <span asp-validation-for="Input.Enabled" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-floating">
+                    <select asp-for="Input.Group" class="form-control">
+                        @foreach (var opt in Model.GroupOptions)
                         {
-                            <option value="@opt">@opt</option>
+                            if (@opt == @Model.Input.Group)
+                            {
+                                <option value="@opt" selected>@opt</option>
+                            }
+                            else
+                            {
+                                <option value="@opt">@opt</option>
+                            }
                         }
-                    }
-                </select>
-                <label asp-for="Input.Enabled" class="form-label"></label>
-                <span asp-validation-for="Input.Enabled" class="text-danger"></span>
+                    </select>
+                    <label asp-for="Input.Group" class="form-label"></label>
+                    <span asp-validation-for="Input.Group" class="text-danger"></span>
+                </div>
             </div>
         </div>
-        <div class="col-md-6">
-            <div class="form-floating">
-                <select asp-for="Input.Group" class="form-control">
-                    @foreach(var opt in Model.GroupOptions)
-                    {
-                        if (@opt == @Model.Input.Group)
-                        {
-                            <option value="@opt" selected>@opt</option>
-                        }
-                        else
-                        {
-                            <option value="@opt">@opt</option>
-                        }
-                    }
-                </select>
-                <label asp-for="Input.Group" class="form-label"></label>
-                <span asp-validation-for="Input.Group" class="text-danger"></span>
-            </div>
-        </div>
+        <br/>
         <div class="col-md-12">
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />
@@ -131,9 +142,42 @@
                 <a class="btn btn-secondary" asp-page="Index">Back to List</a>
             </div>
         </div>
-    </form>
-</div>
+        <br />
+        <div class="row">
+            <div class="col-md-12">
+                <span class="h3">User License</span>
+            </div>
+        </div>
+        @for(int i = 0; i < @Model.Input.Licenses.Count(); i++)
+        {
+            <input type="hidden" asp-for="@Model.Input.Licenses[i].Id" />
+            <input type="hidden" asp-for="@Model.Input.Licenses[i].PreviouslyAdded" />
+            <input type="hidden" asp-for="@Model.Input.Licenses[i].LicenseTypeId" />
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-check-inline form-switch">
+                        <input class="form-check-input" type="checkbox" data-toggle="toggle" asp-for="@Model.Input.Licenses[i].Added" />
+                        &nbsp;
+                        <span>@Model.Input.Licenses[i].Name</span>
+                    </div>
+                </div>
+            </div>
+            @if(@Model.Input.Licenses[i].ShowProductCode)
+            {
+                <div class="row">
+                    <div class="col-md-6">
+                        <input type="text" class="form-control" asp-for="@Model.Input.Licenses[i].ProductCode" />
+                    </div>
+                </div>
+            }
+            <br />
+        }
+    </div>
+</form>
+
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

@@ -60,6 +60,12 @@ namespace Helpdesk.Pages.People
             {
                 return Forbid();
             }
+            bool ShowEditDelete = await RightsManagement.UserHasClaim(_context, _currentHelpdeskUser.IdentityUserId, ClaimConstantStrings.UsersAdmin);
+            if (ShowEditDelete)
+            {
+                ViewData["ShowEditDelete"] = true;
+            }
+
 
             // load user list
             var users = await _context.Users.ToListAsync();
@@ -111,6 +117,11 @@ namespace Helpdesk.Pages.People
             if (!HasClaim)
             {
                 return Forbid();
+            }
+            bool ShowEditDelete = await RightsManagement.UserHasClaim(_context, _currentHelpdeskUser.IdentityUserId, ClaimConstantStrings.UsersAdmin);
+            if (ShowEditDelete)
+            {
+                ViewData["ShowEditDelete"] = true;
             }
 
             if (string.IsNullOrEmpty(search))
