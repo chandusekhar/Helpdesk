@@ -148,6 +148,7 @@ namespace Helpdesk.Data
                                 context.LicenseType.Add(temp);
                             }
                             await context.SaveChangesAsync();
+                            context.Entry(temp).State = EntityState.Detached;
                         }
                     }
                 }
@@ -174,8 +175,31 @@ namespace Helpdesk.Data
                                 };
                                 context.Groups.Add(group);
                             }
+                            await context.SaveChangesAsync();
+                            context.Entry(group).State = EntityState.Detached;
                         }
-                        await context.SaveChangesAsync();
+                    }
+                }
+
+                foreach (var item in AssetTypeCatalog.Catalog)
+                {
+                    if (item.Version == dbVersion.Value)
+                    {
+                        foreach (var a in item.Templates)
+                        {
+                            var at = await context.AssetTypes.Where(x => x.Name == a.Name).FirstOrDefaultAsync();
+                            if (at == null)
+                            {
+                                at = new AssetType()
+                                {
+                                    Name = a.Name,
+                                    Description = a.Description
+                                };
+                                context.AssetTypes.Add(at);
+                                await context.SaveChangesAsync();
+                                context.Entry(at).State = EntityState.Detached;
+                            }
+                        }
                     }
                 }
 
@@ -765,4 +789,113 @@ namespace Helpdesk.Data
             }
         };
     }
+
+    public class AssetTypeVersion
+    {
+        public string Version { get; set; }
+        public List<AssetType> Templates { get; set; }
+    }
+
+    public static class AssetTypeCatalog
+    {
+        public static List<AssetTypeVersion> Catalog = new List<AssetTypeVersion>()
+        {
+            new AssetTypeVersion()
+            {
+                Version = "",
+                Templates = new List<AssetType>()
+                {
+                    new AssetType()
+                    {
+                        Name = "Laptop",
+                        Description = "Portable laptops, 2-in-1s, convertables, and foldables."
+                    },
+                    new AssetType()
+                    {
+                        Name = "Desktop",
+                        Description = "Towers, desktops, fixed mini-pcs, etc."
+                    },
+                    new AssetType()
+                    {
+                        Name = "Tablet",
+                        Description = "Surface tablets, iPads, eReaders, Android tablets, etc."
+                    },
+                    new AssetType()
+                    {
+                        Name = "Phone",
+                        Description = "Cell phones, desk phones, etc."
+                    },
+                    new AssetType()
+                    {
+                        Name = "Monitor",
+                        Description = "Computer display device."
+                    },
+                    new AssetType()
+                    {
+                        Name = "Dock",
+                        Description = "Plug in and socket docks, port replicators, hubs."
+                    },
+                    new AssetType()
+                    {
+                        Name = "Keyboard",
+                        Description = "Keyboards, 10 key inputs, and keyboard/mouse combo sets."
+                    },
+                    new AssetType()
+                    {
+                        Name = "Mouse",
+                        Description = "Wired or wireless mouse, touch pads, track balls, etc."
+                    },
+                    new AssetType()
+                    {
+                        Name = "Printer",
+                        Description = "Printers, multi-function printers, label makers, receipt printers, etc."
+                    },
+                    new AssetType()
+                    {
+                        Name = "Scanner",
+                        Description = "Document scanners, flat bed scaners, barcode readers, id readers, etc."
+                    },
+                    new AssetType()
+                    {
+                        Name = "Headset",
+                        Description = "Headphones, phone headsets, VR headsets, etc."
+                    },
+                    new AssetType()
+                    {
+                        Name = "Speaker",
+                        Description = "Audio output devices, desktop speakers, conference speakers, etc."
+                    },
+                    new AssetType()
+                    {
+                        Name = "Camera",
+                        Description = "Still or video camera."
+                    },
+                    new AssetType()
+                    {
+                        Name = "Charger",
+                        Description = "Removable chargers, laptop and phone chargers, etc."
+                    },
+                    new AssetType()
+                    {
+                        Name = "Battery",
+                        Description = "Battery or removable power unit, like a spare laptop battery."
+                    },
+                    new AssetType()
+                    {
+                        Name = "Server",
+                        Description = "Tower or Rack server, virtual machine, etc."
+                    },
+                    new AssetType()
+                    {
+                        Name = "Network Device",
+                        Description = "Router, firewall, Wi-Fi Access Point, Gateway, Switch, Bridge, etc."
+                    }
+
+
+
+                }
+            }
+        };
+    }
+
 }
