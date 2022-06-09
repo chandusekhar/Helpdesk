@@ -55,7 +55,15 @@
                 @Html.DisplayFor(modelItem => item.Email)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Enabled)
+                @if(item.Enabled)
+                {
+                    <span class="btn btn-success btn-sm">Enabled</span>
+                }
+                else
+                {
+                    <span class="btn btn-danger btn-sm">Disabled</span>    
+                }
+                @*@Html.DisplayFor(modelItem => item.Enabled)*@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.GivenName)
