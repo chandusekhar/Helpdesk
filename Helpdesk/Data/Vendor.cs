@@ -2,7 +2,7 @@
 
 namespace Helpdesk.Data
 {
-    public class AssetType
+    public class Vendor
     {
         [Key]
         public int Id { get; set; }

@@ -7,8 +7,8 @@ namespace Helpdesk.Data
         [Key]
         public int Id { get; set; }
 
-        //[Required]
-        //public HelpdeskUser HelpdeskUser { get; set; }
+        [Required]
+        public Asset Asset { get; set; }
 
         [Required]
         public LicenseType LicenseType { get; set; }
