@@ -53,5 +53,8 @@ namespace Helpdesk.Data
 
         [Required]
         public bool AssetTypesLink { get; set; }
+
+        [Required]
+        public bool ManufacturersLink { get; set; }
     }
 }

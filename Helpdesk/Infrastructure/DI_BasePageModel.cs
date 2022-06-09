@@ -122,6 +122,10 @@ namespace Helpdesk.Infrastructure
                             {
                                 viewData.Add("NavbarShowAssetTypesLink", "true");
                             }
+                            if (_currentHelpdeskUser.SiteNavTemplate.AssetTypesLink)
+                            {
+                                viewData.Add("NavbarShowManufacturersLink", "true");
+                            }
                         }
 
                     }

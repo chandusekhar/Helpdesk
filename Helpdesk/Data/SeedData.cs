@@ -566,6 +566,7 @@ namespace Helpdesk.Data
                     GroupsLink = true,
                     ImportExportLink = true,
                     AssetTypesLink = true,
+                    ManufacturersLink = true
                 }
             }
         };
