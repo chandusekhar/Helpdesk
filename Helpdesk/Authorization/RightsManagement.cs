@@ -6,6 +6,23 @@ namespace Helpdesk.Authorization
     public static class RightsManagement
     {
 
+        public static async Task<List<HelpdeskRole>> UserRolesAssigned(ApplicationDbContext context, string userId)
+        {
+            var userRoles = new List<HelpdeskRole>();
+            var dbRoles = await context.HelpdeskUsers
+                .Where(x => x.IdentityUserId == userId)
+                .Include(y => y.Roles)
+                .FirstOrDefaultAsync();
+            if (dbRoles != null)
+            {
+                foreach (var r in dbRoles.Roles)
+                {
+                    userRoles.Add(r);
+                } 
+            }
+            return userRoles;
+        }
+
         public static async Task<bool> UserIsInRole(ApplicationDbContext context, string userId, string role)
         {
             var huser = await context.HelpdeskUsers
@@ -86,10 +103,10 @@ namespace Helpdesk.Authorization
         //        return new List<HelpdeskClaim>();
         //    }
 
-        //    public static async Task<List<HelpdeskRole>> GetAllRoles(ApplicationDbContext context)
-        //    {
-        //        return new List<HelpdeskRole>();
-        //    }
+        public static async Task<List<HelpdeskRole>> GetAllRoles(ApplicationDbContext context)
+        {
+            return await context.HelpdeskRoles.ToListAsync();
+        }
 
         //    public static async Task<UserAuthorizeContext> GetUserAuthContext(ApplicationDbContext context, string userId)
         //    {
