@@ -424,50 +424,95 @@ namespace Helpdesk.Data
                 Claims = new List<DefaultRoleClaim.NewRoleClaim>()
                 {
                     new DefaultRoleClaim.NewRoleClaim(ClaimConstantStrings.RolesCreateNew,
-                        "Allows creating a new Role. Requires RolesViewClaims, RolesEditClaims"),
+                        "Allows creating a new Role. Requires RolesViewClaims, RolesEditClaims."),
                     new DefaultRoleClaim.NewRoleClaim(ClaimConstantStrings.RolesViewClaims,
-                        "Allows viewing a Role's claims"),
+                        "Allows viewing a Role's claims."),
                     new DefaultRoleClaim.NewRoleClaim(ClaimConstantStrings.RolesEditClaims,
-                        "Allows Editing a Role's claims"),
+                        "Allows Editing a Role's claims."),
                     new DefaultRoleClaim.NewRoleClaim(ClaimConstantStrings.RolesDeleteRole,
-                        "Allows deleting a role"),
+                        "Allows deleting a role."),
                     new DefaultRoleClaim.NewRoleClaim(ClaimConstantStrings.LicenseTypeAdmin,
-                        "Allows creating, editing, and removing License Types"),
+                        "Allows creating, editing, and removing License Types."),
                     new DefaultRoleClaim.NewRoleClaim(ClaimConstantStrings.GroupAdmin,
-                        "Allows creating, editing, and removing groups"),                    
+                        "Allows creating, editing, and removing groups."),
                     new DefaultRoleClaim.NewRoleClaim(ClaimConstantStrings.SitewideConfigurationEditor,
-                        "Allows editing sitewide configuration settings"),
+                        "Allows editing sitewide configuration settings."),
                     new DefaultRoleClaim.NewRoleClaim(ClaimConstantStrings.UsersAdmin,
-                        "Allows creating users, resetting passwords for users, enabling/disabling users"),
+                        "Allows creating users, resetting passwords for users, enabling/disabling users."),
                     new DefaultRoleClaim.NewRoleClaim(ClaimConstantStrings.UsersRolesAdmin,
-                        "Allows granting/revoking roles for users. Requires UsersAdmin to get to the page to do this"),
-                    //new DefaultRoleClaim.NewRoleClaim(ClaimConstantStrings.UsersPrivilegedAdmin,
-                    //    "Allows password reset, enabling/disabling of users with privileged roles"),
-                    //new DefaultRoleClaim.NewRoleClaim(ClaimConstantStrings.UsersPrivilegedRolesAdmin,
-                    //    "Allows adding a privileged role to a user (super admin, for example). Requires UsersAdmin to get to the page to do this"),
+                        "Allows granting/revoking roles for users. Requires UsersAdmin to get to the page to do this."),
                     new DefaultRoleClaim.NewRoleClaim(ClaimConstantStrings.UsersAllowReadAccess,
-                        "Required to access the users screen and view basic user details"),
+                        "Required to access the users screen and view basic user details."),
                     new DefaultRoleClaim.NewRoleClaim(ClaimConstantStrings.UsersAllowReadLicenseProductCode,
-                        "Allows viewing user license product codes on user details page."),                    
+                        "Allows viewing user license product codes on user details page."),
                     new DefaultRoleClaim.NewRoleClaim(ClaimConstantStrings.ImportExport,
-                        "Import and Export data from the site"),
+                        "Import and Export data from the site."),
+                    new DefaultRoleClaim.NewRoleClaim(ClaimConstantStrings.AssetOptionsEditor,
+                        "Allows creating/editing/removing asset options like Asset Types, Manufacturers, Models, Vendors."),
+                    new DefaultRoleClaim.NewRoleClaim(ClaimConstantStrings.AssetsManager,
+                        "Allows editing and creating assets, setting properties, assigning to users, and assigning licenses."),
+                    new DefaultRoleClaim.NewRoleClaim(ClaimConstantStrings.AssetsAllowReadAccess,
+                        "Required to access the assets screen and view basic asset details. "),
+                    new DefaultRoleClaim.NewRoleClaim(ClaimConstantStrings.AssetsAllowReadLicenseProductCode,
+                        "Allows viewing license product codes for assets on the details page."),
                 }
             },
             new DefaultRoleClaim()
             {
                 Version = string.Empty,
                 RoleName = RoleConstantStrings.UserAdmin,
-                RoleDescription = "User Admins can create users, reset user passwords and security options, and enable/disable accounts",
+                RoleDescription = "User Admins can edit and create users, enable/disable accounts, and assign licenses.",
                 Claims = new List<DefaultRoleClaim.NewRoleClaim>()
                 {
                     new DefaultRoleClaim.NewRoleClaim(ClaimConstantStrings.UsersAdmin,
-                        "Allows creating users, resetting passwords for users, enabling/disabling users"),
+                        "Allows creating users, resetting passwords for users, enabling/disabling users."),
                     new DefaultRoleClaim.NewRoleClaim(ClaimConstantStrings.UsersRolesAdmin,
-                        "Allows granting/revoking roles for users. Requires UsersAdmin to get to the page to do this"),
+                        "Allows granting/revoking roles for users. Requires UsersAdmin to get to the page to do this."),
                     new DefaultRoleClaim.NewRoleClaim(ClaimConstantStrings.UsersAllowReadAccess,
-                        "Required to access the users screen and view basic user details"),
+                        "Required to access the users screen and view basic user details."),
+                    new DefaultRoleClaim.NewRoleClaim(ClaimConstantStrings.UsersAllowReadLicenseProductCode,
+                        "Allows viewing user license product codes on user details page."),
                 }
-            }
+            },
+            new DefaultRoleClaim()
+            {
+                Version = string.Empty,
+                RoleName = RoleConstantStrings.UserReviewer,
+                RoleDescription = "Grants readonly access to users to view properties and assignments.",
+                Claims = new List<DefaultRoleClaim.NewRoleClaim>()
+                {
+                    new DefaultRoleClaim.NewRoleClaim(ClaimConstantStrings.UsersAllowReadAccess,
+                        "Required to access the users screen and view basic user details."),
+                }
+            },
+            new DefaultRoleClaim()
+            {
+                Version = string.Empty,
+                RoleName = RoleConstantStrings.AssetAdmin,
+                RoleDescription = "Asset Admins can edit, create, and delete assets, assign assets to users, and assign licenses.",
+                Claims = new List<DefaultRoleClaim.NewRoleClaim>()
+                {
+                    new DefaultRoleClaim.NewRoleClaim(ClaimConstantStrings.AssetOptionsEditor,
+                        "Allows creating/editing/removing asset options like Asset Types, Manufacturers, Models, Vendors."),
+                    new DefaultRoleClaim.NewRoleClaim(ClaimConstantStrings.AssetsManager,
+                        "Allows editing, deleting, and creating assets, setting properties, assigning to users, and assigning licenses."),
+                    new DefaultRoleClaim.NewRoleClaim(ClaimConstantStrings.AssetsAllowReadAccess,
+                        "Required to access the assets screen and view basic asset details."),
+                    new DefaultRoleClaim.NewRoleClaim(ClaimConstantStrings.AssetsAllowReadLicenseProductCode,
+                        "Allows viewing license product codes for assets on the details page."),
+                }
+            },
+            new DefaultRoleClaim()
+            {
+                Version = string.Empty,
+                RoleName = RoleConstantStrings.AssetReviewer,
+                RoleDescription = "Grants readonly access to assets to view properties and assignments.",
+                Claims = new List<DefaultRoleClaim.NewRoleClaim>()
+                {
+                    new DefaultRoleClaim.NewRoleClaim(ClaimConstantStrings.AssetsAllowReadAccess,
+                        "Required to access the assets screen and view basic asset details."),
+                }
+            },
         };
     }
     
@@ -496,6 +541,7 @@ namespace Helpdesk.Data
                     LicenseTypeLink = true,
                     GroupsLink = true,
                     ImportExportLink = true,
+                    AssetTypesLink = true,
                 }
             }
         };

@@ -11,7 +11,7 @@
         /// </summary>
         public static readonly string UserAdmin = "User Admin";
         /// <summary>
-        /// User Reviewer can view details of users.
+        /// Grants readonly access to users to view properties and assignments.
         /// </summary>
         public static readonly string UserReviewer = "User Reviewer";
         /// <summary>
@@ -39,7 +39,7 @@
         /// </summary>
         public static readonly string AssetAssigner = "Asset Assigner";
         /// <summary>
-        /// Asset Reviewer can review assets
+        /// Grants readonly access to assets to view properties and assignments.
         /// </summary>
         public static readonly string AssetReviewer = "Asset Reviewer";
 

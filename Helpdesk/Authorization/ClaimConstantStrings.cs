@@ -45,16 +45,6 @@
         /// </summary>
         public static readonly string UsersRolesAdmin = "Users Roles Admin";
 
-        ///// <summary>
-        ///// Allows password reset, enabling/disabling of users with privileged roles
-        ///// </summary>
-        //public static readonly string UsersPrivilegedAdmin = "Users Privileged Admin";
-
-        ///// <summary>
-        ///// Allows adding a privileged role to a user (super admin, for example). Requires UsersAdmin to get to the page to do this
-        ///// </summary>
-        //public static readonly string UsersPrivilegedRolesAdmin = "Users Privileged Roles Admin";
-
         /// <summary>
         /// Required to access the users screen and view basic user details. 
         /// </summary>
@@ -66,7 +56,30 @@
         /// </summary>
         public static readonly string UsersAllowReadLicenseProductCode = "Users Allow Read License Product Code";
 
+        /// <summary>
+        /// Allows importing and exporting data users/assets.
+        /// </summary>
         public static readonly string ImportExport = "Import and Export";
+
+        /// <summary>
+        /// Allows creating/editing/removing asset options like Asset Types, Manufacturers, Models, Vendors.
+        /// </summary>
+        public static readonly string AssetOptionsEditor = "Asset Options Editor";
+
+        /// <summary>
+        /// Allows editing and creating assets, setting properties, assigning to users, and assigning licenses.
+        /// </summary>
+        public static readonly string AssetsManager = "Assets Manager";
+
+        /// <summary>
+        /// Required to access the assets screen and view basic asset details. 
+        /// </summary>
+        public static readonly string AssetsAllowReadAccess = "Assets Allow Read Access";
+
+        /// <summary>
+        /// Allows viewing license product codes for assets on the details page.
+        /// </summary>
+        public static readonly string AssetsAllowReadLicenseProductCode = "Assets Allow Read License Product Code";
 
     }
 }
