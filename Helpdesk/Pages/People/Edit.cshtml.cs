@@ -158,10 +158,10 @@ namespace Helpdesk.Pages.People
                 .Include(y => y.LicenseType)
                 //.OrderBy(z => z.LicenseType.Name)
                 .ToListAsync();
-            var availLicenses = await _context.LicenseType
-                .Where(x => x.IsUserLicense && x.Status == LicenseStatuses.Active)
-                //.OrderBy(y => y.Name)
-                .ToListAsync();
+            //var availLicenses = await _context.LicenseType
+            //    .Where(x => x.IsUserLicense && x.Status == LicenseStatuses.Active)
+            //    //.OrderBy(y => y.Name)
+            //    .ToListAsync();
             foreach (var ul in userLicenses)
             {
                 Input.Licenses.Add(new LicenseItem()
@@ -176,24 +176,24 @@ namespace Helpdesk.Pages.People
                     ShowProductCode = !string.IsNullOrEmpty(ul.ProductCode) || ul.LicenseType.UserRequireProductCode
                 });
             }
-            foreach (var al in availLicenses)
-            {
-                var ul = Input.Licenses.Where(x => x.LicenseTypeId == al.Id).FirstOrDefault();
-                if (ul == null)
-                {
-                    Input.Licenses.Add(new LicenseItem()
-                    {
-                        Id = -1,
-                        LicenseTypeId = al.Id,
-                        Name = al.Name,
-                        Description = al.Description,
-                        Added = false,
-                        PreviouslyAdded = false,
-                        ProductCode = "",
-                        ShowProductCode = al.UserRequireProductCode
-                    });
-                }
-            }
+            //foreach (var al in availLicenses)
+            //{
+            //    var ul = Input.Licenses.Where(x => x.LicenseTypeId == al.Id).FirstOrDefault();
+            //    if (ul == null)
+            //    {
+            //        Input.Licenses.Add(new LicenseItem()
+            //        {
+            //            Id = -1,
+            //            LicenseTypeId = al.Id,
+            //            Name = al.Name,
+            //            Description = al.Description,
+            //            Added = false,
+            //            PreviouslyAdded = false,
+            //            ProductCode = "",
+            //            ShowProductCode = al.UserRequireProductCode
+            //        });
+            //    }
+            //}
             Input.Licenses = Input.Licenses.OrderBy(x => x.Name).ToList();
         }
 
@@ -315,14 +315,16 @@ namespace Helpdesk.Pages.People
             }
             await _context.SaveChangesAsync();
 
-            // process license selection
+            // process license selection.
+            // It's important to filter database selects to avoid a malicious user specifying an
+            // arbitrary user license id and adding/updating/deleting a different user's license
             foreach (var lic in Input.Licenses)
             {
                 if (lic.Added && lic.PreviouslyAdded)
                 {
                     // check for updated product key
                     var dblic = await _context.UserLicenseAssignments
-                        .Where(x => x.Id == lic.Id)
+                        .Where(x => x.Id == lic.Id && x.HelpdeskUser.IdentityUserId == iUser.Id)
                         .Include(y => y.LicenseType)
                         .FirstOrDefaultAsync();
                     if (dblic != null)
@@ -357,7 +359,7 @@ namespace Helpdesk.Pages.People
                 {
                     //delete
                     var dellic = await _context.UserLicenseAssignments
-                        .Where(x => x.Id == lic.Id)
+                        .Where(x => x.Id == lic.Id && x.HelpdeskUser.IdentityUserId == iUser.Id)
                         .FirstOrDefaultAsync();
                     if (dellic != null)
                     {
