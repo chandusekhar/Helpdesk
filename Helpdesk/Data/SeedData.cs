@@ -181,6 +181,30 @@ namespace Helpdesk.Data
                     }
                 }
 
+                // Manufacturers
+                foreach (var item in ManufacturerCatalog.Catalog)
+                {
+                    if (item.Version == dbVersion.Value)
+                    {
+                        foreach (var m in item.Templates)
+                        {
+                            var md = await context.Manufacturers.Where(x => x.Name == m.Name).FirstOrDefaultAsync();
+                            if (md == null)
+                            {
+                                md = new Manufacturer()
+                                {
+                                    Name = m.Name
+                                };
+                                context.Manufacturers.Add(m);
+                                await context.SaveChangesAsync();
+                                context.Entry(m).State = EntityState.Detached;
+                            }
+                        }
+                    }
+                }
+
+
+                //Asset types
                 foreach (var item in AssetTypeCatalog.Catalog)
                 {
                     if (item.Version == dbVersion.Value)
@@ -791,6 +815,226 @@ namespace Helpdesk.Data
         };
     }
 
+    public class ManufacturerVersion
+    {
+        public string Version { get; set; }
+        public List<Manufacturer> Templates { get; set; }
+    }
+
+    public static class ManufacturerCatalog
+    {
+        public static List<ManufacturerVersion> Catalog = new List<ManufacturerVersion>()
+        {
+            new ManufacturerVersion()
+            {
+                Version = string.Empty,
+                Templates = new List<Manufacturer>()
+                {
+                    new Manufacturer()
+                    {
+                        Name = "Acer",
+                    },
+                    new Manufacturer()
+                    {
+                        Name = "Adobe",
+                    },
+                    new Manufacturer()
+                    {
+                        Name = "AMD",
+                    },
+                    new Manufacturer()
+                    {
+                        Name = "Apple",
+                    },
+                    new Manufacturer()
+                    {
+                        Name = "Asus",
+                    },
+                    new Manufacturer()
+                    {
+                        Name = "Broadcom",
+                    },
+                    new Manufacturer()
+                    {
+                        Name = "Brother",
+                    },
+                    new Manufacturer()
+                    {
+                        Name = "Canon",
+                    },
+                    new Manufacturer()
+                    {
+                        Name = "Cisco",
+                    },
+                    new Manufacturer()
+                    {
+                        Name = "Dell",
+                    },
+                    new Manufacturer()
+                    {
+                        Name = "Dymo",
+                    },
+                    new Manufacturer()
+                    {
+                        Name = "Epson",
+                    },
+                    new Manufacturer()
+                    {
+                        Name = "Foxconn",
+                    },
+                    new Manufacturer()
+                    {
+                        Name = "Framework",
+                    },
+                    new Manufacturer()
+                    {
+                        Name = "Fujitsu",
+                    },
+                    new Manufacturer()
+                    {
+                        Name = "Google",
+                    },
+                    new Manufacturer()
+                    {
+                        Name = "HP",
+                    },
+                    new Manufacturer()
+                    {
+                        Name = "Huawei",
+                    },
+                    new Manufacturer()
+                    {
+                        Name = "IBM",
+                    },
+                    new Manufacturer()
+                    {
+                        Name = "Intel",
+                    },
+                    new Manufacturer()
+                    {
+                        Name = "Kyocera",
+                    },
+                    new Manufacturer()
+                    {
+                        Name = "Lenovo",
+                    },
+                    new Manufacturer()
+                    {
+                        Name = "Lexmark",
+                    },
+                    new Manufacturer()
+                    {
+                        Name = "LG",
+                    },
+                    new Manufacturer()
+                    {
+                        Name = "Microsoft",
+                    },
+                    new Manufacturer()
+                    {
+                        Name = "Motorola",
+                    },
+                    new Manufacturer()
+                    {
+                        Name = "NCR",
+                    },
+                    new Manufacturer()
+                    {
+                        Name = "NEC",
+                    },
+                    new Manufacturer()
+                    {
+                        Name = "Netgear",
+                    },
+                    new Manufacturer()
+                    {
+                        Name = "Nintendo",
+                    },
+                    new Manufacturer()
+                    {
+                        Name = "Nokia",
+                    },
+                    new Manufacturer()
+                    {
+                        Name = "Nvidia",
+                    },
+                    new Manufacturer()
+                    {
+                        Name = "Panasonic",
+                    },
+                    new Manufacturer()
+                    {
+                        Name = "Pitney Bowes",
+                    },
+                    new Manufacturer()
+                    {
+                        Name = "Qualcomm",
+                    },
+                    new Manufacturer()
+                    {
+                        Name = "Ricoh",
+                    },
+                    new Manufacturer()
+                    {
+                        Name = "Samsung",
+                    },
+                    new Manufacturer()
+                    {
+                        Name = "Schneider Electric",
+                    },
+                    new Manufacturer()
+                    {
+                        Name = "Sharp",
+                    },
+                    new Manufacturer()
+                    {
+                        Name = "Sony",
+                    },
+                    new Manufacturer()
+                    {
+                        Name = "Supermicro",
+                    },
+                    new Manufacturer()
+                    {
+                        Name = "System76",
+                    },
+                    new Manufacturer()
+                    {
+                        Name = "Tektronix",
+                    },
+                    new Manufacturer()
+                    {
+                        Name = "Texas Instruments",
+                    },
+                    new Manufacturer()
+                    {
+                        Name = "Toshiba",
+                    },
+                    new Manufacturer()
+                    {
+                        Name = "Viewsonic",
+                    },
+                    new Manufacturer()
+                    {
+                        Name = "VMWare",
+                    },
+                    new Manufacturer()
+                    {
+                        Name = "Xerox",
+                    },
+                    new Manufacturer()
+                    {
+                        Name = "Xiaomi",
+                    },
+                    new Manufacturer()
+                    {
+                        Name = "Zebra",
+                    },
+                }
+            }
+        };
+    }
+
     public class AssetTypeVersion
     {
         public string Version { get; set; }
@@ -891,9 +1135,6 @@ namespace Helpdesk.Data
                         Name = "Network Device",
                         Description = "Router, firewall, Wi-Fi Access Point, Gateway, Switch, Bridge, etc."
                     }
-
-
-
                 }
             }
         };
