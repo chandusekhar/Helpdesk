@@ -42,12 +42,20 @@
         /// Grants readonly access to assets to view properties and assignments.
         /// </summary>
         public static readonly string AssetReviewer = "Asset Reviewer";
+        /// <summary>
+        /// Allows downloading and deleting all files using the File Manager.
+        /// </summary>
+        public static readonly string FileAdmin = "File Admin";
+        /// <summary>
+        /// Allows downloading and deleting all files owned by the user.
+        /// </summary>
+        public static readonly string FileOwnEditor = "File Own Editor";
 
 
     }
 
 
 
-    
+
 
 }

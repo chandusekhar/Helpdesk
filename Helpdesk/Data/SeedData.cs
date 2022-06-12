@@ -503,6 +503,9 @@ namespace Helpdesk.Data
                         "Required to access the assets screen and view basic asset details. "),
                     new DefaultRoleClaim.NewRoleClaim(ClaimConstantStrings.AssetsAllowReadLicenseProductCode,
                         "Allows viewing license product codes for assets on the details page."),
+                    new DefaultRoleClaim.NewRoleClaim(ClaimConstantStrings.FileManagerAdminAccess,
+                        "Allows uploading, downloading, or deleting uploaded files using File Manager."),
+
                 }
             },
             new DefaultRoleClaim()
@@ -561,6 +564,28 @@ namespace Helpdesk.Data
                         "Required to access the assets screen and view basic asset details."),
                 }
             },
+            new DefaultRoleClaim()
+            {
+                Version = string.Empty,
+                RoleName = RoleConstantStrings.FileAdmin,
+                RoleDescription = "Allows downloading and deleting all files using the File Manager.",
+                Claims = new List<DefaultRoleClaim.NewRoleClaim>()
+                {
+                    new DefaultRoleClaim.NewRoleClaim(ClaimConstantStrings.FileManagerAdminAccess,
+                        "Allows uploading, downloading, or deleting uploaded files using File Manager."),
+                }
+            },
+            new DefaultRoleClaim()
+            {
+                Version = string.Empty,
+                RoleName = RoleConstantStrings.FileOwnEditor,
+                RoleDescription = "Allows downloading and deleting all files owned by the user in File Manager.",
+                Claims = new List<DefaultRoleClaim.NewRoleClaim>()
+                {
+                    new DefaultRoleClaim.NewRoleClaim(ClaimConstantStrings.FileManagerOwnAccess,
+                        "Allows downloading and deleting documents owned by the user in File Manager."),
+                }
+            },
         };
     }
     
@@ -590,7 +615,8 @@ namespace Helpdesk.Data
                     GroupsLink = true,
                     ImportExportLink = true,
                     AssetTypesLink = true,
-                    ManufacturersLink = true
+                    ManufacturersLink = true,
+                    FileManagerLink = true,
                 }
             }
         };

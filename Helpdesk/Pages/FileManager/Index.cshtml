@@ -1,0 +1,55 @@
+﻿@page
+@model Helpdesk.Pages.FileManager.IndexModel
+
+@{
+    ViewData["Title"] = "File Manager";
+}
+
+<h1>File Manager</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Input[0].FileName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Input[0].Uploader)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Input[0].Date)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Input[0].Length)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Input[0].Type)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@for (int i = 0; i < @Model.Input.Count(); i++) {
+        <tr>
+            <td>
+                <a href="/FileManager/Details?id=@Model.Input[i].Id">@Model.Input[i].FileName</a>
+            </td>
+            <td>
+                <a href="/People/Details?id=@Model.Input[i].Uploader">@Model.UserList[@Model.Input[i].Uploader ?? ""]</a>
+            </td>
+            <td>
+                <span>@Model.Input[i].Date</span>
+            </td>
+            <td>
+                <span>@Model.Input[i].Length</span>
+            </td>
+            <td>
+                <span>@Model.Input[i].Type</span>
+            </td>
+            <td>
+                <a asp-page="./Details" asp-route-id="@Model.Input[i].Id">Details</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

@@ -126,6 +126,10 @@ namespace Helpdesk.Infrastructure
                             {
                                 viewData.Add("NavbarShowManufacturersLink", "true");
                             }
+                            if (_currentHelpdeskUser.SiteNavTemplate.FileManagerLink)
+                            {
+                                viewData.Add("NavbarShowFileManagerLink", "true");
+                            }
                         }
 
                     }

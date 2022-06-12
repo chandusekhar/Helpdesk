@@ -81,5 +81,14 @@
         /// </summary>
         public static readonly string AssetsAllowReadLicenseProductCode = "Assets Allow Read License Product Code";
 
+        /// <summary>
+        /// Allows uploading, downloading, or deleting uploaded files using File Manager.
+        /// </summary>
+        public static readonly string FileManagerAdminAccess = "File Manager Admin Access";
+
+        /// <summary>
+        /// Allows downloading and deleting documents owned by the user in File Manager.
+        /// </summary>
+        public static readonly string FileManagerOwnAccess = "File Manager Own Access";
     }
 }

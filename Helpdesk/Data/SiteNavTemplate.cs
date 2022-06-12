@@ -56,5 +56,10 @@ namespace Helpdesk.Data
 
         [Required]
         public bool ManufacturersLink { get; set; }
+        /// <summary>
+        /// Show the file manager link on the nav bar menu
+        /// </summary>
+        [Required]
+        public bool FileManagerLink { get; set; }
     }
 }

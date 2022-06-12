@@ -95,6 +95,12 @@
                                 </ul>
                             </li>
                         }
+                        @if (@ViewData.ContainsKey("NavbarShowFileManagerLink"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-page="/FileManager/Index">File Manager</a>
+                            </li>
+                        }
                         @if (!@ViewData.ContainsKey("NavbarSupressPrivacyLink"))
                         {
                             <li class="nav-item">
