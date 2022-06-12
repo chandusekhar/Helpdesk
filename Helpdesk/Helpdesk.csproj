@@ -19,7 +19,6 @@
 
   <ItemGroup>
     <Folder Include="Pages\Assets\" />
-    <Folder Include="Pages\FileManager\" />
     <Folder Include="Pages\Tickets\" />
   </ItemGroup>
 

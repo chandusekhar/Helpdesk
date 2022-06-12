@@ -50,10 +50,5 @@ namespace Helpdesk.Data
         /// </summary>
         [Required]
         public bool ImportExportLink { get; set; }
-        /// <summary>
-        /// Shows the File Manager on the nav bar menu
-        /// </summary>
-        [Required]
-        public bool FileManagerLink { get; set; }
     }
 }
