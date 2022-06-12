@@ -50,5 +50,11 @@ namespace Helpdesk.Data
         /// </summary>
         [Required]
         public bool ImportExportLink { get; set; }
+
+        [Required]
+        public bool AssetTypesLink { get; set; }
+
+        [Required]
+        public bool ManufacturersLink { get; set; }
     }
 }

@@ -4,6 +4,7 @@ using Helpdesk.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Helpdesk.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220609165255_AddInitialAssetTables")]
+    partial class AddInitialAssetTables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -540,9 +542,6 @@ namespace Helpdesk.Data.Migrations
                     b.Property<bool>("AssetLink")
                         .HasColumnType("bit");
 
-                    b.Property<bool>("AssetTypesLink")
-                        .HasColumnType("bit");
-
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -554,9 +553,6 @@ namespace Helpdesk.Data.Migrations
                         .HasColumnType("bit");
 
                     b.Property<bool>("LicenseTypeLink")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("ManufacturersLink")
                         .HasColumnType("bit");
 
                     b.Property<string>("Name")

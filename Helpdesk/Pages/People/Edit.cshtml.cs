@@ -56,6 +56,7 @@ namespace Helpdesk.Pages.People
             public string? Group { get; set; }
 
             public List<LicenseItem> Licenses { get; set; }
+            public List<UserRoleItem> UserRoles { get; set; }
         }
 
         public class LicenseItem
@@ -75,6 +76,14 @@ namespace Helpdesk.Pages.People
             public bool ShowProductCode { get; set; } = true;
             [Display(Name="Product Code")]
             public string? ProductCode { get; set; } = string.Empty;
+        }
+
+        public class UserRoleItem
+        {
+            public string RoleName { get; set; } = string.Empty;
+            public string RoleDescription { get; set; } = string.Empty;
+            public bool Added { get; set; }
+            public bool PreviouslyAdded { get; set; }
         }
 
         public List<string> SiteNavTemplates { get; set; } = new List<string>();
@@ -99,6 +108,12 @@ namespace Helpdesk.Pages.People
             if (id == null || _context.HelpdeskUsers == null || _userManager == null)
             {
                 return NotFound();
+            }
+
+            bool ShowUserRoleAdmin = await RightsManagement.UserHasClaim(_context, _currentHelpdeskUser.IdentityUserId, ClaimConstantStrings.UsersRolesAdmin);
+            if (ShowUserRoleAdmin)
+            {
+                ViewData["ShowUserRoleAdmin"] = true;
             }
 
             var iUser = await _userManager.FindByIdAsync(id);
@@ -147,9 +162,31 @@ namespace Helpdesk.Pages.People
                 Group = hUser.Group?.Name
             };
             await PopulateLicenses(iUser);
+            if (ShowUserRoleAdmin)
+            {
+                await PopulateUserRoles(iUser);
+            }
             return Page();
         }
         
+        private async Task PopulateUserRoles(IdentityUser iUser)
+        {
+            var userRoles = await RightsManagement.UserRolesAssigned(_context, iUser.Id);
+            var allroles = await RightsManagement.GetAllRoles(_context);
+            Input.UserRoles = new List<UserRoleItem>();
+            foreach (var r in allroles)
+            {
+                var inRole = userRoles.Where(x => x.Id == r.Id).Any();
+                Input.UserRoles.Add(new UserRoleItem()
+                {
+                    Added = inRole,
+                    PreviouslyAdded = inRole,
+                    RoleName = r.Name,
+                    RoleDescription = r.Description
+                });
+            }
+        }
+
         private async Task PopulateLicenses(IdentityUser iUser)
         {
             Input.Licenses = new List<LicenseItem>();
@@ -239,6 +276,12 @@ namespace Helpdesk.Pages.People
                 return NotFound();
             }
 
+            bool ShowUserRoleAdmin = await RightsManagement.UserHasClaim(_context, _currentHelpdeskUser.IdentityUserId, ClaimConstantStrings.UsersRolesAdmin);
+            if (ShowUserRoleAdmin)
+            {
+                ViewData["ShowUserRoleAdmin"] = true;
+            }
+
             // Make sure nav template selection is valid
             var navTemplate = await _context.SiteNavTemplates
                 .Where(x => x.Name == Input.SiteNavTemplateName)
@@ -315,14 +358,16 @@ namespace Helpdesk.Pages.People
             }
             await _context.SaveChangesAsync();
 
-            // process license selection
+            // process license selection.
+            // It's important to filter database selects to avoid a malicious user specifying an
+            // arbitrary user license id and adding/updating/deleting a different user's license
             foreach (var lic in Input.Licenses)
             {
                 if (lic.Added && lic.PreviouslyAdded)
                 {
                     // check for updated product key
                     var dblic = await _context.UserLicenseAssignments
-                        .Where(x => x.Id == lic.Id)
+                        .Where(x => x.Id == lic.Id && x.HelpdeskUser.IdentityUserId == iUser.Id)
                         .Include(y => y.LicenseType)
                         .FirstOrDefaultAsync();
                     if (dblic != null)
@@ -357,7 +402,7 @@ namespace Helpdesk.Pages.People
                 {
                     //delete
                     var dellic = await _context.UserLicenseAssignments
-                        .Where(x => x.Id == lic.Id)
+                        .Where(x => x.Id == lic.Id && x.HelpdeskUser.IdentityUserId == iUser.Id)
                         .FirstOrDefaultAsync();
                     if (dellic != null)
                     {
@@ -385,6 +430,24 @@ namespace Helpdesk.Pages.People
                 }
             }
 
+            if (ShowUserRoleAdmin)
+            {
+                foreach (var r in Input.UserRoles)
+                {
+                    if (r.Added && !r.PreviouslyAdded)
+                    {
+                        // add
+                        await RightsManagement.UserAddRole(_context, iUser.Id, r.RoleName);
+                    }
+                    if (!r.Added && r.PreviouslyAdded)
+                    {
+                        // remove
+                        await RightsManagement.UserRemoveRole(_context, iUser.Id, r.RoleName);
+                    }
+                }
+            }
+            // since we redirect to the HTTPGet method, we don't need to load these here.
+            //await PopulateUserRoles(iUser);
             //await PopulateLicenses(iUser);
             return RedirectToPage("/People/Edit", new { id = iUser.Id });
         }

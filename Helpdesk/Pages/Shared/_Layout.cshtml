@@ -84,6 +84,14 @@
                                     {
                                         <li><a class="dropdown-item" asp-area="" asp-page="/ImportExport/Index">Import/Export</a></li>
                                     }
+                                    @if (@ViewData.ContainsKey("NavbarShowAssetTypesLink"))
+                                    {
+                                        <li><a class="dropdown-item" asp-area="" asp-page="/AssetTypes/Index">Asset Types</a></li>
+                                    }
+                                    @if (@ViewData.ContainsKey("NavbarShowManufacturersLink"))
+                                    {
+                                        <li><a class="dropdown-item" asp-area="" asp-page="/Manufacturers/Index">Manufacturers</a></li>
+                                    }                                
                                 </ul>
                             </li>
                         }

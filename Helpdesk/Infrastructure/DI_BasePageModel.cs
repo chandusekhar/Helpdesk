@@ -118,6 +118,14 @@ namespace Helpdesk.Infrastructure
                             {
                                 viewData.Add("NavbarShowImportExportLink", "true");
                             }
+                            if (_currentHelpdeskUser.SiteNavTemplate.AssetTypesLink)
+                            {
+                                viewData.Add("NavbarShowAssetTypesLink", "true");
+                            }
+                            if (_currentHelpdeskUser.SiteNavTemplate.AssetTypesLink)
+                            {
+                                viewData.Add("NavbarShowManufacturersLink", "true");
+                            }
                         }
 
                     }

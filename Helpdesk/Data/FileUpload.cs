@@ -43,5 +43,6 @@ namespace Helpdesk.Data
         /// True: Indicates that this file is temporary (such as a CSV for a user import process).
         /// </summary>
         public bool IsTempFile { get; set; }
+        public DocumentType? DocumentType { get; set; }
     }
 }

@@ -148,6 +148,7 @@ namespace Helpdesk.Data
                                 context.LicenseType.Add(temp);
                             }
                             await context.SaveChangesAsync();
+                            context.Entry(temp).State = EntityState.Detached;
                         }
                     }
                 }
@@ -174,8 +175,55 @@ namespace Helpdesk.Data
                                 };
                                 context.Groups.Add(group);
                             }
+                            await context.SaveChangesAsync();
+                            context.Entry(group).State = EntityState.Detached;
                         }
-                        await context.SaveChangesAsync();
+                    }
+                }
+
+                // Manufacturers
+                foreach (var item in ManufacturerCatalog.Catalog)
+                {
+                    if (item.Version == dbVersion.Value)
+                    {
+                        foreach (var m in item.Templates)
+                        {
+                            var md = await context.Manufacturers.Where(x => x.Name == m.Name).FirstOrDefaultAsync();
+                            if (md == null)
+                            {
+                                md = new Manufacturer()
+                                {
+                                    Name = m.Name
+                                };
+                                context.Manufacturers.Add(m);
+                                await context.SaveChangesAsync();
+                                context.Entry(m).State = EntityState.Detached;
+                            }
+                        }
+                    }
+                }
+
+
+                //Asset types
+                foreach (var item in AssetTypeCatalog.Catalog)
+                {
+                    if (item.Version == dbVersion.Value)
+                    {
+                        foreach (var a in item.Templates)
+                        {
+                            var at = await context.AssetTypes.Where(x => x.Name == a.Name).FirstOrDefaultAsync();
+                            if (at == null)
+                            {
+                                at = new AssetType()
+                                {
+                                    Name = a.Name,
+                                    Description = a.Description
+                                };
+                                context.AssetTypes.Add(at);
+                                await context.SaveChangesAsync();
+                                context.Entry(at).State = EntityState.Detached;
+                            }
+                        }
                     }
                 }
 
@@ -424,50 +472,95 @@ namespace Helpdesk.Data
                 Claims = new List<DefaultRoleClaim.NewRoleClaim>()
                 {
                     new DefaultRoleClaim.NewRoleClaim(ClaimConstantStrings.RolesCreateNew,
-                        "Allows creating a new Role. Requires RolesViewClaims, RolesEditClaims"),
+                        "Allows creating a new Role. Requires RolesViewClaims, RolesEditClaims."),
                     new DefaultRoleClaim.NewRoleClaim(ClaimConstantStrings.RolesViewClaims,
-                        "Allows viewing a Role's claims"),
+                        "Allows viewing a Role's claims."),
                     new DefaultRoleClaim.NewRoleClaim(ClaimConstantStrings.RolesEditClaims,
-                        "Allows Editing a Role's claims"),
+                        "Allows Editing a Role's claims."),
                     new DefaultRoleClaim.NewRoleClaim(ClaimConstantStrings.RolesDeleteRole,
-                        "Allows deleting a role"),
+                        "Allows deleting a role."),
                     new DefaultRoleClaim.NewRoleClaim(ClaimConstantStrings.LicenseTypeAdmin,
-                        "Allows creating, editing, and removing License Types"),
+                        "Allows creating, editing, and removing License Types."),
                     new DefaultRoleClaim.NewRoleClaim(ClaimConstantStrings.GroupAdmin,
-                        "Allows creating, editing, and removing groups"),                    
+                        "Allows creating, editing, and removing groups."),
                     new DefaultRoleClaim.NewRoleClaim(ClaimConstantStrings.SitewideConfigurationEditor,
-                        "Allows editing sitewide configuration settings"),
+                        "Allows editing sitewide configuration settings."),
                     new DefaultRoleClaim.NewRoleClaim(ClaimConstantStrings.UsersAdmin,
-                        "Allows creating users, resetting passwords for users, enabling/disabling users"),
+                        "Allows creating users, resetting passwords for users, enabling/disabling users."),
                     new DefaultRoleClaim.NewRoleClaim(ClaimConstantStrings.UsersRolesAdmin,
-                        "Allows granting/revoking roles for users. Requires UsersAdmin to get to the page to do this"),
-                    //new DefaultRoleClaim.NewRoleClaim(ClaimConstantStrings.UsersPrivilegedAdmin,
-                    //    "Allows password reset, enabling/disabling of users with privileged roles"),
-                    //new DefaultRoleClaim.NewRoleClaim(ClaimConstantStrings.UsersPrivilegedRolesAdmin,
-                    //    "Allows adding a privileged role to a user (super admin, for example). Requires UsersAdmin to get to the page to do this"),
+                        "Allows granting/revoking roles for users. Requires UsersAdmin to get to the page to do this."),
                     new DefaultRoleClaim.NewRoleClaim(ClaimConstantStrings.UsersAllowReadAccess,
-                        "Required to access the users screen and view basic user details"),
+                        "Required to access the users screen and view basic user details."),
                     new DefaultRoleClaim.NewRoleClaim(ClaimConstantStrings.UsersAllowReadLicenseProductCode,
-                        "Allows viewing user license product codes on user details page."),                    
+                        "Allows viewing user license product codes on user details page."),
                     new DefaultRoleClaim.NewRoleClaim(ClaimConstantStrings.ImportExport,
-                        "Import and Export data from the site"),
+                        "Import and Export data from the site."),
+                    new DefaultRoleClaim.NewRoleClaim(ClaimConstantStrings.AssetOptionsEditor,
+                        "Allows creating/editing/removing asset options like Asset Types, Manufacturers, Models, Vendors."),
+                    new DefaultRoleClaim.NewRoleClaim(ClaimConstantStrings.AssetsManager,
+                        "Allows editing and creating assets, setting properties, assigning to users, and assigning licenses."),
+                    new DefaultRoleClaim.NewRoleClaim(ClaimConstantStrings.AssetsAllowReadAccess,
+                        "Required to access the assets screen and view basic asset details. "),
+                    new DefaultRoleClaim.NewRoleClaim(ClaimConstantStrings.AssetsAllowReadLicenseProductCode,
+                        "Allows viewing license product codes for assets on the details page."),
                 }
             },
             new DefaultRoleClaim()
             {
                 Version = string.Empty,
                 RoleName = RoleConstantStrings.UserAdmin,
-                RoleDescription = "User Admins can create users, reset user passwords and security options, and enable/disable accounts",
+                RoleDescription = "User Admins can edit and create users, enable/disable accounts, and assign licenses.",
                 Claims = new List<DefaultRoleClaim.NewRoleClaim>()
                 {
                     new DefaultRoleClaim.NewRoleClaim(ClaimConstantStrings.UsersAdmin,
-                        "Allows creating users, resetting passwords for users, enabling/disabling users"),
+                        "Allows creating users, resetting passwords for users, enabling/disabling users."),
                     new DefaultRoleClaim.NewRoleClaim(ClaimConstantStrings.UsersRolesAdmin,
-                        "Allows granting/revoking roles for users. Requires UsersAdmin to get to the page to do this"),
+                        "Allows granting/revoking roles for users. Requires UsersAdmin to get to the page to do this."),
                     new DefaultRoleClaim.NewRoleClaim(ClaimConstantStrings.UsersAllowReadAccess,
-                        "Required to access the users screen and view basic user details"),
+                        "Required to access the users screen and view basic user details."),
+                    new DefaultRoleClaim.NewRoleClaim(ClaimConstantStrings.UsersAllowReadLicenseProductCode,
+                        "Allows viewing user license product codes on user details page."),
                 }
-            }
+            },
+            new DefaultRoleClaim()
+            {
+                Version = string.Empty,
+                RoleName = RoleConstantStrings.UserReviewer,
+                RoleDescription = "Grants readonly access to users to view properties and assignments.",
+                Claims = new List<DefaultRoleClaim.NewRoleClaim>()
+                {
+                    new DefaultRoleClaim.NewRoleClaim(ClaimConstantStrings.UsersAllowReadAccess,
+                        "Required to access the users screen and view basic user details."),
+                }
+            },
+            new DefaultRoleClaim()
+            {
+                Version = string.Empty,
+                RoleName = RoleConstantStrings.AssetAdmin,
+                RoleDescription = "Asset Admins can edit, create, and delete assets, assign assets to users, and assign licenses.",
+                Claims = new List<DefaultRoleClaim.NewRoleClaim>()
+                {
+                    new DefaultRoleClaim.NewRoleClaim(ClaimConstantStrings.AssetOptionsEditor,
+                        "Allows creating/editing/removing asset options like Asset Types, Manufacturers, Models, Vendors."),
+                    new DefaultRoleClaim.NewRoleClaim(ClaimConstantStrings.AssetsManager,
+                        "Allows editing, deleting, and creating assets, setting properties, assigning to users, and assigning licenses."),
+                    new DefaultRoleClaim.NewRoleClaim(ClaimConstantStrings.AssetsAllowReadAccess,
+                        "Required to access the assets screen and view basic asset details."),
+                    new DefaultRoleClaim.NewRoleClaim(ClaimConstantStrings.AssetsAllowReadLicenseProductCode,
+                        "Allows viewing license product codes for assets on the details page."),
+                }
+            },
+            new DefaultRoleClaim()
+            {
+                Version = string.Empty,
+                RoleName = RoleConstantStrings.AssetReviewer,
+                RoleDescription = "Grants readonly access to assets to view properties and assignments.",
+                Claims = new List<DefaultRoleClaim.NewRoleClaim>()
+                {
+                    new DefaultRoleClaim.NewRoleClaim(ClaimConstantStrings.AssetsAllowReadAccess,
+                        "Required to access the assets screen and view basic asset details."),
+                }
+            },
         };
     }
     
@@ -496,6 +589,8 @@ namespace Helpdesk.Data
                     LicenseTypeLink = true,
                     GroupsLink = true,
                     ImportExportLink = true,
+                    AssetTypesLink = true,
+                    ManufacturersLink = true
                 }
             }
         };
@@ -719,4 +814,330 @@ namespace Helpdesk.Data
             }
         };
     }
+
+    public class ManufacturerVersion
+    {
+        public string Version { get; set; }
+        public List<Manufacturer> Templates { get; set; }
+    }
+
+    public static class ManufacturerCatalog
+    {
+        public static List<ManufacturerVersion> Catalog = new List<ManufacturerVersion>()
+        {
+            new ManufacturerVersion()
+            {
+                Version = string.Empty,
+                Templates = new List<Manufacturer>()
+                {
+                    new Manufacturer()
+                    {
+                        Name = "Acer",
+                    },
+                    new Manufacturer()
+                    {
+                        Name = "Adobe",
+                    },
+                    new Manufacturer()
+                    {
+                        Name = "AMD",
+                    },
+                    new Manufacturer()
+                    {
+                        Name = "Apple",
+                    },
+                    new Manufacturer()
+                    {
+                        Name = "Asus",
+                    },
+                    new Manufacturer()
+                    {
+                        Name = "Broadcom",
+                    },
+                    new Manufacturer()
+                    {
+                        Name = "Brother",
+                    },
+                    new Manufacturer()
+                    {
+                        Name = "Canon",
+                    },
+                    new Manufacturer()
+                    {
+                        Name = "Cisco",
+                    },
+                    new Manufacturer()
+                    {
+                        Name = "Dell",
+                    },
+                    new Manufacturer()
+                    {
+                        Name = "Dymo",
+                    },
+                    new Manufacturer()
+                    {
+                        Name = "Epson",
+                    },
+                    new Manufacturer()
+                    {
+                        Name = "Foxconn",
+                    },
+                    new Manufacturer()
+                    {
+                        Name = "Framework",
+                    },
+                    new Manufacturer()
+                    {
+                        Name = "Fujitsu",
+                    },
+                    new Manufacturer()
+                    {
+                        Name = "Google",
+                    },
+                    new Manufacturer()
+                    {
+                        Name = "HP",
+                    },
+                    new Manufacturer()
+                    {
+                        Name = "Huawei",
+                    },
+                    new Manufacturer()
+                    {
+                        Name = "IBM",
+                    },
+                    new Manufacturer()
+                    {
+                        Name = "Intel",
+                    },
+                    new Manufacturer()
+                    {
+                        Name = "Kyocera",
+                    },
+                    new Manufacturer()
+                    {
+                        Name = "Lenovo",
+                    },
+                    new Manufacturer()
+                    {
+                        Name = "Lexmark",
+                    },
+                    new Manufacturer()
+                    {
+                        Name = "LG",
+                    },
+                    new Manufacturer()
+                    {
+                        Name = "Microsoft",
+                    },
+                    new Manufacturer()
+                    {
+                        Name = "Motorola",
+                    },
+                    new Manufacturer()
+                    {
+                        Name = "NCR",
+                    },
+                    new Manufacturer()
+                    {
+                        Name = "NEC",
+                    },
+                    new Manufacturer()
+                    {
+                        Name = "Netgear",
+                    },
+                    new Manufacturer()
+                    {
+                        Name = "Nintendo",
+                    },
+                    new Manufacturer()
+                    {
+                        Name = "Nokia",
+                    },
+                    new Manufacturer()
+                    {
+                        Name = "Nvidia",
+                    },
+                    new Manufacturer()
+                    {
+                        Name = "Panasonic",
+                    },
+                    new Manufacturer()
+                    {
+                        Name = "Pitney Bowes",
+                    },
+                    new Manufacturer()
+                    {
+                        Name = "Qualcomm",
+                    },
+                    new Manufacturer()
+                    {
+                        Name = "Ricoh",
+                    },
+                    new Manufacturer()
+                    {
+                        Name = "Samsung",
+                    },
+                    new Manufacturer()
+                    {
+                        Name = "Schneider Electric",
+                    },
+                    new Manufacturer()
+                    {
+                        Name = "Sharp",
+                    },
+                    new Manufacturer()
+                    {
+                        Name = "Sony",
+                    },
+                    new Manufacturer()
+                    {
+                        Name = "Supermicro",
+                    },
+                    new Manufacturer()
+                    {
+                        Name = "System76",
+                    },
+                    new Manufacturer()
+                    {
+                        Name = "Tektronix",
+                    },
+                    new Manufacturer()
+                    {
+                        Name = "Texas Instruments",
+                    },
+                    new Manufacturer()
+                    {
+                        Name = "Toshiba",
+                    },
+                    new Manufacturer()
+                    {
+                        Name = "Viewsonic",
+                    },
+                    new Manufacturer()
+                    {
+                        Name = "VMWare",
+                    },
+                    new Manufacturer()
+                    {
+                        Name = "Xerox",
+                    },
+                    new Manufacturer()
+                    {
+                        Name = "Xiaomi",
+                    },
+                    new Manufacturer()
+                    {
+                        Name = "Zebra",
+                    },
+                }
+            }
+        };
+    }
+
+    public class AssetTypeVersion
+    {
+        public string Version { get; set; }
+        public List<AssetType> Templates { get; set; }
+    }
+
+    public static class AssetTypeCatalog
+    {
+        public static List<AssetTypeVersion> Catalog = new List<AssetTypeVersion>()
+        {
+            new AssetTypeVersion()
+            {
+                Version = "",
+                Templates = new List<AssetType>()
+                {
+                    new AssetType()
+                    {
+                        Name = "Laptop",
+                        Description = "Portable laptops, 2-in-1s, convertables, and foldables."
+                    },
+                    new AssetType()
+                    {
+                        Name = "Desktop",
+                        Description = "Towers, desktops, fixed mini-pcs, etc."
+                    },
+                    new AssetType()
+                    {
+                        Name = "Tablet",
+                        Description = "Surface tablets, iPads, eReaders, Android tablets, etc."
+                    },
+                    new AssetType()
+                    {
+                        Name = "Phone",
+                        Description = "Cell phones, desk phones, etc."
+                    },
+                    new AssetType()
+                    {
+                        Name = "Monitor",
+                        Description = "Computer display device."
+                    },
+                    new AssetType()
+                    {
+                        Name = "Dock",
+                        Description = "Plug in and socket docks, port replicators, hubs."
+                    },
+                    new AssetType()
+                    {
+                        Name = "Keyboard",
+                        Description = "Keyboards, 10 key inputs, and keyboard/mouse combo sets."
+                    },
+                    new AssetType()
+                    {
+                        Name = "Mouse",
+                        Description = "Wired or wireless mouse, touch pads, track balls, etc."
+                    },
+                    new AssetType()
+                    {
+                        Name = "Printer",
+                        Description = "Printers, multi-function printers, label makers, receipt printers, etc."
+                    },
+                    new AssetType()
+                    {
+                        Name = "Scanner",
+                        Description = "Document scanners, flat bed scaners, barcode readers, id readers, etc."
+                    },
+                    new AssetType()
+                    {
+                        Name = "Headset",
+                        Description = "Headphones, phone headsets, VR headsets, etc."
+                    },
+                    new AssetType()
+                    {
+                        Name = "Speaker",
+                        Description = "Audio output devices, desktop speakers, conference speakers, etc."
+                    },
+                    new AssetType()
+                    {
+                        Name = "Camera",
+                        Description = "Still or video camera."
+                    },
+                    new AssetType()
+                    {
+                        Name = "Charger",
+                        Description = "Removable chargers, laptop and phone chargers, etc."
+                    },
+                    new AssetType()
+                    {
+                        Name = "Battery",
+                        Description = "Battery or removable power unit, like a spare laptop battery."
+                    },
+                    new AssetType()
+                    {
+                        Name = "Server",
+                        Description = "Tower or Rack server, virtual machine, etc."
+                    },
+                    new AssetType()
+                    {
+                        Name = "Network Device",
+                        Description = "Router, firewall, Wi-Fi Access Point, Gateway, Switch, Bridge, etc."
+                    }
+                }
+            }
+        };
+    }
+
 }
