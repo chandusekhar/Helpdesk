@@ -181,6 +181,30 @@ namespace Helpdesk.Data
                     }
                 }
 
+                // Document Types
+                foreach (var item in DocumentTypeCatalog.Catalog)
+                {
+                    if (item.Version == dbVersion.Value)
+                    {
+                        foreach (var d in item.Templates)
+                        {
+                            var dt = await context.DocumentTypes.Where(x => x.Name == d.Name).FirstOrDefaultAsync();
+                            if (dt == null)
+                            {
+                                dt = new DocumentType()
+                                {
+                                    Name = d.Name,
+                                    Description = d.Description,
+                                    IsSystemType = d.IsSystemType
+                                };
+                                context.DocumentTypes.Add(dt);
+                                await context.SaveChangesAsync();
+                                context.Entry(dt).State = EntityState.Detached;
+                            }
+                        }
+                    }
+                }
+
                 // Manufacturers
                 foreach (var item in ManufacturerCatalog.Catalog)
                 {
@@ -195,9 +219,9 @@ namespace Helpdesk.Data
                                 {
                                     Name = m.Name
                                 };
-                                context.Manufacturers.Add(m);
+                                context.Manufacturers.Add(md);
                                 await context.SaveChangesAsync();
-                                context.Entry(m).State = EntityState.Detached;
+                                context.Entry(md).State = EntityState.Detached;
                             }
                         }
                     }
@@ -617,6 +641,212 @@ namespace Helpdesk.Data
                     AssetTypesLink = true,
                     ManufacturersLink = true,
                     FileManagerLink = true,
+                }
+            }
+        };
+    }
+
+    public class DocumentTypeVersion
+    {
+        public string Version { get; set; }
+        public List<DocumentType> Templates { get; set; }
+    }
+
+    public static class DocumentTypeCatalog
+    {
+        public static List<DocumentTypeVersion> Catalog = new List<DocumentTypeVersion>()
+        {
+            new DocumentTypeVersion()
+            {
+                Version = "",
+                Templates = new List<DocumentType>()
+                {
+                    new DocumentType()
+                    {
+                        Name = DocumentTypeStrings.ImportUsersUpload,
+                        Description = "File upload for the Import Users process. Safe to delete when import is done.",
+                        IsSystemType = true,
+                    },
+                    new DocumentType()
+                    {
+                        Name = DocumentTypeStrings.ImportUsersResults,
+                        Description = "Results of the Users Import process. Safe to delete when import is done.",
+                        IsSystemType = true,
+                    },
+                    new DocumentType()
+                    {
+                        Name = DocumentTypeStrings.ImportAssetsUpload,
+                        Description = "File upload for the Import Assets process. Safe to delete when import is done.",
+                        IsSystemType = true,
+                    },
+                    new DocumentType()
+                    {
+                        Name = DocumentTypeStrings.ImportAssetsResults,
+                        Description = "Results of the Assets Import process. Safe to delete when import is done.",
+                        IsSystemType = true,
+                    },
+                    new DocumentType()
+                    {
+                        Name = "Contract",
+                        Description = "A written or spoken agreement, especially one concerning employment, sales, or tenancy, that is intended to be enforceable by law.",
+                        IsSystemType = false,
+                    },
+                    new DocumentType()
+                    {
+                        Name = "Documentation of bylaws",
+                        Description = "A legal document that describes the structure of an organization, such as a corporation or a nonprofit.",
+                        IsSystemType = false,
+                    },
+                    new DocumentType()
+                    {
+                        Name = "Non-disclosure agreement",
+                        Description = "A binding contract between two or more parties that prevents sensitive information from being shared with others.",
+                        IsSystemType = false,
+                    },
+                    new DocumentType()
+                    {
+                        Name = "Employment agreement",
+                        Description = "An employment contract is an agreement between an employer and employee regarding the employee's term of employment.",
+                        IsSystemType = false,
+                    },
+                    new DocumentType()
+                    {
+                        Name = "Business plan",
+                        Description = "A document that defines in detail a company's objectives and how it plans to achieve its goals.",
+                        IsSystemType = false,
+                    },
+                    new DocumentType()
+                    {
+                        Name = "Balance sheet",
+                        Description = "A summary of the financial balances of an individual or organization.",
+                        IsSystemType = false,
+                    },
+                    new DocumentType()
+                    {
+                        Name = "Income statement",
+                        Description = "Presents the financial results of a business for a stated period of time, aggregating all revenues and expenses.",
+                        IsSystemType = false,
+                    },
+                    new DocumentType()
+                    {
+                        Name = "Cash flow statmenet",
+                        Description = "Provides aggregate data regarding all cash inflows a company receives from its ongoing operations and external investment sources.",
+                        IsSystemType = false,
+                    },
+                    new DocumentType()
+                    {
+                        Name = "Statement of shareholders' equity",
+                        Description = "Details the changes within the equity section of the balance sheet over a designated period of time.",
+                        IsSystemType = false,
+                    },
+                    new DocumentType()
+                    {
+                        Name = "Quotation",
+                        Description = "A formal statement setting out the estimated cost for a particular job or service, including quantities, prices and terms.",
+                        IsSystemType = false,
+                    },
+                    new DocumentType()
+                    {
+                        Name = "Customer Order",
+                        Description = "A formal order from the customer which provides details of the amount and due date for a customer's requirement of products.",
+                        IsSystemType = false,
+                    },
+                    new DocumentType()
+                    {
+                        Name = "Invoice",
+                        Description = "A list of goods sent or services provided, with a statement of the sum due for these; a bill.",
+                        IsSystemType = false,
+                    },
+                    new DocumentType()
+                    {
+                        Name = "Credit Note",
+                        Description = "A document issued by a seller to a buyer to notify that credit is being applied to their account.",
+                        IsSystemType = false,
+                    },
+                    new DocumentType()
+                    {
+                        Name = "Supplier Order",
+                        Description = "A document generated by the buyer and serves the purpose of ordering goods from the supplier.",
+                        IsSystemType = false,
+                    },
+                    new DocumentType()
+                    {
+                        Name = "Compliance and regulatory document",
+                        Description = "Documents or information including records, reports, observations and responses required to verify compliance with standards by a facility or program.",
+                        IsSystemType = false,
+                    },
+                    new DocumentType()
+                    {
+                        Name = "Business report",
+                        Description = "Document that helps the organization's management gain insight into various internal aspects.",
+                        IsSystemType = false,
+                    },
+                    new DocumentType()
+                    {
+                        Name = "Minutes of business meeting",
+                        Description = "An instant written record of a meeting or hearing.",
+                        IsSystemType = false,
+                    },
+                    new DocumentType()
+                    {
+                        Name = "Contractor agreement",
+                        Description = "A contract between a freelancer and a company or client outlining the specifics of their work together.",
+                        IsSystemType = false,
+                    },
+                    new DocumentType()
+                    {
+                        Name = "Business insurance policy",
+                        Description = "A contract of insurance between the insurance company and the policyholder containing the key features, terms and conditions.",
+                        IsSystemType = false,
+                    },
+                    new DocumentType()
+                    {
+                        Name = "Partnership agreement",
+                        Description = "A legal document that dictates how a small for-profit business will operate under two or more people.",
+                        IsSystemType = false,
+                    },
+                    new DocumentType()
+                    {
+                        Name = "Company policy",
+                        Description = "A guideline and rulebook for employers to establish formal expectations and standards for employee health and safety, accountability, best practices and processes within a company.",
+                        IsSystemType = false,
+                    },
+                    new DocumentType()
+                    {
+                        Name = "Franchise agreement",
+                        Description = "Legal agreement that creates a franchise relationship between franchisor and franchisee.",
+                        IsSystemType = false,
+                    },
+                    new DocumentType()
+                    {
+                        Name = "Board resolution",
+                        Description = "A formal document that solidifies in writing important decisions that boards of directors make.",
+                        IsSystemType = false,
+                    },
+                    new DocumentType()
+                    {
+                        Name = "Terms of use",
+                        Description = "Rules, specifications, and requirements for the use of a product or service.",
+                        IsSystemType = false,
+                    },
+                    new DocumentType()
+                    {
+                        Name = "Business pitch deck",
+                        Description = "A presentation that new companies usually create that outlines the organization's main characteristics, qualities and aspirations.",
+                        IsSystemType = false,
+                    },
+                    new DocumentType()
+                    {
+                        Name = "Business license",
+                        Description = "Permit issued by a government agency that allow individuals or companies to conduct business within the government's geographical jurisdiction.",
+                        IsSystemType = false,
+                    },
+                    new DocumentType()
+                    {
+                        Name = "Receipt",
+                        Description = "A document confirming the details of a transaction, such as goods or services received, and amount paid.",
+                        IsSystemType = false,
+                    }
                 }
             }
         };

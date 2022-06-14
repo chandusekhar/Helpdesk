@@ -2,9 +2,10 @@
 {
     public static class DocumentTypeStrings
     {
-        public static string ImportUsersUpload = "Import Users Upload";
-        public static string ImportAssetsUpload = "Import Assets Upload";
-        public static string ImportUsersResults = "Import Users Results";
+        public static string ImportUsersUpload = "Import users upload";
+        public static string ImportAssetsUpload = "Import assets upload";
+        public static string ImportUsersResults = "Import users results";
+        public static string ImportAssetsResults = "Import assets results";
 
     }
 }
