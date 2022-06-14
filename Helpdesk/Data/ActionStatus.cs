@@ -2,7 +2,7 @@
 
 namespace Helpdesk.Data
 {
-    public class DocumentType
+    public class ActionStatus
     {
         [Key]
         public int Id { get; set; }

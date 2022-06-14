@@ -2,7 +2,7 @@
 
 namespace Helpdesk.Data
 {
-    public class DocumentType
+    public class TicketStatus
     {
         [Key]
         public int Id { get; set; }
