@@ -70,11 +70,11 @@
                                 <ul class="dropdown-menu" aria-labelledby="navbarConfigDropdown">
                                     @if (@ViewData.ContainsKey("NavbarShowSiteSettingsLink"))
                                     {
-                                        <li><a class="dropdown-item" asp-area="" asp-page="/SiteSettings/Index">Site Settings</a></li>
+                                        <li><a class="dropdown-item" asp-area="" asp-page="/SiteSettings/Index">Site&nbsp;Settings</a></li>
                                     }
                                     @if (@ViewData.ContainsKey("NavbarShowLicenseTypeLink"))
                                     {
-                                        <li><a class="dropdown-item" asp-area="" asp-page="/LicenseTypes/Index">License Types</a></li>
+                                        <li><a class="dropdown-item" asp-area="" asp-page="/LicenseTypes/Index">License&nbsp;Types</a></li>
                                     }
                                     @if (@ViewData.ContainsKey("NavbarShowGroupsLink"))
                                     {
@@ -86,12 +86,16 @@
                                     }
                                     @if (@ViewData.ContainsKey("NavbarShowAssetTypesLink"))
                                     {
-                                        <li><a class="dropdown-item" asp-area="" asp-page="/AssetTypes/Index">Asset Types</a></li>
+                                        <li><a class="dropdown-item" asp-area="" asp-page="/AssetTypes/Index">Asset&nbsp;Types</a></li>
                                     }
                                     @if (@ViewData.ContainsKey("NavbarShowManufacturersLink"))
                                     {
                                         <li><a class="dropdown-item" asp-area="" asp-page="/Manufacturers/Index">Manufacturers</a></li>
-                                    }                                
+                                    }
+                                    @if (@ViewData.ContainsKey("NavbarShowDocumentTypesLink"))
+                                    {
+                                        <li><a class="dropdown-item" asp-area="" asp-page="/DocumentTypes/Index">Document&nbsp;Types</a></li>
+                                    }
                                 </ul>
                             </li>
                         }

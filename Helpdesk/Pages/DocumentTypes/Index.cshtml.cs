@@ -6,11 +6,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Helpdesk.Data;
-using Microsoft.AspNetCore.Identity;
 using Helpdesk.Infrastructure;
+using Microsoft.AspNetCore.Identity;
 using Helpdesk.Authorization;
 
-namespace Helpdesk.Pages.Groups
+namespace Helpdesk.Pages.DocumentTypes
 {
     public class IndexModel : DI_BasePageModel
     {
@@ -21,7 +21,7 @@ namespace Helpdesk.Pages.Groups
             : base(dbContext, userManager, signInManager)
         { }
 
-        public IList<Group> Group { get;set; } = default!;
+        public IList<DocumentType> DocumentType { get;set; } = default!;
 
         public async Task<IActionResult> OnGetAsync()
         {
@@ -31,14 +31,14 @@ namespace Helpdesk.Pages.Groups
                 // This happens when a user logs in, but hasn't set up their profile yet.
                 return Forbid();
             }
-            bool HasClaim = await RightsManagement.UserHasClaim(_context, _currentHelpdeskUser.IdentityUserId, ClaimConstantStrings.GroupAdmin);
+            bool HasClaim = await RightsManagement.UserHasClaim(_context, _currentHelpdeskUser.IdentityUserId, ClaimConstantStrings.DocumentTypeAdmin);
             if (!HasClaim)
             {
                 return Forbid();
             }
-            if (_context.Groups != null)
+            if (_context.DocumentTypes != null)
             {
-                Group = await _context.Groups.ToListAsync();
+                DocumentType = await _context.DocumentTypes.ToListAsync();
             }
             return Page();
         }

@@ -51,11 +51,23 @@ namespace Helpdesk.Data
         [Required]
         public bool ImportExportLink { get; set; }
 
+        /// <summary>
+        /// Shows the Asset Types link on the Configuration menu
+        /// </summary>
         [Required]
         public bool AssetTypesLink { get; set; }
 
+        /// <summary>
+        /// Shows the Manufactuers link on the Configuration menu
+        /// </summary>
         [Required]
         public bool ManufacturersLink { get; set; }
+
+        /// <summary>
+        /// Shows the Document Types link on the Configuration menu
+        /// </summary>
+        [Required]
+        public bool DocumentTypesLink { get; set; }
         /// <summary>
         /// Show the file manager link on the nav bar menu
         /// </summary>

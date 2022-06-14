@@ -529,6 +529,9 @@ namespace Helpdesk.Data
                         "Allows viewing license product codes for assets on the details page."),
                     new DefaultRoleClaim.NewRoleClaim(ClaimConstantStrings.FileManagerAdminAccess,
                         "Allows uploading, downloading, or deleting uploaded files using File Manager."),
+                    new DefaultRoleClaim.NewRoleClaim(ClaimConstantStrings.DocumentTypeAdmin,
+                        "Allows creating, editing, or deleting document types for File Uplaods."),
+
 
                 }
             },
@@ -640,6 +643,7 @@ namespace Helpdesk.Data
                     ImportExportLink = true,
                     AssetTypesLink = true,
                     ManufacturersLink = true,
+                    DocumentTypesLink = true,
                     FileManagerLink = true,
                 }
             }

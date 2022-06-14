@@ -90,5 +90,10 @@
         /// Allows downloading and deleting documents owned by the user in File Manager.
         /// </summary>
         public static readonly string FileManagerOwnAccess = "File Manager Own Access";
+
+        /// <summary>
+        /// Allows creating, editing, or deleting document types for File Uplaods
+        /// </summary>
+        public static readonly string DocumentTypeAdmin = "Document Type Admin";
     }
 }

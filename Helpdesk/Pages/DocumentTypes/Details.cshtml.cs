@@ -6,24 +6,24 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Helpdesk.Data;
-using Microsoft.AspNetCore.Identity;
 using Helpdesk.Infrastructure;
+using Microsoft.AspNetCore.Identity;
 using Helpdesk.Authorization;
 
-namespace Helpdesk.Pages.Groups
+namespace Helpdesk.Pages.DocumentTypes
 {
-    public class IndexModel : DI_BasePageModel
+    public class DetailsModel : DI_BasePageModel
     {
 
-        public IndexModel(ApplicationDbContext dbContext,
+        public DetailsModel(ApplicationDbContext dbContext,
             UserManager<IdentityUser> userManager,
             SignInManager<IdentityUser> signInManager)
             : base(dbContext, userManager, signInManager)
         { }
 
-        public IList<Group> Group { get;set; } = default!;
+        public DocumentType DocumentType { get; set; } = default!; 
 
-        public async Task<IActionResult> OnGetAsync()
+        public async Task<IActionResult> OnGetAsync(int? id)
         {
             await LoadSiteSettings(ViewData);
             if (_currentHelpdeskUser == null)
@@ -31,14 +31,24 @@ namespace Helpdesk.Pages.Groups
                 // This happens when a user logs in, but hasn't set up their profile yet.
                 return Forbid();
             }
-            bool HasClaim = await RightsManagement.UserHasClaim(_context, _currentHelpdeskUser.IdentityUserId, ClaimConstantStrings.GroupAdmin);
+            bool HasClaim = await RightsManagement.UserHasClaim(_context, _currentHelpdeskUser.IdentityUserId, ClaimConstantStrings.DocumentTypeAdmin);
             if (!HasClaim)
             {
                 return Forbid();
             }
-            if (_context.Groups != null)
+            if (id == null || _context.DocumentTypes == null)
             {
-                Group = await _context.Groups.ToListAsync();
+                return NotFound();
+            }
+
+            var documenttype = await _context.DocumentTypes.FirstOrDefaultAsync(m => m.Id == id);
+            if (documenttype == null)
+            {
+                return NotFound();
+            }
+            else 
+            {
+                DocumentType = documenttype;
             }
             return Page();
         }
