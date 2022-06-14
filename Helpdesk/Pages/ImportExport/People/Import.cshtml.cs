@@ -105,17 +105,24 @@ namespace Helpdesk.Pages.ImportExport.People
                 //await FileUpload.FormFile.CopyToAsync(fileStream);
             }
 
+            var doctype = await _context.DocumentTypes
+                .Where(x => x.IsSystemType && x.Name == DocumentTypeStrings.ImportUsersUpload)
+                .FirstOrDefaultAsync();
+
             FileUpload upload = new FileUpload()
             {
-                FilePath = filePath,
+                FilePath = trustedFileNameForFileStorage,
                 IsTempFile = true,
                 FileLength = formFileContent.Length,
                 OriginalFileName = WebUtility.HtmlEncode(FileUpload.FormFile.FileName),
                 IsDatabaseFile = false,
                 UploadedBy = _currentHelpdeskUser.IdentityUserId,
-                DetectedFileType = "text/csv",
+                MIMEType = "text/csv",
                 FileData = null,
-                WhenUploaded = DateTime.UtcNow
+                WhenUploaded = DateTime.UtcNow,
+                DocumentType = doctype,
+                AllowAllAuthenticatedAccess = false,
+                AllowUnauthenticatedAccess = false
             };
 
             _context.FileUploads.Add(upload);

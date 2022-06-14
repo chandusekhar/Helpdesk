@@ -91,33 +91,13 @@ namespace Helpdesk.Pages.FileManager
                     FileName = f.OriginalFileName,
                     Uploader = f.UploadedBy ?? "",
                     Date = f.WhenUploaded.ToLongDateString(),
-                    Length = FormatSize(f.FileLength),
+                    Length = FileHelpers.FormatSize(f.FileLength),
                     Type = f.DocumentType?.Name ?? ""
                 });
             }
             return Page();
         }
 
-        public string FormatSize(int size)
-        {
-            if (size >= 1073741824)
-            {
-                return string.Format("{0:0.##} GB", size / 1073741824f);
-            }
-            else if (size >= 1048576)
-            {
-                return string.Format("{0:0.##} MB", size / 1048576f);
-            }
-            else if (size >= 1024)
-            {
-                return string.Format("{0:0.#} KB", size / 1024f);
-            }
-            else
-            {
-                return string.Format("{0} B", size);
-            }
-
-        }
     }
 
 

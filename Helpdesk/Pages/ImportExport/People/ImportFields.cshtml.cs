@@ -111,13 +111,21 @@ namespace Helpdesk.Pages.ImportExport.People
             string? header = string.Empty;
             try
             {
-                using (StreamReader reader = System.IO.File.OpenText(fileupload.FilePath))
+                // TODO: This only works for filesystem files. It needs to be updated to work with 
+                // database stored files.
+                string filePath = await FileHelpers.GetActualFilePath(_context, fileupload);
+                if (string.IsNullOrEmpty(filePath) || !System.IO.File.Exists(filePath))
+                {
+                    return StatusCode(StatusCodes.Status500InternalServerError);
+                }
+                using (StreamReader reader = System.IO.File.OpenText(filePath))
                 {
                     header = await reader.ReadLineAsync();
                 }
             }
             catch 
             {
+                return StatusCode(StatusCodes.Status500InternalServerError);
             }
 
             if (string.IsNullOrEmpty(header))
@@ -420,18 +428,25 @@ namespace Helpdesk.Pages.ImportExport.People
             var filePath = Path.Combine(
                 targetFilePath, trustedFileNameForFileStorage);
 
+            var doctype = await _context.DocumentTypes
+                .Where(x => x.IsSystemType && x.Name == DocumentTypeStrings.ImportUsersResults)
+                .FirstOrDefaultAsync();
+
             // create the log file database entry
             FileUpload ImportLogDB = new FileUpload()
             {
-                FilePath = filePath,
+                FilePath = trustedFileNameForFileStorage,
                 IsTempFile = true,
                 FileLength = 0,
                 OriginalFileName = WebUtility.HtmlEncode(String.Format("User Import Log {0}.txt", DateTime.UtcNow.ToString())),
                 IsDatabaseFile = false,
                 UploadedBy = _currentHelpdeskUser.IdentityUserId,
-                DetectedFileType = "text/plain",
+                MIMEType = "text/plain",
                 FileData = null,
-                WhenUploaded = DateTime.UtcNow
+                WhenUploaded = DateTime.UtcNow,
+                DocumentType = doctype,
+                AllowAllAuthenticatedAccess = false,
+                AllowUnauthenticatedAccess = false
             };
 
             _context.FileUploads.Add(ImportLogDB);
@@ -439,7 +454,14 @@ namespace Helpdesk.Pages.ImportExport.People
             string? header = string.Empty;
             try
             {
-                using (StreamReader reader = System.IO.File.OpenText(fileupload.FilePath))
+                // TODO: This only works for filesystem files. It needs to be updated to work with 
+                // database stored files.
+                string readfilePath = await FileHelpers.GetActualFilePath(_context, fileupload);
+                if (string.IsNullOrEmpty(readfilePath) || !System.IO.File.Exists(readfilePath))
+                {
+                    return StatusCode(StatusCodes.Status500InternalServerError);
+                }
+                using (StreamReader reader = System.IO.File.OpenText(readfilePath))
                 using (StreamWriter writer = System.IO.File.CreateText(filePath))
                 {
                     header = await reader.ReadLineAsync();

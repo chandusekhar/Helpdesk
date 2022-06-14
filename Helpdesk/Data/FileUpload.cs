@@ -32,9 +32,9 @@ namespace Helpdesk.Data
         /// </summary>
         public string OriginalFileName { get; set; } = string.Empty!;
         /// <summary>
-        /// File type detected from the file.
+        /// MIME file type of the file.
         /// </summary>
-        public string DetectedFileType { get; set; } = string.Empty!;
+        public string MIMEType { get; set; } = string.Empty!;
         /// <summary>
         /// Length in bytes of file.
         /// </summary>
@@ -43,6 +43,15 @@ namespace Helpdesk.Data
         /// True: Indicates that this file is temporary (such as a CSV for a user import process).
         /// </summary>
         public bool IsTempFile { get; set; }
+
+        /// <summary>
+        /// Allows anonymous users (not signed in) to download the file.
+        /// </summary>
+        public bool AllowUnauthenticatedAccess { get; set; }
+        /// <summary>
+        /// Allows anyone authenticated to the system to download the file.
+        /// </summary>
+        public bool AllowAllAuthenticatedAccess { get; set; }
         public DocumentType? DocumentType { get; set; }
     }
 }

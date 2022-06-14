@@ -6,9 +6,11 @@ using System.Linq;
 using System.Net;
 using System.Reflection;
 using System.Threading.Tasks;
+using Helpdesk.Data;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.AspNetCore.WebUtilities;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Net.Http.Headers;
 
 namespace Helpdesk.Infrastructure
@@ -266,6 +268,39 @@ namespace Helpdesk.Infrastructure
                 return signatures.Any(signature =>
                     headerBytes.Take(signature.Length).SequenceEqual(signature));
             }
+        }
+        public static string FormatSize(int size)
+        {
+            if (size >= 1073741824)
+            {
+                return string.Format("{0:0.##} GB", size / 1073741824f);
+            }
+            else if (size >= 1048576)
+            {
+                return string.Format("{0:0.##} MB", size / 1048576f);
+            }
+            else if (size >= 1024)
+            {
+                return string.Format("{0:0.#} KB", size / 1024f);
+            }
+            else
+            {
+                return string.Format("{0} B", size);
+            }
+        }
+
+        public static async Task<string> GetActualFilePath(ApplicationDbContext context, FileUpload file)
+        {
+            ConfigOpt? opt = await context.ConfigOpts
+                    .Where(x => x.Category == ConfigOptConsts.System_UploadPath.Category &&
+                                x.Key == ConfigOptConsts.System_UploadPath.Key)
+                    .FirstOrDefaultAsync();
+            string targetFilePath = opt?.Value ?? ConfigOptConsts.System_UploadPath.Value;
+            if (file.IsDatabaseFile || string.IsNullOrEmpty(file.FilePath))
+            {
+                return string.Empty;
+            }
+            return Path.Combine(targetFilePath, file.FilePath);
         }
     }
 }
