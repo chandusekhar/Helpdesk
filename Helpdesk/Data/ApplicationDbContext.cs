@@ -76,7 +76,7 @@ namespace Helpdesk.Data
         /// <summary>
         /// Locations that an asset can be assigned to
         /// </summary>
-        public DbSet<AssetLocation> AssetLocations { get; set; }
+        public DbSet<Location> Locations { get; set; }
         /// <summary>
         /// Status of an asset, such as ordered, deployed, etc.
         /// </summary>

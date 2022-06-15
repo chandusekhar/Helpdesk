@@ -29,8 +29,7 @@ namespace Helpdesk.Data
         [Display(Name = "Status")]
         public AssetStatus? AssetStatus { get; set; }
 
-        [Display(Name = "Location")]
-        public AssetLocation? AssetLocation { get; set; }
+        public Location? Location { get; set; }
 
         public Manufacturer? Manufacturer { get; set; }
 
