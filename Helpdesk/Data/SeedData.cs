@@ -57,7 +57,7 @@ namespace Helpdesk.Data
                         HelpdeskRole? role = await RightsManagement.GetRoleIfExists(context, item.RoleName);
                         if (role == null)
                         {
-                            role = await RightsManagement.CreateRole(context, item.RoleName, item.RoleDescription);
+                            role = await RightsManagement.CreateRole(context, item.RoleName, item.RoleDescription, item.IsPrivileged);
                             roleClaims = new List<HelpdeskClaim>();
                         }
                         else

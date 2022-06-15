@@ -123,12 +123,13 @@ namespace Helpdesk.Authorization
             return await context.HelpdeskRoles.Where(x => x.Name == roleName).FirstOrDefaultAsync();
         }
 
-        public static async Task<HelpdeskRole> CreateRole(ApplicationDbContext context, string roleName, string roleDescription)
+        public static async Task<HelpdeskRole> CreateRole(ApplicationDbContext context, string roleName, string roleDescription, bool isPrivileged)
         {
             var newrole = new HelpdeskRole()
             {
                 Name = roleName,
-                Description = roleDescription
+                Description = roleDescription,
+                IsPrivileged = isPrivileged
             };
             context.HelpdeskRoles.Add(newrole);
             await context.SaveChangesAsync();

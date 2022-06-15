@@ -176,6 +176,10 @@ namespace Helpdesk.Pages.People
             Input.UserRoles = new List<UserRoleItem>();
             foreach (var r in allroles)
             {
+                if (r.IsPrivileged && (_currentIdentityUser == null || !await RightsManagement.UserIsInRole(_context, _currentIdentityUser.Id, r.Name)))
+                {
+                    continue;
+                }
                 var inRole = userRoles.Where(x => x.Id == r.Id).Any();
                 Input.UserRoles.Add(new UserRoleItem()
                 {
@@ -430,19 +434,28 @@ namespace Helpdesk.Pages.People
                 }
             }
 
+            var allroles = await RightsManagement.GetAllRoles(_context);
             if (ShowUserRoleAdmin)
             {
                 foreach (var r in Input.UserRoles)
                 {
-                    if (r.Added && !r.PreviouslyAdded)
+                    var role = allroles.Where(x => x.Name == r.RoleName).FirstOrDefault();
+                    if (role != null)
                     {
-                        // add
-                        await RightsManagement.UserAddRole(_context, iUser.Id, r.RoleName);
-                    }
-                    if (!r.Added && r.PreviouslyAdded)
-                    {
-                        // remove
-                        await RightsManagement.UserRemoveRole(_context, iUser.Id, r.RoleName);
+                        if (role.IsPrivileged && (_currentIdentityUser == null || !await RightsManagement.UserIsInRole(_context, _currentIdentityUser.Id, role.Name)))
+                        {
+                            continue;
+                        }
+                        if (r.Added && !r.PreviouslyAdded)
+                        {
+                            // add
+                            await RightsManagement.UserAddRole(_context, iUser.Id, r.RoleName);
+                        }
+                        if (!r.Added && r.PreviouslyAdded)
+                        {
+                            // remove
+                            await RightsManagement.UserRemoveRole(_context, iUser.Id, r.RoleName);
+                        }
                     }
                 }
             }
