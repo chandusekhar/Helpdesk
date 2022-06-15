@@ -1,4 +1,6 @@
-﻿namespace Helpdesk.Data
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace Helpdesk.Data
 {
     /// <summary>
     /// Defines a specific operation in the sytem.
@@ -6,9 +8,15 @@
     /// </summary>
     public class HelpdeskClaim
     {
+        [Key]
         public int Id { get; set; }
+        [Required]
         public string Name { get; set; }
+        [Required]
         public string Description { get; set; }
+
+        [Required]
+        public bool IsSystemType { get; set; }
 
         /// <summary>
         /// Roles that grant access to this claim

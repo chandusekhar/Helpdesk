@@ -19,6 +19,7 @@
 
   <ItemGroup>
     <Folder Include="Pages\Assets\" />
+    <Folder Include="Pages\RoleAdmin\" />
     <Folder Include="Pages\Tickets\" />
   </ItemGroup>
 

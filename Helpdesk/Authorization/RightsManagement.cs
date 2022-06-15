@@ -145,12 +145,13 @@ namespace Helpdesk.Authorization
             return role.Claims.ToList();
         }
 
-        public static async Task<HelpdeskClaim> CreateClaim(ApplicationDbContext context, string claimName, string claimDescription)
+        public static async Task<HelpdeskClaim> CreateClaim(ApplicationDbContext context, string claimName, string claimDescription, bool isSystemClaim)
         {
             var newclaim = new HelpdeskClaim()
             {
                 Name = claimName,
-                Description = claimDescription
+                Description = claimDescription,
+                IsSystemType = isSystemClaim
             };
             context.HelpdeskClaims.Add(newclaim);
             await context.SaveChangesAsync();

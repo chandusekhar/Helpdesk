@@ -72,7 +72,7 @@ namespace Helpdesk.Data
                                 var cl = allClaims.Where(x => x.Name == rclaim.ClaimName).FirstOrDefault();
                                 if (cl == null)
                                 {
-                                    cl = await RightsManagement.CreateClaim(context, rclaim.ClaimName, rclaim.ClaimDescription);
+                                    cl = await RightsManagement.CreateClaim(context, rclaim.ClaimName, rclaim.ClaimDescription, true);
                                     allClaims.Add(cl);
                                 }
                                 await RightsManagement.AddClaimToRoll(context, item.RoleName, rclaim.ClaimName);
