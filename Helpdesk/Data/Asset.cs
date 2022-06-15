@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Helpdesk.Data
 {
@@ -48,6 +49,7 @@ namespace Helpdesk.Data
         public Vendor? PurchasingVendor { get; set; }
 
         [Display(Name = "Purchase Price")]
+        [Column(TypeName = "decimal(19,4)")]
         public decimal? PurchasePrice { get; set; }
 
         [Display(Name = "Quote Number")]
