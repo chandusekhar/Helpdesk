@@ -251,6 +251,28 @@ namespace Helpdesk.Data
                     }
                 }
 
+                foreach (var item in LocationCatalog.Catalog)
+                {
+                    if (item.Version == dbVersion.Value)
+                    {
+                        foreach (var l in item.Templates)
+                        {
+                            var lt = await context.Locations.Where(x => x.Name == l.Name).FirstOrDefaultAsync();
+                            if (lt == null)
+                            {
+                                lt = new Location()
+                                {
+                                    Name = l.Name,
+                                    Description = l.Description
+                                };
+                                context.Locations.Add(lt);
+                                await context.SaveChangesAsync();
+                                context.Entry(lt).State = EntityState.Detached;
+                            }
+                        }
+                    }
+                }
+
                 // site settings.
                 var rollup = ConfigOptRollupCatalog.RollupIndex.Where(x => x.Version == dbVersion.Value).FirstOrDefault();
                 if (rollup == null)
@@ -644,6 +666,7 @@ namespace Helpdesk.Data
                     ImportExportLink = true,
                     AssetTypesLink = true,
                     ManufacturersLink = true,
+                    LocationsLink = true,
                     RoleAdminLink = true,
                     DocumentTypesLink = true,
                     FileManagerLink = true,
@@ -1296,6 +1319,47 @@ namespace Helpdesk.Data
             }
         };
     }
+
+    public class LocationVersion
+    {
+        public string Version { get; set; }
+        public List<Location> Templates { get; set; }
+    }
+
+    public static class LocationCatalog
+    {
+        public static List<LocationVersion> Catalog = new List<LocationVersion>()
+        {
+            new LocationVersion()
+            {
+                Version = "",
+                Templates = new List<Location>()
+                {
+                    new Location()
+                    {
+                        Name = "Accounting Department",
+                        Description = "Headquarters accounting department."
+                    },
+                    new Location()
+                    {
+                        Name = "Marketing Department",
+                        Description = "Headquarters marketing department."
+                    },
+                    new Location()
+                    {
+                        Name = "IT Office",
+                        Description = "Headquarters IT office"
+                    },
+                    new Location()
+                    {
+                        Name = "Storage Rack 1",
+                        Description = "Storage rack in main IT office storage room."
+                    }
+                }
+            }
+        };
+    }
+
 
     public class AssetTypeVersion
     {

@@ -128,7 +128,11 @@ namespace Helpdesk.Infrastructure
                             }
                             if (_currentHelpdeskUser.SiteNavTemplate.RoleAdminLink)
                             {
-                                viewData.Add("NavbarShowRoleAdminLinkLink", "true");
+                                viewData.Add("NavbarShowRoleAdminLink", "true");
+                            }
+                            if (_currentHelpdeskUser.SiteNavTemplate.LocationsLink)
+                            {
+                                viewData.Add("NavbarShowLocationsLink", "true");
                             }
                             if (_currentHelpdeskUser.SiteNavTemplate.DocumentTypesLink)
                             {

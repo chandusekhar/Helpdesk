@@ -68,6 +68,11 @@ namespace Helpdesk.Data
         /// </summary>
         [Required]
         public bool RoleAdminLink { get; set; }
+        /// <summary>
+        /// Shows the Locations link on the Configuration menu
+        /// </summary>
+        [Required]
+        public bool LocationsLink { get; set; }
 
         /// <summary>
         /// Shows the Document Types link on the Configuration menu
