@@ -668,6 +668,7 @@ namespace Helpdesk.Data
                     ManufacturersLink = true,
                     LocationsLink = true,
                     ActionStatusesLink = true,
+                    TicketStatusesLink = true,
                     RoleAdminLink = true,
                     DocumentTypesLink = true,
                     FileManagerLink = true,
