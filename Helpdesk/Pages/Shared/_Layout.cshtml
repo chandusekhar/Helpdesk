@@ -98,6 +98,10 @@
                                     {
                                         <li><a class="dropdown-item" asp-area="" asp-page="/Manufacturers/Index">Manufacturers</a></li>
                                     }
+                                    @if (@ViewData.ContainsKey("NavbarShowRoleAdminLinkLink"))
+                                    {
+                                        <li><a class="dropdown-item" asp-area="" asp-page="/RoleAdmin/Index">Role&nbsp;Admin</a></li>
+                                    }
                                     @if (@ViewData.ContainsKey("NavbarShowSiteSettingsLink"))
                                     {
                                         <li><a class="dropdown-item" asp-area="" asp-page="/SiteSettings/Index">Site&nbsp;Settings</a></li>

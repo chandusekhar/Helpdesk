@@ -126,6 +126,10 @@ namespace Helpdesk.Infrastructure
                             {
                                 viewData.Add("NavbarShowManufacturersLink", "true");
                             }
+                            if (_currentHelpdeskUser.SiteNavTemplate.RoleAdminLink)
+                            {
+                                viewData.Add("NavbarShowRoleAdminLinkLink", "true");
+                            }
                             if (_currentHelpdeskUser.SiteNavTemplate.DocumentTypesLink)
                             {
                                 viewData.Add("NavbarShowDocumentTypesLink", "true");

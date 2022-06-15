@@ -644,6 +644,7 @@ namespace Helpdesk.Data
                     ImportExportLink = true,
                     AssetTypesLink = true,
                     ManufacturersLink = true,
+                    RoleAdminLink = true,
                     DocumentTypesLink = true,
                     FileManagerLink = true,
                 }

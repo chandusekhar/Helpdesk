@@ -64,6 +64,12 @@ namespace Helpdesk.Data
         public bool ManufacturersLink { get; set; }
 
         /// <summary>
+        /// Shows the Roles link on the Configuration menu
+        /// </summary>
+        [Required]
+        public bool RoleAdminLink { get; set; }
+
+        /// <summary>
         /// Shows the Document Types link on the Configuration menu
         /// </summary>
         [Required]
