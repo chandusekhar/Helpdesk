@@ -74,6 +74,10 @@
                                     Configuration
                                 </a>
                                 <ul class="dropdown-menu" aria-labelledby="navbarConfigDropdown">
+                                    @if (@ViewData.ContainsKey("NavbarShowActionStatusesLink"))
+                                    {
+                                        <li><a class="dropdown-item" asp-area="" asp-page="/ActionStatuses/Index">Action&nbsp;Statuses</a></li>
+                                    }
                                     @if (@ViewData.ContainsKey("NavbarShowAssetTypesLink"))
                                     {
                                         <li><a class="dropdown-item" asp-area="" asp-page="/AssetTypes/Index">Asset&nbsp;Types</a></li>

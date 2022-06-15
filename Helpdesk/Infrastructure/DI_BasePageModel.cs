@@ -134,6 +134,10 @@ namespace Helpdesk.Infrastructure
                             {
                                 viewData.Add("NavbarShowLocationsLink", "true");
                             }
+                            if (_currentHelpdeskUser.SiteNavTemplate.ActionStatusesLink)
+                            {
+                                viewData.Add("NavbarShowActionStatusesLink", "true");
+                            }
                             if (_currentHelpdeskUser.SiteNavTemplate.DocumentTypesLink)
                             {
                                 viewData.Add("NavbarShowDocumentTypesLink", "true");

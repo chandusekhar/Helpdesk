@@ -667,6 +667,7 @@ namespace Helpdesk.Data
                     AssetTypesLink = true,
                     ManufacturersLink = true,
                     LocationsLink = true,
+                    ActionStatusesLink = true,
                     RoleAdminLink = true,
                     DocumentTypesLink = true,
                     FileManagerLink = true,
