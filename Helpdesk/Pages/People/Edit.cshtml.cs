@@ -178,7 +178,10 @@ namespace Helpdesk.Pages.People
             {
                 if (r.IsPrivileged && (_currentIdentityUser == null || !await RightsManagement.UserIsInRole(_context, _currentIdentityUser.Id, r.Name)))
                 {
-                    continue;
+                    if (_currentIdentityUser == null || !await RightsManagement.UserHasSuperAdmin(_context, _currentIdentityUser.Id))
+                    {
+                        continue;
+                    }
                 }
                 var inRole = userRoles.Where(x => x.Id == r.Id).Any();
                 Input.UserRoles.Add(new UserRoleItem()
@@ -439,12 +442,21 @@ namespace Helpdesk.Pages.People
             {
                 foreach (var r in Input.UserRoles)
                 {
+                    if (r.Added == r.PreviouslyAdded)
+                    {
+                        continue;
+                    }
                     var role = allroles.Where(x => x.Name == r.RoleName).FirstOrDefault();
                     if (role != null)
                     {
+                        // privileged roles can only be added/removed by users that hold those privileges
                         if (role.IsPrivileged && (_currentIdentityUser == null || !await RightsManagement.UserIsInRole(_context, _currentIdentityUser.Id, role.Name)))
                         {
-                            continue;
+                            // except for SuperAdmins. They can add/remove any privileged role.
+                            if (_currentIdentityUser == null || !await RightsManagement.UserHasSuperAdmin(_context, _currentIdentityUser.Id))
+                            {
+                                continue;
+                            }
                         }
                         if (r.Added && !r.PreviouslyAdded)
                         {
@@ -453,6 +465,16 @@ namespace Helpdesk.Pages.People
                         }
                         if (!r.Added && r.PreviouslyAdded)
                         {
+                            if (role.IsSuperAdmin)
+                            {
+                                // make sure we aren't about to screw up and remove the last super admin from the site.
+                                var rUsers = await RightsManagement.GetUsersWithRole(_context, role.Name);
+                                if (rUsers.Count == 1 && rUsers[0].IdentityUserId == iUser.Id)
+                                {
+                                    // The last super admin can't remove themselves.
+                                    continue;
+                                }
+                            }
                             // remove
                             await RightsManagement.UserRemoveRole(_context, iUser.Id, r.RoleName);
                         }

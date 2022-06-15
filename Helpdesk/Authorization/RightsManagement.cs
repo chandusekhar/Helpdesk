@@ -5,7 +5,6 @@ namespace Helpdesk.Authorization
 {
     public static class RightsManagement
     {
-
         public static async Task<List<HelpdeskRole>> UserRolesAssigned(ApplicationDbContext context, string userId)
         {
             var userRoles = new List<HelpdeskRole>();
@@ -23,6 +22,20 @@ namespace Helpdesk.Authorization
             return userRoles;
         }
 
+        public static async Task<bool> UserHasSuperAdmin(ApplicationDbContext context, string userId)
+        {
+            var huser = await context.HelpdeskUsers
+                .Where(x => x.IdentityUserId == userId && 
+                            x.Roles.Any(y => y.IsSuperAdmin))
+                .FirstOrDefaultAsync();
+            if (huser == null)
+            {
+                return false;
+            }
+
+            return huser.IdentityUserId == userId;
+        }
+
         public static async Task<bool> UserIsInRole(ApplicationDbContext context, string userId, string role)
         {
             var huser = await context.HelpdeskUsers
@@ -34,6 +47,21 @@ namespace Helpdesk.Authorization
                 return false;
             }
             return huser.Roles.Any(x => x.Name == role);
+        }
+
+        public static async Task<List<HelpdeskUser>> GetUsersWithRole(ApplicationDbContext context, string role)
+        {
+            var users = await context.HelpdeskUsers
+                .Where(x => x.Roles.Any(y => y.Name == role))
+                .ToListAsync();
+            if (users == null || users.Count == 0)
+            {
+                return new List<HelpdeskUser>();
+            }
+            else
+            {
+                return users;
+            }
         }
 
         public static async Task<bool> UserHasClaim(ApplicationDbContext context, string userId, string claimName)
@@ -123,13 +151,14 @@ namespace Helpdesk.Authorization
             return await context.HelpdeskRoles.Where(x => x.Name == roleName).FirstOrDefaultAsync();
         }
 
-        public static async Task<HelpdeskRole> CreateRole(ApplicationDbContext context, string roleName, string roleDescription, bool isPrivileged)
+        public static async Task<HelpdeskRole> CreateRole(ApplicationDbContext context, string roleName, string roleDescription, bool isPrivileged, bool isSuperAdmin)
         {
             var newrole = new HelpdeskRole()
             {
                 Name = roleName,
                 Description = roleDescription,
-                IsPrivileged = isPrivileged
+                IsPrivileged = isPrivileged,
+                IsSuperAdmin = isSuperAdmin
             };
             context.HelpdeskRoles.Add(newrole);
             await context.SaveChangesAsync();

@@ -89,6 +89,11 @@ namespace Helpdesk.Pages.People
                 Input.Enabled = huser.IsEnabled ? "Enabled" : "Disabled";
             }
 
+            if (await RightsManagement.UserHasSuperAdmin(_context, iuser.Id))
+            {
+                ModelState.AddModelError("", "You can't delete this user because they have Super Admin rights.");
+            }
+
             return Page();
         }
 
@@ -119,6 +124,11 @@ namespace Helpdesk.Pages.People
                 return NotFound();
             }
 
+            if (await RightsManagement.UserHasSuperAdmin(_context, iuser.Id))
+            {
+                return RedirectToPage("./Delete", new { id = iuser.Id });
+            }
+
             var huser = await _context.HelpdeskUsers
                 .Where(x => x.IdentityUserId == Input.Id)
                 .FirstOrDefaultAsync();
@@ -131,10 +141,11 @@ namespace Helpdesk.Pages.People
             await _context.SaveChangesAsync();
 
             if (huser != null)
-            { 
+            {
                 await RightsManagement.RemoveAllRolesFromUser(_context, Input.Id);
-                _context.HelpdeskUsers.Remove(huser);
-                await _context.SaveChangesAsync();
+                // Don't remove the HelpdeskUser, as this is require for tickets, assets, history tracking, etc.
+                //_context.HelpdeskUsers.Remove(huser);
+                //await _context.SaveChangesAsync();
             }
 
             await _userManager.DeleteAsync(iuser);

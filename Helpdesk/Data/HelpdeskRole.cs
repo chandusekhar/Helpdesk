@@ -16,6 +16,8 @@ namespace Helpdesk.Data
         public string Description { get; set; }
         [Required]
         public bool IsPrivileged { get; set; }
+        [Required]
+        public bool IsSuperAdmin { get; set; }
         /// <summary>
         /// Users that are assigned this role.
         /// </summary>
