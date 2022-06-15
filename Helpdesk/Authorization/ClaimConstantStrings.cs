@@ -3,21 +3,9 @@
     public static class ClaimConstantStrings
     {
         /// <summary>
-        /// Allows creating a new Role. Requires RolesViewClaims, RolesEditClaims
+        /// Allows creating, editing, and deleting roles.
         /// </summary>        
-        public static readonly string RolesCreateNew = "Roles Create New";
-        /// <summary>
-        /// Allows viewing a Role's claims
-        /// </summary>
-        public static readonly string RolesViewClaims = "Roles View Claims";
-        /// <summary>
-        /// Allows Editing a Role's claims
-        /// </summary>
-        public static readonly string RolesEditClaims = "Roles Edit Claims";
-        /// <summary>
-        /// Allows deleting a role
-        /// </summary>
-        public static readonly string RolesDeleteRole = "Roles Delete Role";
+        public static readonly string HelpdeskRolesAdmin = "Roles Administrator";
         
         /// <summary>
         /// Allows editing sitewide configuration settings
@@ -33,7 +21,6 @@
         /// Allows creating/editing/removing groups
         /// </summary>
         public static readonly string GroupAdmin = "Group Admin";
-
 
         /// <summary>
         /// Allows creating users, resetting passwords for users, enabling/disabling users

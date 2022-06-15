@@ -469,6 +469,7 @@ namespace Helpdesk.Data
         public string Version { get; set; }
         public string RoleName { get; set; }
         public string RoleDescription { get; set; }
+        public bool IsPrivileged { get; set; }
         public List<NewRoleClaim> Claims { get; set; }
 
         public class NewRoleClaim
@@ -493,16 +494,11 @@ namespace Helpdesk.Data
                 Version = string.Empty,
                 RoleName = RoleConstantStrings.SuperAdmin,
                 RoleDescription = "Super Admins can do anything on the site",
+                IsPrivileged = true,
                 Claims = new List<DefaultRoleClaim.NewRoleClaim>()
                 {
-                    new DefaultRoleClaim.NewRoleClaim(ClaimConstantStrings.RolesCreateNew,
-                        "Allows creating a new Role. Requires RolesViewClaims, RolesEditClaims."),
-                    new DefaultRoleClaim.NewRoleClaim(ClaimConstantStrings.RolesViewClaims,
-                        "Allows viewing a Role's claims."),
-                    new DefaultRoleClaim.NewRoleClaim(ClaimConstantStrings.RolesEditClaims,
-                        "Allows Editing a Role's claims."),
-                    new DefaultRoleClaim.NewRoleClaim(ClaimConstantStrings.RolesDeleteRole,
-                        "Allows deleting a role."),
+                    new DefaultRoleClaim.NewRoleClaim(ClaimConstantStrings.HelpdeskRolesAdmin,
+                        "Allows creating, editing, and deleting roles."),
                     new DefaultRoleClaim.NewRoleClaim(ClaimConstantStrings.LicenseTypeAdmin,
                         "Allows creating, editing, and removing License Types."),
                     new DefaultRoleClaim.NewRoleClaim(ClaimConstantStrings.GroupAdmin,
@@ -540,6 +536,7 @@ namespace Helpdesk.Data
                 Version = string.Empty,
                 RoleName = RoleConstantStrings.UserAdmin,
                 RoleDescription = "User Admins can edit and create users, enable/disable accounts, and assign licenses.",
+                IsPrivileged = false,
                 Claims = new List<DefaultRoleClaim.NewRoleClaim>()
                 {
                     new DefaultRoleClaim.NewRoleClaim(ClaimConstantStrings.UsersAdmin,
@@ -557,6 +554,7 @@ namespace Helpdesk.Data
                 Version = string.Empty,
                 RoleName = RoleConstantStrings.UserReviewer,
                 RoleDescription = "Grants readonly access to users to view properties and assignments.",
+                IsPrivileged = false,
                 Claims = new List<DefaultRoleClaim.NewRoleClaim>()
                 {
                     new DefaultRoleClaim.NewRoleClaim(ClaimConstantStrings.UsersAllowReadAccess,
@@ -568,6 +566,7 @@ namespace Helpdesk.Data
                 Version = string.Empty,
                 RoleName = RoleConstantStrings.AssetAdmin,
                 RoleDescription = "Asset Admins can edit, create, and delete assets, assign assets to users, and assign licenses.",
+                IsPrivileged = false,
                 Claims = new List<DefaultRoleClaim.NewRoleClaim>()
                 {
                     new DefaultRoleClaim.NewRoleClaim(ClaimConstantStrings.AssetOptionsEditor,
@@ -585,6 +584,7 @@ namespace Helpdesk.Data
                 Version = string.Empty,
                 RoleName = RoleConstantStrings.AssetReviewer,
                 RoleDescription = "Grants readonly access to assets to view properties and assignments.",
+                IsPrivileged = false,
                 Claims = new List<DefaultRoleClaim.NewRoleClaim>()
                 {
                     new DefaultRoleClaim.NewRoleClaim(ClaimConstantStrings.AssetsAllowReadAccess,
@@ -596,6 +596,7 @@ namespace Helpdesk.Data
                 Version = string.Empty,
                 RoleName = RoleConstantStrings.FileAdmin,
                 RoleDescription = "Allows downloading and deleting all files using the File Manager.",
+                IsPrivileged = false,
                 Claims = new List<DefaultRoleClaim.NewRoleClaim>()
                 {
                     new DefaultRoleClaim.NewRoleClaim(ClaimConstantStrings.FileManagerAdminAccess,
@@ -607,6 +608,7 @@ namespace Helpdesk.Data
                 Version = string.Empty,
                 RoleName = RoleConstantStrings.FileOwnEditor,
                 RoleDescription = "Allows downloading and deleting all files owned by the user in File Manager.",
+                IsPrivileged = false,
                 Claims = new List<DefaultRoleClaim.NewRoleClaim>()
                 {
                     new DefaultRoleClaim.NewRoleClaim(ClaimConstantStrings.FileManagerOwnAccess,
