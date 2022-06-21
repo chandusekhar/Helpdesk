@@ -9,6 +9,8 @@ using Helpdesk.Data;
 using Helpdesk.Infrastructure;
 using Microsoft.AspNetCore.Identity;
 using Helpdesk.Authorization;
+using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 
 namespace Helpdesk.Pages.RoleAdmin
 {
@@ -19,6 +21,20 @@ namespace Helpdesk.Pages.RoleAdmin
             SignInManager<IdentityUser> signInManager)
             : base(dbContext, userManager, signInManager)
         { }
+
+        public class InputModel
+        {
+            [Required]
+            public string Name { get; set; }
+            [Required]
+            public string Description { get; set; }
+            [Required]
+            [Display(Name = "Privileged Role")]
+            public bool IsPrivileged { get; set; }
+            [Required]
+            [Display(Name = "Super Admin")]
+            public bool IsSuperAdmin { get; set; }
+        }
 
         public async Task<IActionResult> OnGet()
         {
@@ -37,9 +53,8 @@ namespace Helpdesk.Pages.RoleAdmin
         }
 
         [BindProperty]
-        public HelpdeskRole HelpdeskRole { get; set; } = default!;
+        public InputModel HelpdeskRole { get; set; } = default!;
         
-
         // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
         public async Task<IActionResult> OnPostAsync()
         {
@@ -59,10 +74,23 @@ namespace Helpdesk.Pages.RoleAdmin
                 return Page();
             }
 
-            _context.HelpdeskRoles.Add(HelpdeskRole);
+            var role = await _context.HelpdeskRoles.Where(x => x.Name == HelpdeskRole.Name).FirstOrDefaultAsync();
+            if (role != null)
+            {
+                ModelState.AddModelError("HelpdeskRole.Name", "Role name is already in use.");
+                return Page();
+            }
+            role = new HelpdeskRole()
+            {
+                Name = HelpdeskRole.Name,
+                Description = HelpdeskRole.Description,
+                IsPrivileged = HelpdeskRole.IsPrivileged,
+                IsSuperAdmin = HelpdeskRole.IsSuperAdmin
+            };
+            _context.HelpdeskRoles.Add(role);
             await _context.SaveChangesAsync();
 
-            return RedirectToPage("./Index");
+            return RedirectToPage("./Edit", new { id = role.Id });
         }
     }
 }

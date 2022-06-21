@@ -188,7 +188,7 @@ namespace Helpdesk.Authorization
             return newclaim;
         }
 
-        public static async Task<bool> AddClaimToRoll(ApplicationDbContext context, string roleName, string claimName)
+        public static async Task<bool> AddClaimToRole(ApplicationDbContext context, string roleName, string claimName)
         {
             var role = await context.HelpdeskRoles.Where(x => x.Name == roleName).Include(x => x.Claims).FirstOrDefaultAsync();
             var claim = await context.HelpdeskClaims.Where(x => x.Name == claimName).FirstOrDefaultAsync();
@@ -201,6 +201,23 @@ namespace Helpdesk.Authorization
                 return true;
             }
             role.Claims.Add(claim);
+            await context.SaveChangesAsync();
+            return true;
+        }
+
+        public static async Task<bool> RemoveClaimFromRole(ApplicationDbContext context, string roleName, string claimName)
+        {
+            var role = await context.HelpdeskRoles.Where(x => x.Name == roleName).Include(x => x.Claims).FirstOrDefaultAsync();
+            var claim = await context.HelpdeskClaims.Where(x => x.Name == claimName).FirstOrDefaultAsync();
+            if (role == null || claim == null)
+            {
+                return true;
+            }
+            if (!role.Claims.Contains(claim))
+            {
+                return true;
+            }
+            role.Claims.Remove(claim);
             await context.SaveChangesAsync();
             return true;
         }

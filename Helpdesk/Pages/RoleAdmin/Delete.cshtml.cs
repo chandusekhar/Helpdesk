@@ -47,6 +47,10 @@ namespace Helpdesk.Pages.RoleAdmin
             {
                 return NotFound();
             }
+            else if (helpdeskrole.IsSuperAdmin)
+            {
+                ModelState.AddModelError("", "You can't delete a Super Admin role.");
+            }
             else 
             {
                 HelpdeskRole = helpdeskrole;
@@ -75,6 +79,11 @@ namespace Helpdesk.Pages.RoleAdmin
 
             if (helpdeskrole != null)
             {
+                if (helpdeskrole.IsSuperAdmin)
+                {
+                    ModelState.AddModelError("", "You can't delete a Super Admin role.");
+                    return Page();
+                }
                 HelpdeskRole = helpdeskrole;
                 _context.HelpdeskRoles.Remove(HelpdeskRole);
                 await _context.SaveChangesAsync();

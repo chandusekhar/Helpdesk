@@ -75,7 +75,7 @@ namespace Helpdesk.Data
                                     cl = await RightsManagement.CreateClaim(context, rclaim.ClaimName, rclaim.ClaimDescription, true);
                                     allClaims.Add(cl);
                                 }
-                                await RightsManagement.AddClaimToRoll(context, item.RoleName, rclaim.ClaimName);
+                                await RightsManagement.AddClaimToRole(context, item.RoleName, rclaim.ClaimName);
                                 roleClaims.Add(cl);
                             }
                         }
@@ -636,6 +636,8 @@ namespace Helpdesk.Data
                         "Allows viewing license product codes for assets on the details page."),
                     new DefaultRoleClaim.NewRoleClaim(ClaimConstantStrings.FileManagerAdminAccess,
                         "Allows uploading, downloading, or deleting uploaded files using File Manager."),
+                    new DefaultRoleClaim.NewRoleClaim(ClaimConstantStrings.FileManagerOwnAccess,
+                        "Allows downloading and deleting documents owned by the user in File Manager."),
                     new DefaultRoleClaim.NewRoleClaim(ClaimConstantStrings.DocumentTypeAdmin,
                         "Allows creating, editing, or deleting document types for File Uplaods."),
                     new DefaultRoleClaim.NewRoleClaim(ClaimConstantStrings.SuperRespsAdminAccess,
