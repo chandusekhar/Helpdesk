@@ -9,195 +9,239 @@
 <div class="text-center">
     <h1 class="display-4">Edit Helpdesk User</h1>
 </div>
+<ul class="nav nav-tabs" id="myTab" role="tablist">
+    <li class="nav-item" role="presentation">
+        <button class="nav-link active" id="userprofile-tab" data-bs-toggle="tab" data-bs-target="#userprofile" type="button" role="tab" aria-controls="userprofile" aria-selected="true">User&nbsp;Profile</button>
+    </li>
+    @if(@Model.Input.Licenses.Count() > 0)
+    {
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="userlicense-tab" data-bs-toggle="tab" data-bs-target="#userlicense" type="button" role="tab" aria-controls="userlicense" aria-selected="false">Licenses</button>
+        </li>
+    }
+    @if (@ViewData.ContainsKey("ShowUserRoleAdmin") && @Model.Input.UserRoles != null)
+    {
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="userroles-tab" data-bs-toggle="tab" data-bs-target="#userroles" type="button" role="tab" aria-controls="userroles" aria-selected="false">Roles</button>
+        </li>
+    }
+</ul>
 <form method="post" class="g-3">
-    <div class="border container" style="padding:30px;">
-        <div class="row col-md-12">
-            <span class="h3">User Profile</span>
-        </div>
-        <input type="hidden" asp-for="Input.Id" />
-        <div class="row col-md-12 text-center">
-            <div class="text-danger text-center" asp-validation-summary="ModelOnly"></div>
-        </div>
-        <div class="row">
-            <div class="col-md-6">
-                <div class="form-floating">
-                    <input asp-for="Input.Email" class="form-control" />
-                    <label asp-for="Input.Email" class="form-label"></label>
-                    <span asp-validation-for="Input.Email" class="text-danger"></span>
+    <div class="tab-content" id="myTabContent">
+        <div class="tab-pane fade show active" id="userprofile" role="tabpanel" aria-labelledby="userprofile-tab">
+            <div class="border container" style="padding:30px;">
+                <div class="row col-md-12">
+                    <span class="h3">User Profile</span>
                 </div>
-            </div>
-            <div class="col-md-6">
-                <div class="form-floating">
-                    <input asp-for="Input.DisplayName" class="form-control" />
-                    <label asp-for="Input.DisplayName" class="form-label"></label>
-                    <span asp-validation-for="Input.DisplayName" class="text-danger"></span>
+                <input type="hidden" asp-for="Input.Id" />
+                <div class="row col-md-12 text-center">
+                    <div class="text-danger text-center" asp-validation-summary="ModelOnly"></div>
                 </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-6">
-                <div class="form-floating">
-                    <input asp-for="Input.GivenName" class="form-control" />
-                    <label asp-for="Input.GivenName" class="form-label"></label>
-                    <span asp-validation-for="Input.GivenName" class="text-danger"></span>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="form-floating">
-                    <input asp-for="Input.Surname" class="form-control" />
-                    <label asp-for="Input.Surname" class="form-label"></label>
-                    <span asp-validation-for="Input.Surname" class="text-danger"></span>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-6">
-                <div class="form-floating">
-                    <input asp-for="Input.JobTitle" class="form-control" />
-                    <label asp-for="Input.JobTitle" class="form-label"></label>
-                    <span asp-validation-for="Input.JobTitle" class="text-danger"></span>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="form-floating">
-                    <input asp-for="Input.Company" class="form-control" />
-                    <label asp-for="Input.Company" class="form-label"></label>
-                    <span asp-validation-for="Input.Company" class="text-danger"></span>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-6">
-                <div class="form-floating">
-                    <input asp-for="Input.PhoneNumber" class="form-control" />
-                    <label asp-for="Input.PhoneNumber" class="form-label"></label>
-                    <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="form-floating">
-                    <select asp-for="Input.SiteNavTemplateName" class="form-control">
-                        @foreach (var opt in Model.SiteNavTemplates)
-                        {
-                            if (@opt == @Model.Input.SiteNavTemplateName)
-                            {
-                                <option value="@opt" selected>@opt</option>
-                            }
-                            else
-                            {
-                                <option value="@opt">@opt</option>
-                            }
-                        }
-                    </select>
-                    <label asp-for="Input.SiteNavTemplateName" class="form-label"></label>
-                    <span asp-validation-for="Input.SiteNavTemplateName" class="text-danger"></span>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-6">
-                <div class="form-floating">
-                    <select asp-for="Input.Enabled" class="form-control">
-                        @foreach (var opt in Model.EnabledOptions)
-                        {
-                            if (@opt == @Model.Input.Enabled)
-                            {
-                                <option value="@opt" selected>@opt</option>
-                            }
-                            else
-                            {
-                                <option value="@opt">@opt</option>
-                            }
-                        }
-                    </select>
-                    <label asp-for="Input.Enabled" class="form-label"></label>
-                    <span asp-validation-for="Input.Enabled" class="text-danger"></span>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="form-floating">
-                    <select asp-for="Input.Group" class="form-control">
-                        @foreach (var opt in Model.GroupOptions)
-                        {
-                            if (@opt == @Model.Input.Group)
-                            {
-                                <option value="@opt" selected>@opt</option>
-                            }
-                            else
-                            {
-                                <option value="@opt">@opt</option>
-                            }
-                        }
-                    </select>
-                    <label asp-for="Input.Group" class="form-label"></label>
-                    <span asp-validation-for="Input.Group" class="text-danger"></span>
-                </div>
-            </div>
-        </div>
-        <br/>
-        <div class="col-md-12">
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-                &nbsp;&nbsp;
-                <a class="btn btn-secondary" asp-page="Index">Back to List</a>
-            </div>
-        </div>
-        <br />
-        <div class="row">
-            <div class="col-md-12">
-                <span class="h3">User License</span>
-            </div>
-        </div>
-        @for(int i = 0; i < @Model.Input.Licenses.Count(); i++)
-        {
-            <input type="hidden" asp-for="@Model.Input.Licenses[i].Id" />
-            <input type="hidden" asp-for="@Model.Input.Licenses[i].PreviouslyAdded" />
-            <input type="hidden" asp-for="@Model.Input.Licenses[i].LicenseTypeId" />
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="form-check-inline form-switch">
-                        <input class="form-check-input" type="checkbox" data-toggle="toggle" asp-for="@Model.Input.Licenses[i].Added" />
-                        &nbsp;
-                        <span>@Model.Input.Licenses[i].Name</span>
-                    </div>
-                </div>
-            </div>
-            @if(@Model.Input.Licenses[i].ShowProductCode)
-            {
                 <div class="row">
                     <div class="col-md-6">
-                        <input type="text" class="form-control" asp-for="@Model.Input.Licenses[i].ProductCode" />
+                        <div class="form-floating">
+                            <input asp-for="Input.Email" class="form-control" />
+                            <label asp-for="Input.Email" class="form-label"></label>
+                            <span asp-validation-for="Input.Email" class="text-danger"></span>
+                        </div>
                     </div>
-                </div>
-            }
-            <br />
-        }
-        @if(@ViewData.ContainsKey("ShowUserRoleAdmin") && @Model.Input.UserRoles != null)
-        {
-            <br />
-            <div class="row">
-                <div class="col-md-12">
-                    <span class="h3">User Roles</span>
-                </div>
-            </div>
-            @for(int i = 0; i < @Model.Input.UserRoles.Count(); i++)
-            {
-                <input type="hidden" asp-for="@Model.Input.UserRoles[i].PreviouslyAdded" />
-                <input type="hidden" asp-for="@Model.Input.UserRoles[i].RoleName " />
-                <input type="hidden" asp-for="@Model.Input.UserRoles[i].RoleDescription " />
-                <div class="row">
-                    <div class="col-md-12">
-                        <div class="form-check-inline form-switch">
-                            <input class="form-check-input" type="checkbox" data-toggle="toggle" asp-for="@Model.Input.UserRoles[i].Added" />
-                            &nbsp;
-                            <span>@Model.Input.UserRoles[i].RoleName</span>
-                            <span>(@Model.Input.UserRoles[i].RoleDescription)</span>
+                    <div class="col-md-6">
+                        <div class="form-floating">
+                            <input asp-for="Input.DisplayName" class="form-control" />
+                            <label asp-for="Input.DisplayName" class="form-label"></label>
+                            <span asp-validation-for="Input.DisplayName" class="text-danger"></span>
                         </div>
                     </div>
                 </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-floating">
+                            <input asp-for="Input.GivenName" class="form-control" />
+                            <label asp-for="Input.GivenName" class="form-label"></label>
+                            <span asp-validation-for="Input.GivenName" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-floating">
+                            <input asp-for="Input.Surname" class="form-control" />
+                            <label asp-for="Input.Surname" class="form-label"></label>
+                            <span asp-validation-for="Input.Surname" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-floating">
+                            <input asp-for="Input.JobTitle" class="form-control" />
+                            <label asp-for="Input.JobTitle" class="form-label"></label>
+                            <span asp-validation-for="Input.JobTitle" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-floating">
+                            <input asp-for="Input.Company" class="form-control" />
+                            <label asp-for="Input.Company" class="form-label"></label>
+                            <span asp-validation-for="Input.Company" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-floating">
+                            <input asp-for="Input.PhoneNumber" class="form-control" />
+                            <label asp-for="Input.PhoneNumber" class="form-label"></label>
+                            <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-floating">
+                            <select asp-for="Input.SiteNavTemplateName" class="form-control">
+                                @foreach (var opt in Model.SiteNavTemplates)
+                                {
+                                    if (@opt == @Model.Input.SiteNavTemplateName)
+                                    {
+                                        <option value="@opt" selected>@opt</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@opt">@opt</option>
+                                    }
+                                }
+                            </select>
+                            <label asp-for="Input.SiteNavTemplateName" class="form-label"></label>
+                            <span asp-validation-for="Input.SiteNavTemplateName" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-floating">
+                            <select asp-for="Input.Enabled" class="form-control">
+                                @foreach (var opt in Model.EnabledOptions)
+                                {
+                                    if (@opt == @Model.Input.Enabled)
+                                    {
+                                        <option value="@opt" selected>@opt</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@opt">@opt</option>
+                                    }
+                                }
+                            </select>
+                            <label asp-for="Input.Enabled" class="form-label"></label>
+                            <span asp-validation-for="Input.Enabled" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-floating">
+                            <select asp-for="Input.Group" class="form-control">
+                                @foreach (var opt in Model.GroupOptions)
+                                {
+                                    if (@opt == @Model.Input.Group)
+                                    {
+                                        <option value="@opt" selected>@opt</option>
+                                    }
+                                    else
+                                    {
+                                        <option value="@opt">@opt</option>
+                                    }
+                                }
+                            </select>
+                            <label asp-for="Input.Group" class="form-label"></label>
+                            <span asp-validation-for="Input.Group" class="text-danger"></span>
+                        </div>
+                    </div>
+                </div>
+                <br/>
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <input type="submit" value="Save" class="btn btn-primary" />
+                        &nbsp;&nbsp;
+                        <a class="btn btn-secondary" asp-page="Index">Back to List</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @if (@Model.Input.Licenses.Count() > 0)
+    {
+        <div class="tab-pane fade" id="userlicense" role="tabpanel" aria-labelledby="userlicense-tab">
+            <div class="border container" style="padding:30px;">
+                <div class="row">
+                    <div class="col-md-12">
+                        <span class="h3">User License</span>
+                    </div>
+                </div>
+                @for (int i = 0; i < @Model.Input.Licenses.Count(); i++)
+                {
+                    <input type="hidden" asp-for="@Model.Input.Licenses[i].Id" />
+                    <input type="hidden" asp-for="@Model.Input.Licenses[i].PreviouslyAdded" />
+                    <input type="hidden" asp-for="@Model.Input.Licenses[i].LicenseTypeId" />
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-check-inline form-switch">
+                                <input class="form-check-input" type="checkbox" data-toggle="toggle" asp-for="@Model.Input.Licenses[i].Added" />
+                                &nbsp;
+                                <span>@Model.Input.Licenses[i].Name</span>
+                            </div>
+                        </div>
+                    </div>
+                    @if (@Model.Input.Licenses[i].ShowProductCode)
+                    {
+                        <div class="row">
+                            <div class="col-md-6">
+                                <input type="text" class="form-control" asp-for="@Model.Input.Licenses[i].ProductCode" />
+                            </div>
+                        </div>
+                    }
+                }
                 <br />
-            }
-        }
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <input type="submit" value="Save" class="btn btn-primary" />
+                        &nbsp;&nbsp;
+                        <a class="btn btn-secondary" asp-page="Index">Back to List</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+    @if (@ViewData.ContainsKey("ShowUserRoleAdmin") && @Model.Input.UserRoles != null)
+    {
+        <div class="tab-pane fade" id="userroles" role="tabpanel" aria-labelledby="userroles-tab">
+            <div class="border container" style="padding:30px;">
+                <div class="row">
+                    <div class="col-md-12">
+                        <span class="h3">User Roles</span>
+                    </div>
+                </div>
+                @for (int i = 0; i < @Model.Input.UserRoles.Count(); i++)
+                {
+                    <input type="hidden" asp-for="@Model.Input.UserRoles[i].PreviouslyAdded" />
+                    <input type="hidden" asp-for="@Model.Input.UserRoles[i].RoleName " />
+                    <input type="hidden" asp-for="@Model.Input.UserRoles[i].RoleDescription " />
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-check-inline form-switch">
+                                <input class="form-check-input" type="checkbox" data-toggle="toggle" asp-for="@Model.Input.UserRoles[i].Added" />
+                                &nbsp;
+                                <span>@Model.Input.UserRoles[i].RoleName</span>
+                                <span>(@Model.Input.UserRoles[i].RoleDescription)</span>
+                            </div>
+                        </div>
+                    </div>
+                    <br />
+                }
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <input type="submit" value="Save" class="btn btn-primary" />
+                        &nbsp;&nbsp;
+                        <a class="btn btn-secondary" asp-page="Index">Back to List</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
     </div>
 </form>
 
