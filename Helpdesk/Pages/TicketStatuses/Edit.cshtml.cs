@@ -88,6 +88,7 @@ namespace Helpdesk.Pages.TicketStatuses
             ts.Name = TicketStatus.Name;
             ts.Description = TicketStatus.Description;
             ts.IsCompleted = TicketStatus.IsCompleted;
+            ts.Archived = TicketStatus.Archived;
 
             _context.TicketStatuses.Add(ts);
             

@@ -333,6 +333,32 @@ namespace Helpdesk.Data
                     }
                 }
 
+                // Ticket Status
+                foreach (var item in TicketStatusCatalog.Catalog)
+                {
+                    if (item.Version == dbVersion.Value)
+                    {
+                        foreach (var s in item.Templates)
+                        {
+                            var st = await context.TicketStatuses.Where(x => x.Name == s.Name).FirstOrDefaultAsync();
+                            if (st == null)
+                            {
+                                st = new TicketStatus()
+                                {
+                                    Name = s.Name,
+                                    Description = s.Description,
+                                    IsSystemType = s.IsSystemType,
+                                    IsCompleted = s.IsCompleted,
+                                    Archived = s.Archived
+                                };
+                                context.TicketStatuses.Add(st);
+                                await context.SaveChangesAsync();
+                                context.Entry(st).State = EntityState.Detached;
+                            }
+                        }
+                    }
+                }
+
 
                 // site settings.
                 var rollup = ConfigOptRollupCatalog.RollupIndex.Where(x => x.Version == dbVersion.Value).FirstOrDefault();
@@ -1571,6 +1597,82 @@ namespace Helpdesk.Data
                         Description = "Nothing to do, task ignored",
                         IsSystemType = true,
                         IsCompleted = true
+                    },
+                }
+            }
+        };
+    }
+
+    public class TicketStatusVersion
+    {
+        public string Version { get; set; }
+        public List<TicketStatus> Templates { get; set; }
+    }
+    
+    public static class TicketStatusCatalog
+    {
+        public static List<TicketStatusVersion> Catalog = new List<TicketStatusVersion>()
+        {
+            new TicketStatusVersion()
+            {
+                Version = "",
+                Templates = new List<TicketStatus>()
+                {
+                    new TicketStatus()
+                    {
+                        Name = "New",
+                        Description = "New Ticket",
+                        IsSystemType = true,
+                        IsCompleted = false,
+                        Archived = false
+                    },
+                    new TicketStatus()
+                    {
+                        Name = "Open",
+                        Description = "Assigned to an agent",
+                        IsSystemType = true,
+                        IsCompleted = false,
+                        Archived = false
+                    },
+                    new TicketStatus()
+                    {
+                        Name = "On-Hold",
+                        Description = "Waiting for response from submitter",
+                        IsSystemType = true,
+                        IsCompleted = false,
+                        Archived = false
+                    },
+                    new TicketStatus()
+                    {
+                        Name = "Pending",
+                        Description = "Waiting for internal response",
+                        IsSystemType = true,
+                        IsCompleted = false,
+                        Archived = false
+                    },
+                    new TicketStatus()
+                    {
+                        Name = "Complete",
+                        Description = "Ticket is completed",
+                        IsSystemType = true,
+                        IsCompleted = true,
+                        Archived = false
+                    },
+                    new TicketStatus()
+                    {
+                        Name = "Rejected",
+                        Description = "Ticket will not be completed",
+                        IsSystemType = true,
+                        IsCompleted = true,
+                        Archived = false
+                    },
+                    new TicketStatus()
+                    {
+                        Name = "Closed",
+                        Description = "Ticket has been closed.",
+                        IsSystemType = true,
+                        IsCompleted = true,
+                        Archived = true
                     },
                 }
             }

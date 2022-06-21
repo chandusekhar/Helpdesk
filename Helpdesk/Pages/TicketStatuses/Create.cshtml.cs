@@ -31,6 +31,8 @@ namespace Helpdesk.Pages.TicketStatuses
             [Required]
             [Display(Name="Complete")]
             public bool IsCompleted { get; set; }
+            [Required]
+            public bool Archived { get; set; }
         }
 
         public async Task<IActionResult> OnGet()
@@ -82,7 +84,8 @@ namespace Helpdesk.Pages.TicketStatuses
                 Name = TicketStatus.Name,
                 Description = TicketStatus.Description,
                 IsCompleted = TicketStatus.IsCompleted,
-                IsSystemType = false
+                IsSystemType = false,
+                Archived = TicketStatus.Archived
             };
             _context.TicketStatuses.Add(ts);
             await _context.SaveChangesAsync();

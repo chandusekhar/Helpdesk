@@ -22,6 +22,9 @@
             <th>
                 @Html.DisplayNameFor(model => model.TicketStatus[0].IsCompleted)
             </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TicketStatus[0].Archived)
+            </th>
             <th></th>
         </tr>
     </thead>
@@ -36,6 +39,9 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.IsCompleted)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Archived)
             </td>
             <td>
                 @if (!item.IsSystemType)
