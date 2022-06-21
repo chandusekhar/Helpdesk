@@ -1551,53 +1551,53 @@ namespace Helpdesk.Data
                 {
                     new TaskStatus()
                     {
-                        Name = "New",
+                        Name = TaskStatusStrings.NewTask,
                         Description = "New Task",
                         IsSystemType = true,
                         IsCompleted = false
                     },
                     new TaskStatus()
                     {
-                        Name = "Open",
+                        Name = TaskStatusStrings.OpenTask,
                         Description = "Assigned to an agent",
                         IsSystemType = true,
                         IsCompleted = false
                     },
                     new TaskStatus()
                     {
-                        Name = "On-Hold",
+                        Name = TaskStatusStrings.OnHoldTask,
                         Description = "Waiting for response from submitter",
                         IsSystemType = true,
                         IsCompleted = false
                     },
                     new TaskStatus()
                     {
-                        Name = "Pending",
+                        Name = TaskStatusStrings.PendingTask,
                         Description = "Waiting for internal response",
                         IsSystemType = true,
                         IsCompleted = false
                     },
                     new TaskStatus()
                     {
-                        Name = "Complete",
+                        Name = TaskStatusStrings.CompleteTask,
                         Description = "Task is completed",
                         IsSystemType = true,
                         IsCompleted = true
                     },
                     new TaskStatus()
                     {
-                        Name = "Rejected",
+                        Name = TaskStatusStrings.RejectedTask,
                         Description = "Task will not be completed",
-                        IsSystemType = true,
-                        IsCompleted = false
-                    },
-                    new TaskStatus()
-                    {
-                        Name = "Ignored",
-                        Description = "Nothing to do, task ignored",
                         IsSystemType = true,
                         IsCompleted = true
                     },
+                    new TaskStatus()
+                    {
+                        Name = TaskStatusStrings.IgnoredTask,
+                        Description = "Nothing to do, task ignored",
+                        IsSystemType = true,
+                        IsCompleted = true
+                    }
                 }
             }
         };
@@ -1620,7 +1620,7 @@ namespace Helpdesk.Data
                 {
                     new TicketStatus()
                     {
-                        Name = "New",
+                        Name = TicketStatusStrings.NewTicket,
                         Description = "New Ticket",
                         IsSystemType = true,
                         IsCompleted = false,
@@ -1628,7 +1628,7 @@ namespace Helpdesk.Data
                     },
                     new TicketStatus()
                     {
-                        Name = "Open",
+                        Name = TicketStatusStrings.OpenTicket,
                         Description = "Assigned to an agent",
                         IsSystemType = true,
                         IsCompleted = false,
@@ -1636,7 +1636,7 @@ namespace Helpdesk.Data
                     },
                     new TicketStatus()
                     {
-                        Name = "On-Hold",
+                        Name = TicketStatusStrings.OnHoldTicket,
                         Description = "Waiting for response from submitter",
                         IsSystemType = true,
                         IsCompleted = false,
@@ -1644,7 +1644,7 @@ namespace Helpdesk.Data
                     },
                     new TicketStatus()
                     {
-                        Name = "Pending",
+                        Name = TicketStatusStrings.PendingTicket,
                         Description = "Waiting for internal response",
                         IsSystemType = true,
                         IsCompleted = false,
@@ -1652,7 +1652,7 @@ namespace Helpdesk.Data
                     },
                     new TicketStatus()
                     {
-                        Name = "Complete",
+                        Name = TicketStatusStrings.CompleteTicket,
                         Description = "Ticket is completed",
                         IsSystemType = true,
                         IsCompleted = true,
@@ -1660,7 +1660,7 @@ namespace Helpdesk.Data
                     },
                     new TicketStatus()
                     {
-                        Name = "Rejected",
+                        Name = TicketStatusStrings.RejectedTicket,
                         Description = "Ticket will not be completed",
                         IsSystemType = true,
                         IsCompleted = true,
@@ -1668,8 +1668,8 @@ namespace Helpdesk.Data
                     },
                     new TicketStatus()
                     {
-                        Name = "Closed",
-                        Description = "Ticket has been closed.",
+                        Name = TicketStatusStrings.ClosedTicket,
+                        Description = "Ticket has been closed",
                         IsSystemType = true,
                         IsCompleted = true,
                         Archived = true

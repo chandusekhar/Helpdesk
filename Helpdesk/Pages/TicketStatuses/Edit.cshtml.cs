@@ -90,7 +90,7 @@ namespace Helpdesk.Pages.TicketStatuses
             ts.IsCompleted = TicketStatus.IsCompleted;
             ts.Archived = TicketStatus.Archived;
 
-            _context.TicketStatuses.Add(ts);
+            _context.TicketStatuses.Update(ts);
             
             await _context.SaveChangesAsync();
 
