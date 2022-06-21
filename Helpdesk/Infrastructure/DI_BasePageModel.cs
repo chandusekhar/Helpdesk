@@ -134,14 +134,6 @@ namespace Helpdesk.Infrastructure
                             {
                                 viewData.Add("NavbarShowLocationsLink", "true");
                             }
-                            if (_currentHelpdeskUser.SiteNavTemplate.ActionStatusesLink)
-                            {
-                                viewData.Add("NavbarShowActionStatusesLink", "true");
-                            }
-                            if (_currentHelpdeskUser.SiteNavTemplate.TicketStatusesLink)
-                            {
-                                viewData.Add("NavbarShowTicketStatusesLink", "true");
-                            }
                             if (_currentHelpdeskUser.SiteNavTemplate.DocumentTypesLink)
                             {
                                 viewData.Add("NavbarShowDocumentTypesLink", "true");
@@ -149,6 +141,18 @@ namespace Helpdesk.Infrastructure
                             if (_currentHelpdeskUser.SiteNavTemplate.FileManagerLink)
                             {
                                 viewData.Add("NavbarShowFileManagerLink", "true");
+                            }
+                            if (_currentHelpdeskUser.SiteNavTemplate.SupRespsLink)
+                            {
+                                viewData.Add("NavbarShowSuperRespLink", "true");
+                            }
+                            if (_currentHelpdeskUser.SiteNavTemplate.TicketStatusesLink)
+                            {
+                                viewData.Add("NavbarShowTicketStatusesLink", "true");
+                            }
+                            if (_currentHelpdeskUser.SiteNavTemplate.TaskStatusesLink)
+                            {
+                                viewData.Add("NavbarShowTaskStatusesLink", "true");
                             }
                         }
 

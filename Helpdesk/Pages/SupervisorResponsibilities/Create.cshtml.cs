@@ -10,7 +10,7 @@ using Helpdesk.Infrastructure;
 using Microsoft.AspNetCore.Identity;
 using Helpdesk.Authorization;
 
-namespace Helpdesk.Pages.ActionStatuses
+namespace Helpdesk.Pages.SupervisorResponsibilities
 {
     public class CreateModel : DI_BasePageModel
     {
@@ -28,7 +28,7 @@ namespace Helpdesk.Pages.ActionStatuses
                 // This happens when a user logs in, but hasn't set up their profile yet.
                 return Forbid();
             }
-            bool HasClaim = await RightsManagement.UserHasClaim(_context, _currentHelpdeskUser.IdentityUserId, ClaimConstantStrings.AssetOptionsEditor);
+            bool HasClaim = await RightsManagement.UserHasClaim(_context, _currentHelpdeskUser.IdentityUserId, ClaimConstantStrings.SuperRespsAdminAccess);
             if (!HasClaim)
             {
                 return Forbid();
@@ -37,7 +37,7 @@ namespace Helpdesk.Pages.ActionStatuses
         }
 
         [BindProperty]
-        public ActionStatus ActionStatus { get; set; } = default!;
+        public SupervisorResponsibility SupervisorResponsibility { get; set; } = default!;
         
 
         // To protect from overposting attacks, see https://aka.ms/RazorPagesCRUD
@@ -49,17 +49,17 @@ namespace Helpdesk.Pages.ActionStatuses
                 // This happens when a user logs in, but hasn't set up their profile yet.
                 return Forbid();
             }
-            bool HasClaim = await RightsManagement.UserHasClaim(_context, _currentHelpdeskUser.IdentityUserId, ClaimConstantStrings.AssetOptionsEditor);
+            bool HasClaim = await RightsManagement.UserHasClaim(_context, _currentHelpdeskUser.IdentityUserId, ClaimConstantStrings.SuperRespsAdminAccess);
             if (!HasClaim)
             {
                 return Forbid();
             }
-            if (!ModelState.IsValid || _context.ActionStatuses == null || ActionStatus == null)
+            if (!ModelState.IsValid || _context.SupervisorResponsibilities == null || SupervisorResponsibility == null)
             {
                 return Page();
             }
 
-            _context.ActionStatuses.Add(ActionStatus);
+            _context.SupervisorResponsibilities.Add(SupervisorResponsibility);
             await _context.SaveChangesAsync();
 
             return RedirectToPage("./Index");

@@ -2,7 +2,7 @@
 
 namespace Helpdesk.Data
 {
-    public class TicketActionType
+    public class TicketTaskType
     {
         [Key]
         public int Id { get; set; }

@@ -4,6 +4,7 @@ using Helpdesk.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Helpdesk.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220621020029_AddSupervisorRespLink")]
+    partial class AddSupervisorRespLink
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,6 +23,30 @@ namespace Helpdesk.Data.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
+
+            modelBuilder.Entity("Helpdesk.Data.ActionStatus", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsSystemType")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("ActionStatuses");
+                });
 
             modelBuilder.Entity("Helpdesk.Data.Asset", b =>
                 {
@@ -559,6 +585,9 @@ namespace Helpdesk.Data.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
 
+                    b.Property<bool>("ActionStatusesLink")
+                        .HasColumnType("bit");
+
                     b.Property<bool>("AssetLink")
                         .HasColumnType("bit");
 
@@ -609,9 +638,6 @@ namespace Helpdesk.Data.Migrations
                     b.Property<bool>("SupRespsLink")
                         .HasColumnType("bit");
 
-                    b.Property<bool>("TaskStatusesLink")
-                        .HasColumnType("bit");
-
                     b.Property<bool>("TicketLink")
                         .HasColumnType("bit");
 
@@ -649,33 +675,6 @@ namespace Helpdesk.Data.Migrations
                     b.ToTable("SupervisorResponsibilities");
                 });
 
-            modelBuilder.Entity("Helpdesk.Data.TaskStatus", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsCompleted")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsSystemType")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("TaskStatuses");
-                });
-
             modelBuilder.Entity("Helpdesk.Data.TeamMember", b =>
                 {
                     b.Property<int>("Id")
@@ -700,6 +699,68 @@ namespace Helpdesk.Data.Migrations
                     b.HasIndex("HelpdeskUserId");
 
                     b.ToTable("TeamMembers");
+                });
+
+            modelBuilder.Entity("Helpdesk.Data.TicketAction", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<int>("ActionStatusId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("TicketMasterId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ActionStatusId");
+
+                    b.HasIndex("TicketMasterId");
+
+                    b.ToTable("TicketActions");
+                });
+
+            modelBuilder.Entity("Helpdesk.Data.TicketActionType", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("CreationClaim")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("EditClaim")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsSystemType")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("TicketTypeId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ViewClaim")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TicketTypeId");
+
+                    b.ToTable("TicketActionTypes");
                 });
 
             modelBuilder.Entity("Helpdesk.Data.TicketMaster", b =>
@@ -768,68 +829,6 @@ namespace Helpdesk.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("TicketStatuses");
-                });
-
-            modelBuilder.Entity("Helpdesk.Data.TicketTask", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<int>("TaskStatusId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("TicketMasterId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("TaskStatusId");
-
-                    b.HasIndex("TicketMasterId");
-
-                    b.ToTable("TicketTasks");
-                });
-
-            modelBuilder.Entity("Helpdesk.Data.TicketTaskType", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<string>("CreationClaim")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Description")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("EditClaim")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsSystemType")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<int?>("TicketTypeId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ViewClaim")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("TicketTypeId");
-
-                    b.ToTable("TicketTaskTypes");
                 });
 
             modelBuilder.Entity("Helpdesk.Data.TicketType", b =>
@@ -1340,6 +1339,32 @@ namespace Helpdesk.Data.Migrations
                         .HasForeignKey("HelpdeskUserId");
                 });
 
+            modelBuilder.Entity("Helpdesk.Data.TicketAction", b =>
+                {
+                    b.HasOne("Helpdesk.Data.ActionStatus", "ActionStatus")
+                        .WithMany()
+                        .HasForeignKey("ActionStatusId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Helpdesk.Data.TicketMaster", "TicketMaster")
+                        .WithMany("TicketActions")
+                        .HasForeignKey("TicketMasterId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("ActionStatus");
+
+                    b.Navigation("TicketMaster");
+                });
+
+            modelBuilder.Entity("Helpdesk.Data.TicketActionType", b =>
+                {
+                    b.HasOne("Helpdesk.Data.TicketType", null)
+                        .WithMany("DefaultActions")
+                        .HasForeignKey("TicketTypeId");
+                });
+
             modelBuilder.Entity("Helpdesk.Data.TicketMaster", b =>
                 {
                     b.HasOne("Helpdesk.Data.HelpdeskUser", "Handler")
@@ -1369,32 +1394,6 @@ namespace Helpdesk.Data.Migrations
                     b.Navigation("TicketStatus");
 
                     b.Navigation("TicketType");
-                });
-
-            modelBuilder.Entity("Helpdesk.Data.TicketTask", b =>
-                {
-                    b.HasOne("Helpdesk.Data.TaskStatus", "TaskStatus")
-                        .WithMany()
-                        .HasForeignKey("TaskStatusId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Helpdesk.Data.TicketMaster", "TicketMaster")
-                        .WithMany("TicketTasks")
-                        .HasForeignKey("TicketMasterId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("TaskStatus");
-
-                    b.Navigation("TicketMaster");
-                });
-
-            modelBuilder.Entity("Helpdesk.Data.TicketTaskType", b =>
-                {
-                    b.HasOne("Helpdesk.Data.TicketType", null)
-                        .WithMany("DefaultTasks")
-                        .HasForeignKey("TicketTypeId");
                 });
 
             modelBuilder.Entity("Helpdesk.Data.TicketWatcher", b =>
@@ -1540,14 +1539,14 @@ namespace Helpdesk.Data.Migrations
 
             modelBuilder.Entity("Helpdesk.Data.TicketMaster", b =>
                 {
-                    b.Navigation("TicketTasks");
+                    b.Navigation("TicketActions");
 
                     b.Navigation("TicketWatchers");
                 });
 
             modelBuilder.Entity("Helpdesk.Data.TicketType", b =>
                 {
-                    b.Navigation("DefaultTasks");
+                    b.Navigation("DefaultActions");
                 });
 #pragma warning restore 612, 618
         }

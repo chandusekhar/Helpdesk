@@ -28,6 +28,6 @@ namespace Helpdesk.Data
         /// </summary>
         public string? ViewClaim { get; set; }
 
-        public ICollection<TicketActionType> DefaultActions { get; set; }
+        public ICollection<TicketTaskType> DefaultTasks { get; set; }
     }
 }

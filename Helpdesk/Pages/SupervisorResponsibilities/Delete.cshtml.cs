@@ -10,7 +10,7 @@ using Helpdesk.Infrastructure;
 using Microsoft.AspNetCore.Identity;
 using Helpdesk.Authorization;
 
-namespace Helpdesk.Pages.ActionStatuses
+namespace Helpdesk.Pages.SupervisorResponsibilities
 {
     public class DeleteModel : DI_BasePageModel
     {
@@ -21,7 +21,7 @@ namespace Helpdesk.Pages.ActionStatuses
         { }
 
         [BindProperty]
-      public ActionStatus ActionStatus { get; set; } = default!;
+      public SupervisorResponsibility SupervisorResponsibility { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -31,25 +31,25 @@ namespace Helpdesk.Pages.ActionStatuses
                 // This happens when a user logs in, but hasn't set up their profile yet.
                 return Forbid();
             }
-            bool HasClaim = await RightsManagement.UserHasClaim(_context, _currentHelpdeskUser.IdentityUserId, ClaimConstantStrings.AssetOptionsEditor);
+            bool HasClaim = await RightsManagement.UserHasClaim(_context, _currentHelpdeskUser.IdentityUserId, ClaimConstantStrings.SuperRespsAdminAccess);
             if (!HasClaim)
             {
                 return Forbid();
             }
-            if (id == null || _context.ActionStatuses == null)
+            if (id == null || _context.SupervisorResponsibilities == null)
             {
                 return NotFound();
             }
 
-            var actionstatus = await _context.ActionStatuses.FirstOrDefaultAsync(m => m.Id == id);
+            var supervisorresponsibility = await _context.SupervisorResponsibilities.FirstOrDefaultAsync(m => m.Id == id);
 
-            if (actionstatus == null)
+            if (supervisorresponsibility == null)
             {
                 return NotFound();
             }
             else 
             {
-                ActionStatus = actionstatus;
+                SupervisorResponsibility = supervisorresponsibility;
             }
             return Page();
         }
@@ -62,21 +62,21 @@ namespace Helpdesk.Pages.ActionStatuses
                 // This happens when a user logs in, but hasn't set up their profile yet.
                 return Forbid();
             }
-            bool HasClaim = await RightsManagement.UserHasClaim(_context, _currentHelpdeskUser.IdentityUserId, ClaimConstantStrings.AssetOptionsEditor);
+            bool HasClaim = await RightsManagement.UserHasClaim(_context, _currentHelpdeskUser.IdentityUserId, ClaimConstantStrings.SuperRespsAdminAccess);
             if (!HasClaim)
             {
                 return Forbid();
             }
-            if (id == null || _context.ActionStatuses == null)
+            if (id == null || _context.SupervisorResponsibilities == null)
             {
                 return NotFound();
             }
-            var actionstatus = await _context.ActionStatuses.FindAsync(id);
+            var supervisorresponsibility = await _context.SupervisorResponsibilities.FindAsync(id);
 
-            if (actionstatus != null)
+            if (supervisorresponsibility != null)
             {
-                ActionStatus = actionstatus;
-                _context.ActionStatuses.Remove(ActionStatus);
+                SupervisorResponsibility = supervisorresponsibility;
+                _context.SupervisorResponsibilities.Remove(SupervisorResponsibility);
                 await _context.SaveChangesAsync();
             }
 

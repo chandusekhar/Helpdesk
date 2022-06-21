@@ -31,6 +31,10 @@ namespace Helpdesk.Data
         [Required]
         public bool ShowConfigurationMenu { get; set; }
         /// <summary>
+        /// Show Supervisor Responsibilities link in the Configuration menu
+        /// </summary>
+        public bool SupRespsLink { get; set; }
+        /// <summary>
         /// Show LicenseType link in the Configuration Menu
         /// </summary>
         [Required]
@@ -79,7 +83,7 @@ namespace Helpdesk.Data
         /// Shows the ActionStatuses link on the Configuration menu
         /// </summary>
         [Required]
-        public bool ActionStatusesLink { get; set; }
+        public bool TaskStatusesLink { get; set; }
 
         /// <summary>
         /// Shows the TicketStatuses link on the Configuration menu

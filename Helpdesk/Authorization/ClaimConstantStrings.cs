@@ -82,5 +82,10 @@
         /// Allows creating, editing, or deleting document types for File Uplaods
         /// </summary>
         public static readonly string DocumentTypeAdmin = "Document Type Admin";
+
+        /// <summary>
+        /// Allows creating, editing, or deleting Supervisor Responsibilities
+        /// </summary>
+        public static readonly string SuperRespsAdminAccess = "Supervisor Responsibilities Admin Access";
     }
 }

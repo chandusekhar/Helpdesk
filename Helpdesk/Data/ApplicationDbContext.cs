@@ -102,7 +102,7 @@ namespace Helpdesk.Data
         /// </summary>
         public DbSet<TicketStatus> TicketStatuses { get; set; }
         /// <summary>
-        /// Type of ticket that is used to filter access, as well as assign default actions and fields for a ticket.
+        /// Type of ticket that is used to filter access, as well as assign default tasks and fields for a ticket.
         /// </summary>
         public DbSet<TicketType> TicketTypes { get; set; }
         /// <summary>
@@ -114,17 +114,17 @@ namespace Helpdesk.Data
         /// </summary>
         public DbSet<TicketMaster> TicketMasters { get; set; }
         /// <summary>
-        /// Status of an action, such as new, complete, rejected, etc.
+        /// Status of an task, such as new, complete, rejected, etc.
         /// </summary>
-        public DbSet<ActionStatus> ActionStatuses { get; set; }
+        public DbSet<TaskStatus> TaskStatuses { get; set; }
         /// <summary>
-        /// Kinds of actions that can be assigned to a ticket. 
+        /// Kinds of tasks that can be assigned to a ticket. 
         /// </summary>
-        public DbSet<TicketActionType> TicketActionTypes { get; set; }
+        public DbSet<TicketTaskType> TicketTaskTypes { get; set; }
         /// <summary>
-        /// Action that is required or performed for a ticket.
+        /// Tatsl that is required or performed for a ticket.
         /// </summary>
-        public DbSet<TicketAction> TicketActions { get; set; }
+        public DbSet<TicketTask> TicketTasks { get; set; }
 
     }
 }

@@ -11,7 +11,7 @@ using Helpdesk.Infrastructure;
 using Microsoft.AspNetCore.Identity;
 using Helpdesk.Authorization;
 
-namespace Helpdesk.Pages.ActionStatuses
+namespace Helpdesk.Pages.SupervisorResponsibilities
 {
     public class EditModel : DI_BasePageModel
     {
@@ -22,7 +22,7 @@ namespace Helpdesk.Pages.ActionStatuses
         { }
 
         [BindProperty]
-        public ActionStatus ActionStatus { get; set; } = default!;
+        public SupervisorResponsibility SupervisorResponsibility { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync(int? id)
         {
@@ -32,22 +32,22 @@ namespace Helpdesk.Pages.ActionStatuses
                 // This happens when a user logs in, but hasn't set up their profile yet.
                 return Forbid();
             }
-            bool HasClaim = await RightsManagement.UserHasClaim(_context, _currentHelpdeskUser.IdentityUserId, ClaimConstantStrings.AssetOptionsEditor);
+            bool HasClaim = await RightsManagement.UserHasClaim(_context, _currentHelpdeskUser.IdentityUserId, ClaimConstantStrings.SuperRespsAdminAccess);
             if (!HasClaim)
             {
                 return Forbid();
             }
-            if (id == null || _context.ActionStatuses == null)
+            if (id == null || _context.SupervisorResponsibilities == null)
             {
                 return NotFound();
             }
 
-            var actionstatus =  await _context.ActionStatuses.FirstOrDefaultAsync(m => m.Id == id);
-            if (actionstatus == null)
+            var supervisorresponsibility =  await _context.SupervisorResponsibilities.FirstOrDefaultAsync(m => m.Id == id);
+            if (supervisorresponsibility == null)
             {
                 return NotFound();
             }
-            ActionStatus = actionstatus;
+            SupervisorResponsibility = supervisorresponsibility;
             return Page();
         }
 
@@ -61,7 +61,7 @@ namespace Helpdesk.Pages.ActionStatuses
                 // This happens when a user logs in, but hasn't set up their profile yet.
                 return Forbid();
             }
-            bool HasClaim = await RightsManagement.UserHasClaim(_context, _currentHelpdeskUser.IdentityUserId, ClaimConstantStrings.AssetOptionsEditor);
+            bool HasClaim = await RightsManagement.UserHasClaim(_context, _currentHelpdeskUser.IdentityUserId, ClaimConstantStrings.SuperRespsAdminAccess);
             if (!HasClaim)
             {
                 return Forbid();
@@ -71,7 +71,7 @@ namespace Helpdesk.Pages.ActionStatuses
                 return Page();
             }
 
-            _context.Attach(ActionStatus).State = EntityState.Modified;
+            _context.Attach(SupervisorResponsibility).State = EntityState.Modified;
 
             try
             {
@@ -79,7 +79,7 @@ namespace Helpdesk.Pages.ActionStatuses
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!ActionStatusExists(ActionStatus.Id))
+                if (!SupervisorResponsibilityExists(SupervisorResponsibility.Id))
                 {
                     return NotFound();
                 }
@@ -92,9 +92,9 @@ namespace Helpdesk.Pages.ActionStatuses
             return RedirectToPage("./Index");
         }
 
-        private bool ActionStatusExists(int id)
+        private bool SupervisorResponsibilityExists(int id)
         {
-          return (_context.ActionStatuses?.Any(e => e.Id == id)).GetValueOrDefault();
+          return (_context.SupervisorResponsibilities?.Any(e => e.Id == id)).GetValueOrDefault();
         }
     }
 }

@@ -2,13 +2,13 @@
 
 namespace Helpdesk.Data
 {
-    public class TicketAction
+    public class TicketTask
     {
         [Key]
         public int Id { get; set; }
         [Required]
         public TicketMaster TicketMaster { get; set; }
         [Required]
-        public ActionStatus ActionStatus { get; set; }
+        public TaskStatus TaskStatus { get; set; }
     }
 }

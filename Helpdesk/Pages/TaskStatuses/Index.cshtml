@@ -1,5 +1,5 @@
 ﻿@page
-@model Helpdesk.Pages.ActionStatuses.IndexModel
+@model Helpdesk.Pages.TaskStatuses.IndexModel
 
 @{
     ViewData["Title"] = "Index";
@@ -14,19 +14,22 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.ActionStatus[0].Name)
+                @Html.DisplayNameFor(model => model.TaskStatus[0].Name)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ActionStatus[0].Description)
+                @Html.DisplayNameFor(model => model.TaskStatus[0].Description)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.ActionStatus[0].IsSystemType)
+                @Html.DisplayNameFor(model => model.TaskStatus[0].IsSystemType)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TaskStatus[0].IsCompleted)
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model.ActionStatus) {
+@foreach (var item in Model.TaskStatus) {
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.Name)
@@ -38,7 +41,11 @@
                 @Html.DisplayFor(modelItem => item.IsSystemType)
             </td>
             <td>
+                @Html.DisplayFor(modelItem => item.IsCompleted)
+            </td>
+            <td>
                 <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-page="./Details" asp-route-id="@item.Id">Details</a> |
                 <a asp-page="./Delete" asp-route-id="@item.Id">Delete</a>
             </td>
         </tr>

@@ -54,6 +54,6 @@ namespace Helpdesk.Data
         /// <summary>
         /// Actions that have been created for this ticket
         /// </summary>
-        public ICollection<TicketAction> TicketActions { get; set; }
+        public ICollection<TicketTask> TicketTasks { get; set; }
     }
 }

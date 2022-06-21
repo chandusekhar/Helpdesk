@@ -2,7 +2,7 @@
 
 namespace Helpdesk.Data
 {
-    public class ActionStatus
+    public class TaskStatus
     {
         [Key]
         public int Id { get; set; }
@@ -12,5 +12,7 @@ namespace Helpdesk.Data
         public string Description { get; set; }
         [Required]
         public bool IsSystemType { get; set; }
+        [Required]
+        public bool IsCompleted { get; set; }
     }
 }

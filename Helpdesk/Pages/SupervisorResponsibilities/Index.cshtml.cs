@@ -10,7 +10,7 @@ using Helpdesk.Infrastructure;
 using Microsoft.AspNetCore.Identity;
 using Helpdesk.Authorization;
 
-namespace Helpdesk.Pages.ActionStatuses
+namespace Helpdesk.Pages.SupervisorResponsibilities
 {
     public class IndexModel : DI_BasePageModel
     {
@@ -20,7 +20,7 @@ namespace Helpdesk.Pages.ActionStatuses
             : base(dbContext, userManager, signInManager)
         { }
 
-        public IList<ActionStatus> ActionStatus { get;set; } = default!;
+        public IList<SupervisorResponsibility> SupervisorResponsibility { get;set; } = default!;
 
         public async Task<IActionResult> OnGetAsync()
         {
@@ -30,14 +30,14 @@ namespace Helpdesk.Pages.ActionStatuses
                 // This happens when a user logs in, but hasn't set up their profile yet.
                 return Forbid();
             }
-            bool HasClaim = await RightsManagement.UserHasClaim(_context, _currentHelpdeskUser.IdentityUserId, ClaimConstantStrings.AssetOptionsEditor);
+            bool HasClaim = await RightsManagement.UserHasClaim(_context, _currentHelpdeskUser.IdentityUserId, ClaimConstantStrings.SuperRespsAdminAccess);
             if (!HasClaim)
             {
                 return Forbid();
             }
-            if (_context.ActionStatuses != null)
+            if (_context.SupervisorResponsibilities != null)
             {
-                ActionStatus = await _context.ActionStatuses.ToListAsync();
+                SupervisorResponsibility = await _context.SupervisorResponsibilities.ToListAsync();
             }
             return Page();
         }

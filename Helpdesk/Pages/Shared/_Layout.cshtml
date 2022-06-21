@@ -74,10 +74,6 @@
                                     Configuration
                                 </a>
                                 <ul class="dropdown-menu" aria-labelledby="navbarConfigDropdown">
-                                    @if (@ViewData.ContainsKey("NavbarShowActionStatusesLink"))
-                                    {
-                                        <li><a class="dropdown-item" asp-area="" asp-page="/ActionStatuses/Index">Action&nbsp;Statuses</a></li>
-                                    }
                                     @if (@ViewData.ContainsKey("NavbarShowAssetTypesLink"))
                                     {
                                         <li><a class="dropdown-item" asp-area="" asp-page="/AssetTypes/Index">Asset&nbsp;Types</a></li>
@@ -113,6 +109,14 @@
                                     @if (@ViewData.ContainsKey("NavbarShowSiteSettingsLink"))
                                     {
                                         <li><a class="dropdown-item" asp-area="" asp-page="/SiteSettings/Index">Site&nbsp;Settings</a></li>
+                                    }
+                                    @if (@ViewData.ContainsKey("NavbarShowSuperRespLink"))
+                                    {
+                                        <li><a class="dropdown-item" asp-area="" asp-page="/SupervisorResponsibilities/Index">Super&nbsp;Resps</a></li>
+                                    }
+                                    @if (@ViewData.ContainsKey("NavbarShowTaskStatusesLink"))
+                                    {
+                                        <li><a class="dropdown-item" asp-area="" asp-page="/TaskStatuses/Index">Task&nbsp;Statuses</a></li>
                                     }
                                     @if (@ViewData.ContainsKey("NavbarShowTicketStatusesLink"))
                                     {

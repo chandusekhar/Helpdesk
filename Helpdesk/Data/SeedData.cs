@@ -92,14 +92,25 @@ namespace Helpdesk.Data
                             .FirstOrDefaultAsync();
                         if (temp != null)
                         {
-                            temp.Description = item.SiteNavTemplate.Description;
-                            temp.TicketLink = item.SiteNavTemplate.TicketLink;
                             temp.AssetLink = item.SiteNavTemplate.AssetLink;
-                            temp.PeopleLink = item.SiteNavTemplate.PeopleLink;
-                            temp.ShowConfigurationMenu = item.SiteNavTemplate.ShowConfigurationMenu;
-                            temp.LicenseTypeLink = item.SiteNavTemplate.LicenseTypeLink;
-                            temp.SiteSettingsLink = item.SiteNavTemplate.SiteSettingsLink;
+                            temp.AssetTypesLink = item.SiteNavTemplate.AssetTypesLink;
+                            temp.Description = item.SiteNavTemplate.Description;
+                            temp.DocumentTypesLink = item.SiteNavTemplate.DocumentTypesLink;
+                            temp.FileManagerLink = item.SiteNavTemplate.FileManagerLink;
                             temp.GroupsLink = item.SiteNavTemplate.GroupsLink;
+                            temp.ImportExportLink = item.SiteNavTemplate.ImportExportLink;
+                            temp.LicenseTypeLink = item.SiteNavTemplate.LicenseTypeLink;
+                            temp.LocationsLink = item.SiteNavTemplate.LocationsLink;
+                            temp.ManufacturersLink = item.SiteNavTemplate.ManufacturersLink;
+                            temp.Name = item.SiteNavTemplate.Name;
+                            temp.PeopleLink = item.SiteNavTemplate.PeopleLink;
+                            temp.RoleAdminLink = item.SiteNavTemplate.RoleAdminLink;
+                            temp.ShowConfigurationMenu = item.SiteNavTemplate.ShowConfigurationMenu;
+                            temp.SiteSettingsLink = item.SiteNavTemplate.SiteSettingsLink;
+                            temp.SupRespsLink = item.SiteNavTemplate.SupRespsLink;
+                            temp.TicketLink = item.SiteNavTemplate.TicketLink;
+                            temp.TicketStatusesLink = item.SiteNavTemplate.TicketStatusesLink;
+
                             context.SiteNavTemplates.Update(temp);
                             await context.SaveChangesAsync();
                         }
@@ -251,6 +262,7 @@ namespace Helpdesk.Data
                     }
                 }
 
+                // Locations
                 foreach (var item in LocationCatalog.Catalog)
                 {
                     if (item.Version == dbVersion.Value)
@@ -272,6 +284,55 @@ namespace Helpdesk.Data
                         }
                     }
                 }
+
+                // Supervisor Responsibilities
+                foreach (var item in SupervisorResponsibilityCatalog.Catalog)
+                {
+                    if (item.Version == dbVersion.Value)
+                    {
+                        foreach (var s in item.Templates)
+                        {
+                            var st = await context.SupervisorResponsibilities.Where(x => x.Name == s.Name).FirstOrDefaultAsync();
+                            if (st == null)
+                            {
+                                st = new SupervisorResponsibility()
+                                {
+                                    Name = s.Name,
+                                    Description = s.Description
+                                };
+                                context.SupervisorResponsibilities.Add(st);
+                                await context.SaveChangesAsync();
+                                context.Entry(st).State = EntityState.Detached;
+                            }
+                        }
+                    }
+                }
+
+                // Task Status
+                foreach (var item in TaskStatusCatalog.Catalog)
+                {
+                    if (item.Version == dbVersion.Value)
+                    {
+                        foreach (var s in item.Templates)
+                        {
+                            var st = await context.TaskStatuses.Where(x => x.Name == s.Name).FirstOrDefaultAsync();
+                            if (st == null)
+                            {
+                                st = new TaskStatus()
+                                {
+                                    Name = s.Name,
+                                    Description = s.Description,
+                                    IsSystemType = s.IsSystemType,
+                                    IsCompleted = s.IsCompleted
+                                };
+                                context.TaskStatuses.Add(st);
+                                await context.SaveChangesAsync();
+                                context.Entry(st).State = EntityState.Detached;
+                            }
+                        }
+                    }
+                }
+
 
                 // site settings.
                 var rollup = ConfigOptRollupCatalog.RollupIndex.Where(x => x.Version == dbVersion.Value).FirstOrDefault();
@@ -551,7 +612,8 @@ namespace Helpdesk.Data
                         "Allows uploading, downloading, or deleting uploaded files using File Manager."),
                     new DefaultRoleClaim.NewRoleClaim(ClaimConstantStrings.DocumentTypeAdmin,
                         "Allows creating, editing, or deleting document types for File Uplaods."),
-
+                    new DefaultRoleClaim.NewRoleClaim(ClaimConstantStrings.SuperRespsAdminAccess,
+                        "Allows creating, editing, or deleting Supervisor Responsibilities."),
 
                 }
             },
@@ -667,11 +729,64 @@ namespace Helpdesk.Data
                     AssetTypesLink = true,
                     ManufacturersLink = true,
                     LocationsLink = true,
-                    ActionStatusesLink = true,
+                    TaskStatusesLink = true,
                     TicketStatusesLink = true,
                     RoleAdminLink = true,
                     DocumentTypesLink = true,
                     FileManagerLink = true,
+                    SupRespsLink = true,
+                }
+            },
+            new SiteNavTemplateVersion()
+            {
+                Version = "",
+                SiteNavTemplate = new SiteNavTemplate()
+                {
+                    Name = "Support Tech",
+                    Description = "Assets, Tickets, and Pepole acces.",
+                    TicketLink = true,
+                    AssetLink = true,
+                    PeopleLink = true,
+                    ShowConfigurationMenu = false,
+                    SiteSettingsLink = false,
+                    LicenseTypeLink = false,
+                    GroupsLink = false,
+                    ImportExportLink = false,
+                    AssetTypesLink = false,
+                    ManufacturersLink = false,
+                    LocationsLink = false,
+                    TaskStatusesLink = false,
+                    TicketStatusesLink = false,
+                    RoleAdminLink = false,
+                    DocumentTypesLink = false,
+                    FileManagerLink = false,
+                    SupRespsLink = false,
+                }
+            },
+            new SiteNavTemplateVersion()
+            {
+                Version = "",
+                SiteNavTemplate = new SiteNavTemplate()
+                {
+                    Name = "Ticket Submitter User",
+                    Description = "Basic ticket access",
+                    TicketLink = true,
+                    AssetLink = false,
+                    PeopleLink = false,
+                    ShowConfigurationMenu = false,
+                    SiteSettingsLink = false,
+                    LicenseTypeLink = false,
+                    GroupsLink = false,
+                    ImportExportLink = false,
+                    AssetTypesLink = false,
+                    ManufacturersLink = false,
+                    LocationsLink = false,
+                    TaskStatusesLink = false,
+                    TicketStatusesLink = false,
+                    RoleAdminLink = false,
+                    DocumentTypesLink = false,
+                    FileManagerLink = false,
+                    SupRespsLink = false,
                 }
             }
         };
@@ -1322,6 +1437,36 @@ namespace Helpdesk.Data
         };
     }
 
+    public class SupervisorResponsibilityVersion
+    {
+        public string Version { get; set; }
+        public List<SupervisorResponsibility> Templates { get; set; }
+    }
+
+    public static class SupervisorResponsibilityCatalog
+    {
+        public static List<SupervisorResponsibilityVersion> Catalog = new List<SupervisorResponsibilityVersion>()
+        {
+            new SupervisorResponsibilityVersion()
+            {
+                Version = "",
+                Templates = new List<SupervisorResponsibility>()
+                {
+                    new SupervisorResponsibility()
+                    {
+                        Name = "Supervisor",
+                        Description = "Supervisor for team member"
+                    },
+                    new SupervisorResponsibility()
+                    {
+                        Name = "Director",
+                        Description = "Program or company director"
+                    }
+                }
+            }
+        };
+    }
+
     public class LocationVersion
     {
         public string Version { get; set; }
@@ -1362,6 +1507,74 @@ namespace Helpdesk.Data
         };
     }
 
+    public class TaskStatusVersion
+    {
+        public string Version { get; set; }
+        public List<TaskStatus> Templates { get; set; }
+    }
+
+    public static class TaskStatusCatalog
+    {
+        public static List<TaskStatusVersion> Catalog = new List<TaskStatusVersion>()
+        {
+            new TaskStatusVersion()
+            {
+                Version = "",
+                Templates = new List<TaskStatus>()
+                {
+                    new TaskStatus()
+                    {
+                        Name = "New",
+                        Description = "New Task",
+                        IsSystemType = true,
+                        IsCompleted = false
+                    },
+                    new TaskStatus()
+                    {
+                        Name = "Open",
+                        Description = "Assigned to an agent",
+                        IsSystemType = true,
+                        IsCompleted = false
+                    },
+                    new TaskStatus()
+                    {
+                        Name = "On-Hold",
+                        Description = "Waiting for response from submitter",
+                        IsSystemType = true,
+                        IsCompleted = false
+                    },
+                    new TaskStatus()
+                    {
+                        Name = "Pending",
+                        Description = "Waiting for internal response",
+                        IsSystemType = true,
+                        IsCompleted = false
+                    },
+                    new TaskStatus()
+                    {
+                        Name = "Complete",
+                        Description = "Task is completed",
+                        IsSystemType = true,
+                        IsCompleted = true
+                    },
+                    new TaskStatus()
+                    {
+                        Name = "Rejected",
+                        Description = "Task will not be completed",
+                        IsSystemType = true,
+                        IsCompleted = false
+                    },
+                    new TaskStatus()
+                    {
+                        Name = "Ignored",
+                        Description = "Nothing to do, task ignored",
+                        IsSystemType = true,
+                        IsCompleted = true
+                    },
+                }
+            }
+        };
+    }
 
     public class AssetTypeVersion
     {
