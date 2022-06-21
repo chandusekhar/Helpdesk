@@ -71,23 +71,24 @@ namespace Helpdesk.Pages.SupervisorResponsibilities
                 return Page();
             }
 
-            _context.Attach(SupervisorResponsibility).State = EntityState.Modified;
-
-            try
+            var resp = await _context.SupervisorResponsibilities.Where(x => x.Id == SupervisorResponsibility.Id).FirstOrDefaultAsync();
+            if (resp == null)
             {
-                await _context.SaveChangesAsync();
+                return NotFound();
             }
-            catch (DbUpdateConcurrencyException)
+            if (resp.Name != SupervisorResponsibility.Name)
             {
-                if (!SupervisorResponsibilityExists(SupervisorResponsibility.Id))
+                bool exists = await _context.SupervisorResponsibilities.Where(x => x.Name == SupervisorResponsibility.Name).AnyAsync();
+                if (exists)
                 {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
+                    ModelState.AddModelError("SupervisorResponsibility.Name", "The name is already in use.");
+                    return Page();
                 }
             }
+            resp.Name = SupervisorResponsibility.Name;
+            resp.Description = SupervisorResponsibility.Description;
+            _context.Update(resp);
+            await _context.SaveChangesAsync();
 
             return RedirectToPage("./Index");
         }

@@ -9,6 +9,7 @@ using Helpdesk.Data;
 using Helpdesk.Infrastructure;
 using Microsoft.AspNetCore.Identity;
 using Helpdesk.Authorization;
+using Microsoft.EntityFrameworkCore;
 
 namespace Helpdesk.Pages.SupervisorResponsibilities
 {
@@ -59,7 +60,20 @@ namespace Helpdesk.Pages.SupervisorResponsibilities
                 return Page();
             }
 
-            _context.SupervisorResponsibilities.Add(SupervisorResponsibility);
+            var exist = await _context.SupervisorResponsibilities.Where(x => x.Name == SupervisorResponsibility.Name).AnyAsync();
+            if (exist)
+            {
+                ModelState.AddModelError("SupervisorResponsibility.Name", "The name is already in use.");
+                return Page();
+            }
+
+            var sup = new SupervisorResponsibility()
+            {
+                Name = SupervisorResponsibility.Name,
+                Description = SupervisorResponsibility.Description
+            };
+
+            _context.SupervisorResponsibilities.Add(sup);
             await _context.SaveChangesAsync();
 
             return RedirectToPage("./Index");
