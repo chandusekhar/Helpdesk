@@ -20,7 +20,7 @@
                 @Html.DisplayNameFor(model => model.TicketStatus[0].Description)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.TicketStatus[0].IsSystemType)
+                @Html.DisplayNameFor(model => model.TicketStatus[0].IsCompleted)
             </th>
             <th></th>
         </tr>
@@ -35,11 +35,14 @@
                 @Html.DisplayFor(modelItem => item.Description)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.IsSystemType)
+                @Html.DisplayFor(modelItem => item.IsCompleted)
             </td>
             <td>
-                <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-page="./Delete" asp-route-id="@item.Id">Delete</a>
+                @if (!item.IsSystemType)
+                {
+                    <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a> <text> | </text>
+                    <a asp-page="./Delete" asp-route-id="@item.Id">Delete</a>
+                }
             </td>
         </tr>
 }

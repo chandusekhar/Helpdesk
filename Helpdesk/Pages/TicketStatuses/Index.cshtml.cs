@@ -30,7 +30,7 @@ namespace Helpdesk.Pages.TicketStatuses
                 // This happens when a user logs in, but hasn't set up their profile yet.
                 return Forbid();
             }
-            bool HasClaim = await RightsManagement.UserHasClaim(_context, _currentHelpdeskUser.IdentityUserId, ClaimConstantStrings.AssetOptionsEditor);
+            bool HasClaim = await RightsManagement.UserHasClaim(_context, _currentHelpdeskUser.IdentityUserId, ClaimConstantStrings.TicketOptionsEditor);
             if (!HasClaim)
             {
                 return Forbid();

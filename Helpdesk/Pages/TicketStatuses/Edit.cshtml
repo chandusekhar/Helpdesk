@@ -14,6 +14,7 @@
         <form method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="TicketStatus.Id" />
+            <input type="hidden" asp-for="TicketStatus.IsSystemType" />
             <div class="form-group">
                 <label asp-for="TicketStatus.Name" class="control-label"></label>
                 <input asp-for="TicketStatus.Name" class="form-control" />
@@ -26,7 +27,7 @@
             </div>
             <div class="form-group form-check">
                 <label class="form-check-label">
-                    <input class="form-check-input" asp-for="TicketStatus.IsSystemType" /> @Html.DisplayNameFor(model => model.TicketStatus.IsSystemType)
+                    <input class="form-check-input" asp-for="TicketStatus.IsCompleted" /> @Html.DisplayNameFor(model => model.TicketStatus.IsCompleted)
                 </label>
             </div>
             <div class="form-group">

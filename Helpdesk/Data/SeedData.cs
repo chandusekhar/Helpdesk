@@ -614,7 +614,8 @@ namespace Helpdesk.Data
                         "Allows creating, editing, or deleting document types for File Uplaods."),
                     new DefaultRoleClaim.NewRoleClaim(ClaimConstantStrings.SuperRespsAdminAccess,
                         "Allows creating, editing, or deleting Supervisor Responsibilities."),
-
+                    new DefaultRoleClaim.NewRoleClaim(ClaimConstantStrings.TicketOptionsEditor,
+                        "Allows creating, editing, and deleting ticket options like statuses."),
                 }
             },
             new DefaultRoleClaim()

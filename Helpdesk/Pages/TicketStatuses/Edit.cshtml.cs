@@ -32,7 +32,7 @@ namespace Helpdesk.Pages.TicketStatuses
                 // This happens when a user logs in, but hasn't set up their profile yet.
                 return Forbid();
             }
-            bool HasClaim = await RightsManagement.UserHasClaim(_context, _currentHelpdeskUser.IdentityUserId, ClaimConstantStrings.AssetOptionsEditor);
+            bool HasClaim = await RightsManagement.UserHasClaim(_context, _currentHelpdeskUser.IdentityUserId, ClaimConstantStrings.TicketOptionsEditor);
             if (!HasClaim)
             {
                 return Forbid();
@@ -61,7 +61,7 @@ namespace Helpdesk.Pages.TicketStatuses
                 // This happens when a user logs in, but hasn't set up their profile yet.
                 return Forbid();
             }
-            bool HasClaim = await RightsManagement.UserHasClaim(_context, _currentHelpdeskUser.IdentityUserId, ClaimConstantStrings.AssetOptionsEditor);
+            bool HasClaim = await RightsManagement.UserHasClaim(_context, _currentHelpdeskUser.IdentityUserId, ClaimConstantStrings.TicketOptionsEditor);
             if (!HasClaim)
             {
                 return Forbid();
@@ -71,23 +71,27 @@ namespace Helpdesk.Pages.TicketStatuses
                 return Page();
             }
 
-            _context.Attach(TicketStatus).State = EntityState.Modified;
+            var ts = await _context.TicketStatuses.Where(x => x.Id == TicketStatus.Id).FirstOrDefaultAsync();
+            if (ts == null)
+            {
+                return NotFound();
+            }
+            if (ts.Name != TicketStatus.Name)
+            {
+                var tse = await _context.TicketStatuses.Where(x => x.Name == TicketStatus.Name).FirstOrDefaultAsync();
+                if (tse != null)
+                {
+                    ModelState.AddModelError("TicketStatus.Name", "Status name is already in use.");
+                    return Page();
+                }
+            }
+            ts.Name = TicketStatus.Name;
+            ts.Description = TicketStatus.Description;
+            ts.IsCompleted = TicketStatus.IsCompleted;
 
-            try
-            {
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!TicketStatusExists(TicketStatus.Id))
-                {
-                    return NotFound();
-                }
-                else
-                {
-                    throw;
-                }
-            }
+            _context.TicketStatuses.Add(ts);
+            
+            await _context.SaveChangesAsync();
 
             return RedirectToPage("./Index");
         }

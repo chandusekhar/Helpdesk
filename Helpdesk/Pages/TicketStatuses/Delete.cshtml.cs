@@ -31,7 +31,7 @@ namespace Helpdesk.Pages.TicketStatuses
                 // This happens when a user logs in, but hasn't set up their profile yet.
                 return Forbid();
             }
-            bool HasClaim = await RightsManagement.UserHasClaim(_context, _currentHelpdeskUser.IdentityUserId, ClaimConstantStrings.AssetOptionsEditor);
+            bool HasClaim = await RightsManagement.UserHasClaim(_context, _currentHelpdeskUser.IdentityUserId, ClaimConstantStrings.TicketOptionsEditor);
             if (!HasClaim)
             {
                 return Forbid();
@@ -47,10 +47,17 @@ namespace Helpdesk.Pages.TicketStatuses
             {
                 return NotFound();
             }
-            else 
+            else if (ticketstatus.IsSystemType)
             {
-                TicketStatus = ticketstatus;
+                return Forbid();
             }
+            bool used = await _context.TicketMasters.Where(x => x.TicketStatus == ticketstatus).AnyAsync();
+            if (used)
+            {
+                ModelState.AddModelError("", "This status is in use and cannot be deleted.");
+            }
+        
+            TicketStatus = ticketstatus;
             return Page();
         }
 
@@ -62,7 +69,7 @@ namespace Helpdesk.Pages.TicketStatuses
                 // This happens when a user logs in, but hasn't set up their profile yet.
                 return Forbid();
             }
-            bool HasClaim = await RightsManagement.UserHasClaim(_context, _currentHelpdeskUser.IdentityUserId, ClaimConstantStrings.AssetOptionsEditor);
+            bool HasClaim = await RightsManagement.UserHasClaim(_context, _currentHelpdeskUser.IdentityUserId, ClaimConstantStrings.TicketOptionsEditor);
             if (!HasClaim)
             {
                 return Forbid();
@@ -75,6 +82,16 @@ namespace Helpdesk.Pages.TicketStatuses
 
             if (ticketstatus != null)
             {
+                if (ticketstatus.IsSystemType)
+                {
+                    return Forbid();
+                }
+                bool used = await _context.TicketMasters.Where(x => x.TicketStatus == ticketstatus).AnyAsync();
+                if (used)
+                {
+                    ModelState.AddModelError("", "This status is in use and cannot be deleted.");
+                    return Page();
+                }
                 TicketStatus = ticketstatus;
                 _context.TicketStatuses.Remove(TicketStatus);
                 await _context.SaveChangesAsync();

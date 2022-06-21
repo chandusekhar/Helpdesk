@@ -12,5 +12,8 @@ namespace Helpdesk.Data
         public string Description { get; set; }
         [Required]
         public bool IsSystemType { get; set; }
+        [Required]
+        public bool IsCompleted { get; set; }
+
     }
 }

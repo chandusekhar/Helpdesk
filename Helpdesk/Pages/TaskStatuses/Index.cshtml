@@ -5,7 +5,7 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h1>Task Statuses</h1>
 
 <p>
     <a asp-page="Create">Create New</a>
@@ -18,9 +18,6 @@
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.TaskStatus[0].Description)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.TaskStatus[0].IsSystemType)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.TaskStatus[0].IsCompleted)
@@ -38,15 +35,14 @@
                 @Html.DisplayFor(modelItem => item.Description)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.IsSystemType)
-            </td>
-            <td>
                 @Html.DisplayFor(modelItem => item.IsCompleted)
             </td>
             <td>
-                <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-page="./Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-page="./Delete" asp-route-id="@item.Id">Delete</a>
+                @if (!item.IsSystemType)
+                {
+                    <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a> <text> | </text>
+                    <a asp-page="./Delete" asp-route-id="@item.Id">Delete</a>
+                }
             </td>
         </tr>
 }

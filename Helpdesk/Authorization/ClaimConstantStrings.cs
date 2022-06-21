@@ -54,6 +54,11 @@
         public static readonly string AssetOptionsEditor = "Asset Options Editor";
 
         /// <summary>
+        /// Allows creating, editing, and deleting ticket options like statuses.
+        /// </summary>
+        public static readonly string TicketOptionsEditor = "Ticket Options Editor";
+
+        /// <summary>
         /// Allows editing and creating assets, setting properties, assigning to users, and assigning licenses.
         /// </summary>
         public static readonly string AssetsManager = "Assets Manager";
