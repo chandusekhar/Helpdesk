@@ -16,7 +16,7 @@ namespace Helpdesk.Data
         [Required]
         public HelpdeskUser Subordinate { get; set; }
         
-        public ICollection<SupervisorResponsibility> SupervisorResponsibilities { get; set; }
+        public virtual ICollection<SupervisorResponsibility> SupervisorResponsibilities { get; set; }
 
     }
 }

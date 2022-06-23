@@ -1,0 +1,68 @@
+﻿@page
+@model Helpdesk.Pages.People.AddTeamModel
+@{
+    ViewData["Title"] = "Add Team Members";
+}
+
+<br />
+<div class="text-center">
+    <h1 class="display-4">@Model.Input.DisplayName 's Team Members</h1>
+</div>
+<form method="post" class="g-3">
+    <input type="hidden" asp-for="Input.DisplayName" />
+    <input type="hidden" asp-for="Input.UserId" />
+    <h3>Select Users to add as subordinates</h3>
+    <label for="userselector" class="form-label">Users</label>
+    <input class="form-control" list="userlist" id="userselector" placeholder="Type to search..." />
+    <datalist id="userlist">
+        @foreach(var usr in @Model.UserList)
+        {
+            <option data-value="@usr.UserId">@usr.DisplayName</option>
+        }
+    </datalist>
+    <input type="hidden" name="userselector" id="userselector-hidden" />
+    <input type="submit" class="btn btn-primary" value="Add User" />
+    @if (@Model.Input.SelectedUsers != null && @Model.Input.SelectedUsers.Count() > 0)
+    {
+        <h3>Selected Users</h3>
+        @for (int i = 0; i < @Model.Input.SelectedUsers.Count(); i++)
+        {
+            <input type="hidden" asp-for="@Model.Input.SelectedUsers[i].UserId">
+            <input type="hidden" asp-for="@Model.Input.SelectedUsers[i].DisplayName">
+            <h4>@Model.Input.SelectedUsers[i].DisplayName</h4>
+        }
+    }
+    <br />
+    <h3>Select responsibilities @Model.Input.DisplayName will have over the team members</h3>
+    <label for="respselector" class="form-label">Responsibility</label>
+    <input class="form-control" list="resplist" id="respselector" placeholder="Type to search..." />
+    <datalist id="resplist">
+        @foreach(var rsp in @Model.RespList)
+        {
+            <option data-value="@rsp.RespId">@rsp.Display</option>
+        }
+    </datalist>
+    <input type="hidden" name="respselector" id="respselector-hidden" />
+    <input type="submit" class="btn btn-primary" value="Add Responsibility" />
+    @if (@Model.Input.SelectedResps != null && @Model.Input.SelectedResps.Count() > 0)
+    {
+        <h3>Selected Responsibility</h3>
+        @for (int i = 0; i < @Model.Input.SelectedResps.Count(); i++)
+        {
+            <input type="hidden" asp-for="@Model.Input.SelectedResps[i].RespId">
+            <input type="hidden" asp-for="@Model.Input.SelectedResps[i].Display">
+            <h4>@Model.Input.SelectedResps[i].Display</h4>
+        }
+    }
+    <br />
+    @if (@Model.Input.SelectedUsers != null && @Model.Input.SelectedUsers.Count() > 0 &&
+         @Model.Input.SelectedResps != null && @Model.Input.SelectedResps.Count() > 0)
+    {
+        <br />
+        <input type="submit" class="btn btn-success" value="Finish Adding" />
+    }
+</form>
+
+@section Scripts {
+    <script type="text/javascript" src="~/js/datavalueselector.js"></script>
+}
