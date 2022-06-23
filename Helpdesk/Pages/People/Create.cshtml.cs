@@ -209,7 +209,10 @@ namespace Helpdesk.Pages.People
             await _context.SaveChangesAsync();
 
             // if Notify is Yes, send new account notification
-            await SendNewUserEmail(iUser, hUser);
+            if (Input.NotifyUser == "Yes")
+            {
+                await SendNewUserEmail(iUser, hUser);
+            }
             return RedirectToPage("./Edit", new { Id = iUser.Id });
         }
 
