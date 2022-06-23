@@ -11,10 +11,10 @@ namespace Helpdesk.Data
         public int Id { get; set; }
 
         [Required]
-        public string Supervisor { get; set; }
+        public HelpdeskUser Supervisor { get; set; }
 
         [Required]
-        public string Subordinate { get; set; }
+        public HelpdeskUser Subordinate { get; set; }
         
         public ICollection<SupervisorResponsibility> SupervisorResponsibilities { get; set; }
 

@@ -31,10 +31,11 @@ namespace Helpdesk.Data
         public SiteNavTemplate SiteNavTemplate { get; set; }
 
         public Group? Group { get; set; }
-        /// <summary>
-        /// If user is a supervisor, this is a list of employees they manage, and what their responsibilities are.
-        /// </summary>
-        public ICollection<TeamMember> TeamMembers { get; set; }
+        // Removed this. We're going to query the table directly.
+        ///// <summary>
+        ///// If user is a supervisor, this is a list of employees they manage, and what their responsibilities are.
+        ///// </summary>
+        //public ICollection<TeamMember> TeamMembers { get; set; }
 
         /// <summary>
         /// Roles this user has.

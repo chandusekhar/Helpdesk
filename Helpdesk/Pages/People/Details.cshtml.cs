@@ -150,6 +150,7 @@ namespace Helpdesk.Pages.People
                 Group = hUser.Group?.Name
             };
             await PopulateLicenses(iUser, ClaimShowProductCode);
+            await PopulateTeam(iUser);
             return Page();
         }
 
@@ -159,12 +160,8 @@ namespace Helpdesk.Pages.People
             var userLicenses = await _context.UserLicenseAssignments
                 .Where(x => x.HelpdeskUser.IdentityUserId == iUser.Id)
                 .Include(y => y.LicenseType)
-                //.OrderBy(z => z.LicenseType.Name)
                 .ToListAsync();
-            //var availLicenses = await _context.LicenseType
-            //    .Where(x => x.IsUserLicense && x.Status == LicenseStatuses.Active)
-            //    //.OrderBy(y => y.Name)
-            //    .ToListAsync();
+
             foreach (var ul in userLicenses)
             {
                 Input.Licenses.Add(new LicenseItem()
@@ -178,24 +175,30 @@ namespace Helpdesk.Pages.People
                     ShowProductCode = ClaimShowProductCode ? (!string.IsNullOrEmpty(ul.ProductCode) || ul.LicenseType.UserRequireProductCode) : false
                 });
             }
-            //foreach (var al in availLicenses)
-            //{
-            //    var ul = Input.Licenses.Where(x => x.LicenseTypeId == al.Id).FirstOrDefault();
-            //    if (ul == null)
-            //    {
-            //        Input.Licenses.Add(new LicenseItem()
-            //        {
-            //            Id = -1,
-            //            LicenseTypeId = al.Id,
-            //            Name = al.Name,
-            //            Description = al.Description,
-            //            Added = false,
-            //            ProductCode = "",
-            //            ShowProductCode = ClaimShowProductCode && al.UserRequireProductCode
-            //        });
-            //    }
-            //}
             Input.Licenses = Input.Licenses.OrderBy(x => x.Name).ToList();
+        }
+
+        private async Task PopulateTeam(IdentityUser iUser)
+        {
+            Input.Team = new List<TeamMember>();
+            var resp = await _context.TeamMembers
+                .Where(x => x.Supervisor.IdentityUserId == iUser.Id)
+                .Include(y => y.Supervisor)
+                .Include(z => z.SupervisorResponsibilities)
+                .OrderBy(x => x.Subordinate.DisplayName)
+                .ToListAsync();
+            foreach (var t in resp)
+            {
+                var teamMember = new TeamMember();
+                teamMember.Id = t.Id;
+                teamMember.DisplayName = t.Subordinate.DisplayName;
+                teamMember.Responsibilities = new List<string>();
+                foreach (var r in t.SupervisorResponsibilities)
+                {
+                    teamMember.Responsibilities.Add(string.Format("{0} ({1})", r.Name, r.Description));
+                }
+                Input.Team.Add(teamMember);
+            }
         }
 
         private async Task PopulateList()
