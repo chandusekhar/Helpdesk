@@ -7,112 +7,175 @@
 
 <br />
 <div class="text-center">
-    <h1 class="display-4">Helpdesk User</h1>
+    <h1 class="display-4">@Model.Input.DisplayName</h1>
 </div>
+<ul class="nav nav-tabs" id="myTab" role="tablist">
+    <li class="nav-item" role="presentation">
+        <button class="nav-link active" id="userprofile-tab" data-bs-toggle="tab" data-bs-target="#userprofile" type="button" role="tab" aria-controls="userprofile" aria-selected="true">User&nbsp;Profile</button>
+    </li>
+    @if (@Model.Input.Team != null && @Model.Input.Team.Count() > 0)
+    {
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="team-tab" data-bs-toggle="tab" data-bs-target="#team" type="button" role="tab" aria-controls="team" aria-selected="true">Team</button>
+        </li>
+    }
+    @if(@Model.Input.Licenses.Count() > 0)
+    {
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="userlicense-tab" data-bs-toggle="tab" data-bs-target="#userlicense" type="button" role="tab" aria-controls="userlicense" aria-selected="false">Licenses</button>
+        </li>
+    }
+</ul>
 <form method="post" class="g-3">
-    <div class="border container" style="padding:30px;">
-        <div class="row col-md-12">
-            <span class="h3">User Profile</span>
-        </div>
-        <input type="hidden" asp-for="Input.Id" />
-        <div class="row">
-            <div class="col-md-6">
-                <div class="form-floating">
-                    <input asp-for="Input.Email" class="form-control" readonly />
-                    <label asp-for="Input.Email" class="form-label"></label>
+    <div class="tab-content" id="myTabContent">
+        <div class="tab-pane fade show active" id="userprofile" role="tabpanel" aria-labelledby="userprofile-tab">
+            <div class="border container" style="padding:30px;">
+                <div class="row col-md-12">
+                    <span class="h3">User Profile</span>
                 </div>
-            </div>
-            <div class="col-md-6">
-                <div class="form-floating">
-                    <input asp-for="Input.DisplayName" class="form-control" readonly />
-                    <label asp-for="Input.DisplayName" class="form-label"></label>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-6">
-                <div class="form-floating">
-                    <input asp-for="Input.GivenName" class="form-control" readonly />
-                    <label asp-for="Input.GivenName" class="form-label"></label>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="form-floating">
-                    <input asp-for="Input.Surname" class="form-control" readonly />
-                    <label asp-for="Input.Surname" class="form-label"></label>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-6">
-                <div class="form-floating">
-                    <input asp-for="Input.JobTitle" class="form-control" readonly />
-                    <label asp-for="Input.JobTitle" class="form-label"></label>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="form-floating">
-                    <input asp-for="Input.Company" class="form-control" readonly />
-                    <label asp-for="Input.Company" class="form-label"></label>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-6">
-                <div class="form-floating">
-                    <input asp-for="Input.PhoneNumber" class="form-control" readonly />
-                    <label asp-for="Input.PhoneNumber" class="form-label"></label>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="form-floating">
-                    <input asp-for="Input.SiteNavTemplateName" class="form-control" readonly />
-                    <label asp-for="Input.SiteNavTemplateName" class="form-label"></label>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-6">
-                <div class="form-floating">
-                    <input asp-for="Input.Enabled" class="form-control" readonly />
-                    <label asp-for="Input.Enabled" class="form-label"></label>
-                </div>
-            </div>
-            <div class="col-md-6">
-                <div class="form-floating">
-                    <input asp-for="Input.Group" class="form-control" readonly />
-                    <label asp-for="Input.Group" class="form-label"></label>
-                </div>
-            </div>
-        </div>
-        <br/>
-        <br />
-        <div class="row">
-            <div class="col-md-12">
-                <span class="h3">User License</span>
-            </div>
-        </div>
-        @for(int i = 0; i < @Model.Input.Licenses.Count(); i++)
-        {
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="form-check-inline form-switch">
-                        <input class="form-check-input" type="checkbox" data-toggle="toggle" asp-for="@Model.Input.Licenses[i].Added" disabled />
-                        &nbsp;
-                        <span>@Model.Input.Licenses[i].Name</span>
-                    </div>
-                </div>
-            </div>
-            @if(@Model.Input.Licenses[i].ShowProductCode)
-            {
+                <input type="hidden" asp-for="Input.Id" />
                 <div class="row">
                     <div class="col-md-6">
-                        <input type="text" class="form-control" asp-for="@Model.Input.Licenses[i].ProductCode" readonly/>
+                        <div class="form-floating">
+                            <input asp-for="Input.Email" class="form-control" readonly />
+                            <label asp-for="Input.Email" class="form-label"></label>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-floating">
+                            <input asp-for="Input.DisplayName" class="form-control" readonly />
+                            <label asp-for="Input.DisplayName" class="form-label"></label>
+                        </div>
                     </div>
                 </div>
-            }
-            <br />
-        }
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-floating">
+                            <input asp-for="Input.GivenName" class="form-control" readonly />
+                            <label asp-for="Input.GivenName" class="form-label"></label>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-floating">
+                            <input asp-for="Input.Surname" class="form-control" readonly />
+                            <label asp-for="Input.Surname" class="form-label"></label>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-floating">
+                            <input asp-for="Input.JobTitle" class="form-control" readonly />
+                            <label asp-for="Input.JobTitle" class="form-label"></label>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-floating">
+                            <input asp-for="Input.Company" class="form-control" readonly />
+                            <label asp-for="Input.Company" class="form-label"></label>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-floating">
+                            <input asp-for="Input.PhoneNumber" class="form-control" readonly />
+                            <label asp-for="Input.PhoneNumber" class="form-label"></label>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-floating">
+                            <input asp-for="Input.SiteNavTemplateName" class="form-control" readonly />
+                            <label asp-for="Input.SiteNavTemplateName" class="form-label"></label>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-floating">
+                            <input asp-for="Input.Enabled" class="form-control" readonly />
+                            <label asp-for="Input.Enabled" class="form-label"></label>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-floating">
+                            <input asp-for="Input.Group" class="form-control" readonly />
+                            <label asp-for="Input.Group" class="form-label"></label>
+                        </div>
+                    </div>
+                </div>
+        </div>
+    </div>
+    @if (@Model.Input.Team != null && @Model.Input.Team.Count() > 0)
+    {
+        <div class="tab-pane fade" id="team" role="tabpanel" aria-labelledby="team-tab">
+            <div class="border container" style="padding:30px;">
+                <div class="row">
+                    <div class="col-md-12">
+                        <span class="h3">Team Members</span>
+                        <p>List of employees managed by this supervisor.</p>
+                    </div>
+                </div>
+                <br />
+                <div class="accordion" id="teamaccordion">
+                    @for(int i = 0; i < @Model.Input.Team.Count(); i++)
+                    {
+                        string heading = string.Format("heading{0}", i.ToString());
+                        string collapse = string.Format("collapse{0}", i.ToString());
+                        string hashcollapse = string.Format("#collapse{0}", i.ToString());
+                        <div class="accordion-item">
+                            <h2 class="accordion-header" id="@heading">
+                                <button class="accordion-button" type="button" data-bs-toggle="@collapse" data-bs-target="@hashcollapse" aria-expanded="false" aria-controls="@collapse">
+                                    <text>@Model.Input.Team[i].DisplayName</text>
+                                </button>
+                            </h2>
+                        </div>
+                        <div id="@collapse" class="accordion-collapse collapse" aria-labelledby="@heading" data-bs-parent="#teamaccordion">
+                            <div class="accordion-body">
+                                @foreach (var item in @Model.Input.Team[i].Responsibilities)
+                                {
+                                    <p>@item</p>
+                                }
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    }
+    @if(@Model.Input.Licenses.Count() > 0)
+    {
+        <div class="tab-pane fade" id="userlicense" role="tabpanel" aria-labelledby="userlicense-tab">
+            <div class="border container" style="padding:30px;">
+                <div class="row">
+                    <div class="col-md-12">
+                        <span class="h3">User License</span>
+                    </div>
+                </div>
+                @for(int i = 0; i < @Model.Input.Licenses.Count(); i++)
+                {
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-check-inline form-switch">
+                                <input class="form-check-input" type="checkbox" data-toggle="toggle" asp-for="@Model.Input.Licenses[i].Added" disabled />
+                                &nbsp;
+                                <span>@Model.Input.Licenses[i].Name</span>
+                            </div>
+                        </div>
+                    </div>
+                    @if(@Model.Input.Licenses[i].ShowProductCode)
+                    {
+                        <div class="row">
+                            <div class="col-md-6">
+                                <input type="text" class="form-control" asp-for="@Model.Input.Licenses[i].ProductCode" readonly/>
+                            </div>
+                        </div>
+                    }
+                    <br />
+                }
+            </div>
+        </div>
+    }
     </div>
 </form>
 

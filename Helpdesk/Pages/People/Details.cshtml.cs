@@ -47,6 +47,16 @@ namespace Helpdesk.Pages.People
             public string? Group { get; set; }
 
             public List<LicenseItem> Licenses { get; set; }
+
+            public List<TeamMember> Team { get; set; }
+        }
+
+        public class TeamMember
+        {
+            public int Id { get; set; }
+            [Display(Name = "Name")]
+            public string DisplayName { get; set; }
+            public List<string> Responsibilities { get; set; }
         }
 
         public class LicenseItem
