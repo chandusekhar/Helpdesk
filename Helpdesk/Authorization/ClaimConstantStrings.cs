@@ -92,5 +92,21 @@
         /// Allows creating, editing, or deleting Supervisor Responsibilities
         /// </summary>
         public static readonly string SuperRespsAdminAccess = "Supervisor Responsibilities Admin Access";
+
+        /// <summary>
+        /// Allows submitting tickets and editing ticket details of own and watched ticket
+        /// </summary>
+        public static readonly string TicketSubmitter = "Ticket Submitter";
+
+        /// <summary>
+        /// Allows processing and submitting tickets on other's behalf
+        /// </summary>
+        public static readonly string TicketHandler = "Ticket Handler";
+
+        /// <summary>
+        /// Allows read only access to other people's tickets
+        /// </summary>
+        public static readonly string TicketReviewer = "Ticket Reviewer";
+        
     }
 }

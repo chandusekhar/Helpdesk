@@ -6,23 +6,37 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.EntityFrameworkCore;
 using Helpdesk.Data;
+using Helpdesk.Infrastructure;
+using Microsoft.AspNetCore.Identity;
+using Helpdesk.Authorization;
 
 namespace Helpdesk.Pages.Tickets
 {
-    public class DeleteModel : PageModel
+    public class DeleteModel : DI_BasePageModel
     {
-        private readonly Helpdesk.Data.ApplicationDbContext _context;
-
-        public DeleteModel(Helpdesk.Data.ApplicationDbContext context)
-        {
-            _context = context;
-        }
+        public DeleteModel(ApplicationDbContext dbContext,
+            UserManager<IdentityUser> userManager,
+            SignInManager<IdentityUser> signInManager)
+            : base(dbContext, userManager, signInManager)
+        { }
 
         [BindProperty]
-      public TicketMaster TicketMaster { get; set; } = default!;
+        public TicketMaster TicketMaster { get; set; } = default!;
 
         public async Task<IActionResult> OnGetAsync(string id)
         {
+            await LoadSiteSettings(ViewData);
+            if (_currentHelpdeskUser == null)
+            {
+                // This happens when a user logs in, but hasn't set up their profile yet.
+                return Forbid();
+            }
+            bool HasSubmitter = await RightsManagement.UserHasClaim(_context, _currentHelpdeskUser.IdentityUserId, ClaimConstantStrings.TicketSubmitter);
+            bool HasHandler = await RightsManagement.UserHasClaim(_context, _currentHelpdeskUser.IdentityUserId, ClaimConstantStrings.TicketHandler);
+            if (!HasSubmitter && !HasHandler)
+            {
+                return Forbid();
+            }
             if (id == null || _context.TicketMasters == null)
             {
                 return NotFound();
@@ -43,6 +57,18 @@ namespace Helpdesk.Pages.Tickets
 
         public async Task<IActionResult> OnPostAsync(string id)
         {
+            await LoadSiteSettings(ViewData);
+            if (_currentHelpdeskUser == null)
+            {
+                // This happens when a user logs in, but hasn't set up their profile yet.
+                return Forbid();
+            }
+            bool HasSubmitter = await RightsManagement.UserHasClaim(_context, _currentHelpdeskUser.IdentityUserId, ClaimConstantStrings.TicketSubmitter);
+            bool HasHandler = await RightsManagement.UserHasClaim(_context, _currentHelpdeskUser.IdentityUserId, ClaimConstantStrings.TicketHandler);
+            if (!HasSubmitter && !HasHandler)
+            {
+                return Forbid();
+            }
             if (id == null || _context.TicketMasters == null)
             {
                 return NotFound();

@@ -90,6 +90,10 @@ namespace Helpdesk.Infrastructure
                             {
                                 viewData.Add("NavbarShowTicketLink", "true");
                             }
+                            if (_currentHelpdeskUser.SiteNavTemplate.TicketMenu)
+                            {
+                                viewData.Add("NavbarShowTicketMenu", "true");
+                            }
                             if (_currentHelpdeskUser.SiteNavTemplate.AssetLink)
                             {
                                 viewData.Add("NavbarShowAssetLink", "true");

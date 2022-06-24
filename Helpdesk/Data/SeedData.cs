@@ -110,6 +110,7 @@ namespace Helpdesk.Data
                             temp.SupRespsLink = item.SiteNavTemplate.SupRespsLink;
                             temp.TicketLink = item.SiteNavTemplate.TicketLink;
                             temp.TicketStatusesLink = item.SiteNavTemplate.TicketStatusesLink;
+                            temp.TicketMenu = item.SiteNavTemplate.TicketMenu;
 
                             context.SiteNavTemplates.Update(temp);
                             await context.SaveChangesAsync();
@@ -609,122 +610,163 @@ namespace Helpdesk.Data
                 Claims = new List<DefaultRoleClaim.NewRoleClaim>()
                 {
                     new DefaultRoleClaim.NewRoleClaim(ClaimConstantStrings.HelpdeskRolesAdmin,
-                        "Allows creating, editing, and deleting roles."),
+                        "Allows creating, editing, and deleting roles"),
                     new DefaultRoleClaim.NewRoleClaim(ClaimConstantStrings.LicenseTypeAdmin,
-                        "Allows creating, editing, and removing License Types."),
+                        "Allows creating, editing, and removing License Types"),
                     new DefaultRoleClaim.NewRoleClaim(ClaimConstantStrings.GroupAdmin,
-                        "Allows creating, editing, and removing groups."),
+                        "Allows creating, editing, and removing groups"),
                     new DefaultRoleClaim.NewRoleClaim(ClaimConstantStrings.SitewideConfigurationEditor,
-                        "Allows editing sitewide configuration settings."),
+                        "Allows editing sitewide configuration settings"),
                     new DefaultRoleClaim.NewRoleClaim(ClaimConstantStrings.UsersAdmin,
-                        "Allows creating users, resetting passwords for users, enabling/disabling users."),
+                        "Allows creating users, resetting passwords for users, enabling/disabling users"),
                     new DefaultRoleClaim.NewRoleClaim(ClaimConstantStrings.UsersRolesAdmin,
-                        "Allows granting/revoking roles for users. Requires UsersAdmin to get to the page to do this."),
+                        "Allows granting/revoking roles for users. Requires UsersAdmin to get to the page to do this"),
                     new DefaultRoleClaim.NewRoleClaim(ClaimConstantStrings.UsersAllowReadAccess,
-                        "Required to access the users screen and view basic user details."),
+                        "Required to access the users screen and view basic user details"),
                     new DefaultRoleClaim.NewRoleClaim(ClaimConstantStrings.UsersAllowReadLicenseProductCode,
-                        "Allows viewing user license product codes on user details page."),
+                        "Allows viewing user license product codes on user details page"),
                     new DefaultRoleClaim.NewRoleClaim(ClaimConstantStrings.ImportExport,
-                        "Import and Export data from the site."),
+                        "Import and Export data from the site"),
                     new DefaultRoleClaim.NewRoleClaim(ClaimConstantStrings.AssetOptionsEditor,
-                        "Allows creating/editing/removing asset options like Asset Types, Manufacturers, Models, Vendors."),
+                        "Allows creating/editing/removing asset options like Asset Types, Manufacturers, Models, Vendors"),
                     new DefaultRoleClaim.NewRoleClaim(ClaimConstantStrings.AssetsManager,
-                        "Allows editing and creating assets, setting properties, assigning to users, and assigning licenses."),
+                        "Allows editing and creating assets, setting properties, assigning to users, and assigning licenses"),
                     new DefaultRoleClaim.NewRoleClaim(ClaimConstantStrings.AssetsAllowReadAccess,
                         "Required to access the assets screen and view basic asset details. "),
                     new DefaultRoleClaim.NewRoleClaim(ClaimConstantStrings.AssetsAllowReadLicenseProductCode,
-                        "Allows viewing license product codes for assets on the details page."),
+                        "Allows viewing license product codes for assets on the details page"),
                     new DefaultRoleClaim.NewRoleClaim(ClaimConstantStrings.FileManagerAdminAccess,
-                        "Allows uploading, downloading, or deleting uploaded files using File Manager."),
+                        "Allows uploading, downloading, or deleting uploaded files using File Manager"),
                     new DefaultRoleClaim.NewRoleClaim(ClaimConstantStrings.FileManagerOwnAccess,
-                        "Allows downloading and deleting documents owned by the user in File Manager."),
+                        "Allows downloading and deleting documents owned by the user in File Manager"),
                     new DefaultRoleClaim.NewRoleClaim(ClaimConstantStrings.DocumentTypeAdmin,
-                        "Allows creating, editing, or deleting document types for File Uplaods."),
+                        "Allows creating, editing, or deleting document types for File Uplaods"),
                     new DefaultRoleClaim.NewRoleClaim(ClaimConstantStrings.SuperRespsAdminAccess,
-                        "Allows creating, editing, or deleting Supervisor Responsibilities."),
+                        "Allows creating, editing, or deleting Supervisor Responsibilities"),
                     new DefaultRoleClaim.NewRoleClaim(ClaimConstantStrings.TicketOptionsEditor,
-                        "Allows creating, editing, and deleting ticket options like statuses."),
+                        "Allows submitting tickets and editing ticket details of own and watched ticket"),
+                    new DefaultRoleClaim.NewRoleClaim(ClaimConstantStrings.TicketSubmitter,
+                        "Allows submitting tickets and editing ticket details"),
+                    new DefaultRoleClaim.NewRoleClaim(ClaimConstantStrings.TicketHandler,
+                        "Allows processing and submitting tickets on other's behalf"),
+                    new DefaultRoleClaim.NewRoleClaim(ClaimConstantStrings.TicketReviewer,
+                        "Allows read only access to other people's tickets"),
                 }
             },
             new DefaultRoleClaim()
             {
                 Version = string.Empty,
                 RoleName = RoleConstantStrings.UserAdmin,
-                RoleDescription = "User Admins can edit and create users, enable/disable accounts, and assign licenses.",
+                RoleDescription = "User Admins can edit and create users, enable/disable accounts, and assign licenses",
                 IsPrivileged = true,
                 Claims = new List<DefaultRoleClaim.NewRoleClaim>()
                 {
                     new DefaultRoleClaim.NewRoleClaim(ClaimConstantStrings.UsersAdmin,
-                        "Allows creating users, resetting passwords for users, enabling/disabling users."),
+                        "Allows creating users, resetting passwords for users, enabling/disabling users"),
                     new DefaultRoleClaim.NewRoleClaim(ClaimConstantStrings.UsersRolesAdmin,
-                        "Allows granting/revoking roles for users. Requires UsersAdmin to get to the page to do this."),
+                        "Allows granting/revoking roles for users. Requires UsersAdmin to get to the page to do this"),
                     new DefaultRoleClaim.NewRoleClaim(ClaimConstantStrings.UsersAllowReadAccess,
-                        "Required to access the users screen and view basic user details."),
+                        "Required to access the users screen and view basic user details"),
                     new DefaultRoleClaim.NewRoleClaim(ClaimConstantStrings.UsersAllowReadLicenseProductCode,
-                        "Allows viewing user license product codes on user details page."),
+                        "Allows viewing user license product codes on user details page"),
                 }
             },
             new DefaultRoleClaim()
             {
                 Version = string.Empty,
                 RoleName = RoleConstantStrings.UserReviewer,
-                RoleDescription = "Grants readonly access to users to view properties and assignments.",
+                RoleDescription = "Grants readonly access to users to view properties and assignments",
                 Claims = new List<DefaultRoleClaim.NewRoleClaim>()
                 {
                     new DefaultRoleClaim.NewRoleClaim(ClaimConstantStrings.UsersAllowReadAccess,
-                        "Required to access the users screen and view basic user details."),
+                        "Required to access the users screen and view basic user details"),
                 }
             },
             new DefaultRoleClaim()
             {
                 Version = string.Empty,
                 RoleName = RoleConstantStrings.AssetAdmin,
-                RoleDescription = "Asset Admins can edit, create, and delete assets, assign assets to users, and assign licenses.",
+                RoleDescription = "Asset Admins can edit, create, and delete assets, assign assets to users, and assign licenses",
                 IsPrivileged = true,
                 Claims = new List<DefaultRoleClaim.NewRoleClaim>()
                 {
                     new DefaultRoleClaim.NewRoleClaim(ClaimConstantStrings.AssetOptionsEditor,
-                        "Allows creating/editing/removing asset options like Asset Types, Manufacturers, Models, Vendors."),
+                        "Allows creating/editing/removing asset options like Asset Types, Manufacturers, Models, Vendors"),
                     new DefaultRoleClaim.NewRoleClaim(ClaimConstantStrings.AssetsManager,
-                        "Allows editing, deleting, and creating assets, setting properties, assigning to users, and assigning licenses."),
+                        "Allows editing, deleting, and creating assets, setting properties, assigning to users, and assigning licenses"),
                     new DefaultRoleClaim.NewRoleClaim(ClaimConstantStrings.AssetsAllowReadAccess,
-                        "Required to access the assets screen and view basic asset details."),
+                        "Required to access the assets screen and view basic asset details"),
                     new DefaultRoleClaim.NewRoleClaim(ClaimConstantStrings.AssetsAllowReadLicenseProductCode,
-                        "Allows viewing license product codes for assets on the details page."),
+                        "Allows viewing license product codes for assets on the details page"),
                 }
             },
             new DefaultRoleClaim()
             {
                 Version = string.Empty,
                 RoleName = RoleConstantStrings.AssetReviewer,
-                RoleDescription = "Grants readonly access to assets to view properties and assignments.",
+                RoleDescription = "Grants readonly access to assets to view properties and assignments",
                 Claims = new List<DefaultRoleClaim.NewRoleClaim>()
                 {
                     new DefaultRoleClaim.NewRoleClaim(ClaimConstantStrings.AssetsAllowReadAccess,
-                        "Required to access the assets screen and view basic asset details."),
+                        "Required to access the assets screen and view basic asset details"),
                 }
             },
             new DefaultRoleClaim()
             {
                 Version = string.Empty,
                 RoleName = RoleConstantStrings.FileAdmin,
-                RoleDescription = "Allows downloading and deleting all files using the File Manager.",
+                RoleDescription = "Allows downloading and deleting all files using the File Manager",
                 IsPrivileged = true,
                 Claims = new List<DefaultRoleClaim.NewRoleClaim>()
                 {
                     new DefaultRoleClaim.NewRoleClaim(ClaimConstantStrings.FileManagerAdminAccess,
-                        "Allows uploading, downloading, or deleting uploaded files using File Manager."),
+                        "Allows uploading, downloading, or deleting uploaded files using File Manager"),
                 }
             },
             new DefaultRoleClaim()
             {
                 Version = string.Empty,
                 RoleName = RoleConstantStrings.FileOwnEditor,
-                RoleDescription = "Allows downloading and deleting all files owned by the user in File Manager.",
+                RoleDescription = "Allows downloading and deleting all files owned by the user in File Manager",
                 Claims = new List<DefaultRoleClaim.NewRoleClaim>()
                 {
                     new DefaultRoleClaim.NewRoleClaim(ClaimConstantStrings.FileManagerOwnAccess,
-                        "Allows downloading and deleting documents owned by the user in File Manager."),
+                        "Allows downloading and deleting documents owned by the user in File Manager"),
+                }
+            },
+            new DefaultRoleClaim()
+            {
+                Version = string.Empty,
+                RoleName = RoleConstantStrings.TicketSubmitter,
+                RoleDescription = "Can create new tickets and update info on their own and watched tickets",
+                Claims = new List<DefaultRoleClaim.NewRoleClaim>()
+                {
+                    new DefaultRoleClaim.NewRoleClaim(ClaimConstantStrings.TicketSubmitter,
+                        "Allows submitting tickets and editing ticket details")
+                }
+            },
+            new DefaultRoleClaim()
+            {
+                Version = string.Empty,
+                RoleName = RoleConstantStrings.TicketHandler,
+                RoleDescription = "Can view tickets, edit them, change their type, add tasks and complete them",
+                Claims = new List<DefaultRoleClaim.NewRoleClaim>()
+                {
+                    new DefaultRoleClaim.NewRoleClaim(ClaimConstantStrings.TicketSubmitter,
+                        "Allows submitting tickets and editing ticket details"),
+                    new DefaultRoleClaim.NewRoleClaim(ClaimConstantStrings.TicketHandler,
+                        "Allows processing and submitting tickets on other's behalf")
+                }
+            },
+            new DefaultRoleClaim()
+            {
+                Version = string.Empty,
+                RoleName = RoleConstantStrings.TicketReviewer,
+                RoleDescription = "Can review other user's tickets, but can't make changes",
+                Claims = new List<DefaultRoleClaim.NewRoleClaim>()
+                {
+                    new DefaultRoleClaim.NewRoleClaim(ClaimConstantStrings.TicketReviewer,
+                        "Allows read only access to other people's tickets")
                 }
             },
         };
@@ -747,7 +789,8 @@ namespace Helpdesk.Data
                 {
                     Name = "Everything Visible",
                     Description = "All Navbar links are shown regardless of access level for user",
-                    TicketLink = true,
+                    TicketMenu = true,
+                    TicketLink = false,
                     AssetLink = true,
                     PeopleLink = true,
                     ShowConfigurationMenu = true,
@@ -772,8 +815,9 @@ namespace Helpdesk.Data
                 SiteNavTemplate = new SiteNavTemplate()
                 {
                     Name = "Support Tech",
-                    Description = "Assets, Tickets, and Pepole acces.",
-                    TicketLink = true,
+                    Description = "Assets, Tickets, and Pepole acces",
+                    TicketLink = false,
+                    TicketMenu = true,
                     AssetLink = true,
                     PeopleLink = true,
                     ShowConfigurationMenu = false,
@@ -800,6 +844,7 @@ namespace Helpdesk.Data
                     Name = "Ticket Submitter User",
                     Description = "Basic ticket access",
                     TicketLink = true,
+                    TicketMenu = false,
                     AssetLink = false,
                     PeopleLink = false,
                     ShowConfigurationMenu = false,
@@ -839,187 +884,187 @@ namespace Helpdesk.Data
                     new DocumentType()
                     {
                         Name = DocumentTypeStrings.ImportUsersUpload,
-                        Description = "File upload for the Import Users process. Safe to delete when import is done.",
+                        Description = "File upload for the Import Users process. Safe to delete when import is done",
                         IsSystemType = true,
                     },
                     new DocumentType()
                     {
                         Name = DocumentTypeStrings.ImportUsersResults,
-                        Description = "Results of the Users Import process. Safe to delete when import is done.",
+                        Description = "Results of the Users Import process. Safe to delete when import is done",
                         IsSystemType = true,
                     },
                     new DocumentType()
                     {
                         Name = DocumentTypeStrings.ImportAssetsUpload,
-                        Description = "File upload for the Import Assets process. Safe to delete when import is done.",
+                        Description = "File upload for the Import Assets process. Safe to delete when import is done",
                         IsSystemType = true,
                     },
                     new DocumentType()
                     {
                         Name = DocumentTypeStrings.ImportAssetsResults,
-                        Description = "Results of the Assets Import process. Safe to delete when import is done.",
+                        Description = "Results of the Assets Import process. Safe to delete when import is done",
                         IsSystemType = true,
                     },
                     new DocumentType()
                     {
                         Name = "Contract",
-                        Description = "A written or spoken agreement, especially one concerning employment, sales, or tenancy, that is intended to be enforceable by law.",
+                        Description = "A written or spoken agreement, especially one concerning employment, sales, or tenancy, that is intended to be enforceable by law",
                         IsSystemType = false,
                     },
                     new DocumentType()
                     {
                         Name = "Documentation of bylaws",
-                        Description = "A legal document that describes the structure of an organization, such as a corporation or a nonprofit.",
+                        Description = "A legal document that describes the structure of an organization, such as a corporation or a nonprofit",
                         IsSystemType = false,
                     },
                     new DocumentType()
                     {
                         Name = "Non-disclosure agreement",
-                        Description = "A binding contract between two or more parties that prevents sensitive information from being shared with others.",
+                        Description = "A binding contract between two or more parties that prevents sensitive information from being shared with others",
                         IsSystemType = false,
                     },
                     new DocumentType()
                     {
                         Name = "Employment agreement",
-                        Description = "An employment contract is an agreement between an employer and employee regarding the employee's term of employment.",
+                        Description = "An employment contract is an agreement between an employer and employee regarding the employee's term of employment",
                         IsSystemType = false,
                     },
                     new DocumentType()
                     {
                         Name = "Business plan",
-                        Description = "A document that defines in detail a company's objectives and how it plans to achieve its goals.",
+                        Description = "A document that defines in detail a company's objectives and how it plans to achieve its goals",
                         IsSystemType = false,
                     },
                     new DocumentType()
                     {
                         Name = "Balance sheet",
-                        Description = "A summary of the financial balances of an individual or organization.",
+                        Description = "A summary of the financial balances of an individual or organization",
                         IsSystemType = false,
                     },
                     new DocumentType()
                     {
                         Name = "Income statement",
-                        Description = "Presents the financial results of a business for a stated period of time, aggregating all revenues and expenses.",
+                        Description = "Presents the financial results of a business for a stated period of time, aggregating all revenues and expenses",
                         IsSystemType = false,
                     },
                     new DocumentType()
                     {
                         Name = "Cash flow statmenet",
-                        Description = "Provides aggregate data regarding all cash inflows a company receives from its ongoing operations and external investment sources.",
+                        Description = "Provides aggregate data regarding all cash inflows a company receives from its ongoing operations and external investment sources",
                         IsSystemType = false,
                     },
                     new DocumentType()
                     {
                         Name = "Statement of shareholders' equity",
-                        Description = "Details the changes within the equity section of the balance sheet over a designated period of time.",
+                        Description = "Details the changes within the equity section of the balance sheet over a designated period of time",
                         IsSystemType = false,
                     },
                     new DocumentType()
                     {
                         Name = "Quotation",
-                        Description = "A formal statement setting out the estimated cost for a particular job or service, including quantities, prices and terms.",
+                        Description = "A formal statement setting out the estimated cost for a particular job or service, including quantities, prices and terms",
                         IsSystemType = false,
                     },
                     new DocumentType()
                     {
                         Name = "Customer Order",
-                        Description = "A formal order from the customer which provides details of the amount and due date for a customer's requirement of products.",
+                        Description = "A formal order from the customer which provides details of the amount and due date for a customer's requirement of products",
                         IsSystemType = false,
                     },
                     new DocumentType()
                     {
                         Name = "Invoice",
-                        Description = "A list of goods sent or services provided, with a statement of the sum due for these; a bill.",
+                        Description = "A list of goods sent or services provided, with a statement of the sum due for these; a bill",
                         IsSystemType = false,
                     },
                     new DocumentType()
                     {
                         Name = "Credit Note",
-                        Description = "A document issued by a seller to a buyer to notify that credit is being applied to their account.",
+                        Description = "A document issued by a seller to a buyer to notify that credit is being applied to their account",
                         IsSystemType = false,
                     },
                     new DocumentType()
                     {
                         Name = "Supplier Order",
-                        Description = "A document generated by the buyer and serves the purpose of ordering goods from the supplier.",
+                        Description = "A document generated by the buyer and serves the purpose of ordering goods from the supplier",
                         IsSystemType = false,
                     },
                     new DocumentType()
                     {
                         Name = "Compliance and regulatory document",
-                        Description = "Documents or information including records, reports, observations and responses required to verify compliance with standards by a facility or program.",
+                        Description = "Documents or information including records, reports, observations and responses required to verify compliance with standards by a facility or program",
                         IsSystemType = false,
                     },
                     new DocumentType()
                     {
                         Name = "Business report",
-                        Description = "Document that helps the organization's management gain insight into various internal aspects.",
+                        Description = "Document that helps the organization's management gain insight into various internal aspects",
                         IsSystemType = false,
                     },
                     new DocumentType()
                     {
                         Name = "Minutes of business meeting",
-                        Description = "An instant written record of a meeting or hearing.",
+                        Description = "An instant written record of a meeting or hearing",
                         IsSystemType = false,
                     },
                     new DocumentType()
                     {
                         Name = "Contractor agreement",
-                        Description = "A contract between a freelancer and a company or client outlining the specifics of their work together.",
+                        Description = "A contract between a freelancer and a company or client outlining the specifics of their work together",
                         IsSystemType = false,
                     },
                     new DocumentType()
                     {
                         Name = "Business insurance policy",
-                        Description = "A contract of insurance between the insurance company and the policyholder containing the key features, terms and conditions.",
+                        Description = "A contract of insurance between the insurance company and the policyholder containing the key features, terms and conditions",
                         IsSystemType = false,
                     },
                     new DocumentType()
                     {
                         Name = "Partnership agreement",
-                        Description = "A legal document that dictates how a small for-profit business will operate under two or more people.",
+                        Description = "A legal document that dictates how a small for-profit business will operate under two or more people",
                         IsSystemType = false,
                     },
                     new DocumentType()
                     {
                         Name = "Company policy",
-                        Description = "A guideline and rulebook for employers to establish formal expectations and standards for employee health and safety, accountability, best practices and processes within a company.",
+                        Description = "A guideline and rulebook for employers to establish formal expectations and standards for employee health and safety, accountability, best practices and processes within a company",
                         IsSystemType = false,
                     },
                     new DocumentType()
                     {
                         Name = "Franchise agreement",
-                        Description = "Legal agreement that creates a franchise relationship between franchisor and franchisee.",
+                        Description = "Legal agreement that creates a franchise relationship between franchisor and franchisee",
                         IsSystemType = false,
                     },
                     new DocumentType()
                     {
                         Name = "Board resolution",
-                        Description = "A formal document that solidifies in writing important decisions that boards of directors make.",
+                        Description = "A formal document that solidifies in writing important decisions that boards of directors make",
                         IsSystemType = false,
                     },
                     new DocumentType()
                     {
                         Name = "Terms of use",
-                        Description = "Rules, specifications, and requirements for the use of a product or service.",
+                        Description = "Rules, specifications, and requirements for the use of a product or service",
                         IsSystemType = false,
                     },
                     new DocumentType()
                     {
                         Name = "Business pitch deck",
-                        Description = "A presentation that new companies usually create that outlines the organization's main characteristics, qualities and aspirations.",
+                        Description = "A presentation that new companies usually create that outlines the organization's main characteristics, qualities and aspirations",
                         IsSystemType = false,
                     },
                     new DocumentType()
                     {
                         Name = "Business license",
-                        Description = "Permit issued by a government agency that allow individuals or companies to conduct business within the government's geographical jurisdiction.",
+                        Description = "Permit issued by a government agency that allow individuals or companies to conduct business within the government's geographical jurisdiction",
                         IsSystemType = false,
                     },
                     new DocumentType()
                     {
                         Name = "Receipt",
-                        Description = "A document confirming the details of a transaction, such as goods or services received, and amount paid.",
+                        Description = "A document confirming the details of a transaction, such as goods or services received, and amount paid",
                         IsSystemType = false,
                     }
                 }
@@ -1514,12 +1559,12 @@ namespace Helpdesk.Data
                     new Location()
                     {
                         Name = "Accounting Department",
-                        Description = "Headquarters accounting department."
+                        Description = "Headquarters accounting department"
                     },
                     new Location()
                     {
                         Name = "Marketing Department",
-                        Description = "Headquarters marketing department."
+                        Description = "Headquarters marketing department"
                     },
                     new Location()
                     {
@@ -1529,7 +1574,7 @@ namespace Helpdesk.Data
                     new Location()
                     {
                         Name = "Storage Rack 1",
-                        Description = "Storage rack in main IT office storage room."
+                        Description = "Storage rack in main IT office storage room"
                     }
                 }
             }
@@ -1699,87 +1744,87 @@ namespace Helpdesk.Data
                     new AssetType()
                     {
                         Name = "Laptop",
-                        Description = "Portable laptops, 2-in-1s, convertables, and foldables."
+                        Description = "Portable laptops, 2-in-1s, convertables, and foldables"
                     },
                     new AssetType()
                     {
                         Name = "Desktop",
-                        Description = "Towers, desktops, fixed mini-pcs, etc."
+                        Description = "Towers, desktops, fixed mini-pcs, etc"
                     },
                     new AssetType()
                     {
                         Name = "Tablet",
-                        Description = "Surface tablets, iPads, eReaders, Android tablets, etc."
+                        Description = "Surface tablets, iPads, eReaders, Android tablets, etc"
                     },
                     new AssetType()
                     {
                         Name = "Phone",
-                        Description = "Cell phones, desk phones, etc."
+                        Description = "Cell phones, desk phones, etc"
                     },
                     new AssetType()
                     {
                         Name = "Monitor",
-                        Description = "Computer display device."
+                        Description = "Computer display device"
                     },
                     new AssetType()
                     {
                         Name = "Dock",
-                        Description = "Plug in and socket docks, port replicators, hubs."
+                        Description = "Plug in and socket docks, port replicators, hubs"
                     },
                     new AssetType()
                     {
                         Name = "Keyboard",
-                        Description = "Keyboards, 10 key inputs, and keyboard/mouse combo sets."
+                        Description = "Keyboards, 10 key inputs, and keyboard/mouse combo sets"
                     },
                     new AssetType()
                     {
                         Name = "Mouse",
-                        Description = "Wired or wireless mouse, touch pads, track balls, etc."
+                        Description = "Wired or wireless mouse, touch pads, track balls, etc"
                     },
                     new AssetType()
                     {
                         Name = "Printer",
-                        Description = "Printers, multi-function printers, label makers, receipt printers, etc."
+                        Description = "Printers, multi-function printers, label makers, receipt printers, etc"
                     },
                     new AssetType()
                     {
                         Name = "Scanner",
-                        Description = "Document scanners, flat bed scaners, barcode readers, id readers, etc."
+                        Description = "Document scanners, flat bed scaners, barcode readers, id readers, etc"
                     },
                     new AssetType()
                     {
                         Name = "Headset",
-                        Description = "Headphones, phone headsets, VR headsets, etc."
+                        Description = "Headphones, phone headsets, VR headsets, etc"
                     },
                     new AssetType()
                     {
                         Name = "Speaker",
-                        Description = "Audio output devices, desktop speakers, conference speakers, etc."
+                        Description = "Audio output devices, desktop speakers, conference speakers, etc"
                     },
                     new AssetType()
                     {
                         Name = "Camera",
-                        Description = "Still or video camera."
+                        Description = "Still or video camera"
                     },
                     new AssetType()
                     {
                         Name = "Charger",
-                        Description = "Removable chargers, laptop and phone chargers, etc."
+                        Description = "Removable chargers, laptop and phone chargers, etc"
                     },
                     new AssetType()
                     {
                         Name = "Battery",
-                        Description = "Battery or removable power unit, like a spare laptop battery."
+                        Description = "Battery or removable power unit, like a spare laptop battery"
                     },
                     new AssetType()
                     {
                         Name = "Server",
-                        Description = "Tower or Rack server, virtual machine, etc."
+                        Description = "Tower or Rack server, virtual machine, etc"
                     },
                     new AssetType()
                     {
                         Name = "Network Device",
-                        Description = "Router, firewall, Wi-Fi Access Point, Gateway, Switch, Bridge, etc."
+                        Description = "Router, firewall, Wi-Fi Access Point, Gateway, Switch, Bridge, etc"
                     }
                 }
             }

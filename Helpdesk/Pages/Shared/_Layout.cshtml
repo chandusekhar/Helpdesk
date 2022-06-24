@@ -49,6 +49,19 @@
                                 <a class="nav-link text-dark" asp-area="" asp-page="/Tickets/Index">Tickets</a>
                             </li>
                         }
+                        @if(@ViewData.ContainsKey("NavbarShowTicketMenu"))
+                        {
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle text-dark" href="#" id="navbarTicketDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Tickets
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="navbarTicketDropdown">
+                                    <li><a class="dropdown-item" asp-area="" asp-page="/Tickets/Index">My&nbsp;Tickets</a></li>
+                                    <li><a class="dropdown-item" asp-area="" asp-page="/Tickets/All">All&nbsp;Tickets</a></li>
+                                    <li><a class="dropdown-item" asp-area="" asp-page="/Tickets/Search">Find&hellip;</a></li>
+                                </ul>
+                            </li>
+                        }
                         @if(@ViewData.ContainsKey("NavbarShowAssetLink"))
                         {
                             <li class="nav-item">

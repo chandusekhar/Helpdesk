@@ -15,15 +15,15 @@
         /// </summary>
         public static readonly string UserReviewer = "User Reviewer";
         /// <summary>
-        /// Ticket Submitter can create new tickets and update info on their own tickets.
+        /// Can create new tickets and update info on their own and watched tickets.
         /// </summary>
         public static readonly string TicketSubmitter = "Ticket Submitter";
         /// <summary>
-        /// Ticket Handler can view tickets, edit them, change their type, add tasks and complete them.
+        /// Can view tickets, edit them, change their type, add tasks and complete them.
         /// </summary>
         public static readonly string TicketHandler = "Ticket Handler";
         /// <summary>
-        /// Ticket Reviewer can review other user's tickets, but can't make changes.
+        /// Can review other user's tickets, but can't make changes.
         /// </summary>
         public static readonly string TicketReviewer = "Ticket Reviewer";
         /// <summary>

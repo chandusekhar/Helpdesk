@@ -11,10 +11,17 @@ namespace Helpdesk.Data
         [Required] 
         public string Description { get; set; }
         /// <summary>
-        /// Shows the Ticket link in the Navbar
+        /// Shows the Ticket link in the Navbar. This takes the user to the My Tickets screen.
         /// </summary>
         [Required] 
         public bool TicketLink { get; set; }
+
+        /// <summary>
+        /// Shows the ticket menu that allows searching for tickets, showing all active, etc.
+        /// Meant for Ticket Admins
+        /// </summary>
+        public bool TicketMenu { get; set; }
+
         /// <summary>
         /// Shows the Asset link in the Navbar
         /// </summary>
