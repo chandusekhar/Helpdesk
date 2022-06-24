@@ -22,7 +22,6 @@
 
   <ItemGroup>
     <Folder Include="Pages\Assets\" />
-    <Folder Include="Pages\Tickets\" />
   </ItemGroup>
 
 </Project>

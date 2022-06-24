@@ -1,0 +1,50 @@
+﻿@page
+@model Helpdesk.Pages.Tickets.EditModel
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>TicketMaster</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="TicketMaster.Id" />
+            <div class="form-group">
+                <label asp-for="TicketMaster.Title" class="control-label"></label>
+                <input asp-for="TicketMaster.Title" class="form-control" />
+                <span asp-validation-for="TicketMaster.Title" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TicketMaster.Description" class="control-label"></label>
+                <input asp-for="TicketMaster.Description" class="form-control" />
+                <span asp-validation-for="TicketMaster.Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TicketMaster.CreationDate" class="control-label"></label>
+                <input asp-for="TicketMaster.CreationDate" class="form-control" />
+                <span asp-validation-for="TicketMaster.CreationDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TicketMaster.DueDate" class="control-label"></label>
+                <input asp-for="TicketMaster.DueDate" class="form-control" />
+                <span asp-validation-for="TicketMaster.DueDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-page="./Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
