@@ -36,6 +36,11 @@ namespace Helpdesk.Data
         /// When a TeamMember submits a ticket, their supervisor is automatically added as a watcher and is notified.
         /// </summary>
         public DbSet<TeamMember> TeamMembers { get; set; }
+
+        /// <summary>
+        /// Defines what responsibilities the supervisor has for the subordinate
+        /// </summary>
+        public DbSet<TeamMemberResponsibility> TeamMemberResponsibilities { get; set; }
         /// <summary>
         /// Lists responsiblities a supervisor (with one or more team members) has. Helps the support desk
         /// to validate requests from a supervisor so that they know if they can perform a requested action.

@@ -224,76 +224,76 @@ namespace Helpdesk.Pages.People
                 }
             }
 
-            if (string.IsNullOrEmpty(AddUserId) && string.IsNullOrEmpty(AddRespId))
-            {
-                // save changes to the database.
-                if (Input.SelectedUsers != null && Input.SelectedUsers.Count() > 0 &&
-                    Input.SelectedResps != null && Input.SelectedResps.Count() > 0)
-                {
-                    var hUser = await _context.HelpdeskUsers
-                        .Where(x => x.IdentityUserId == Input.UserId)
-                        .FirstOrDefaultAsync();
-                    if (hUser == null)
-                    {
-                        return RedirectToPage("./People/Index");
-                    }
-                    Dictionary<int, SupervisorResponsibility> RespCache = new Dictionary<int, SupervisorResponsibility>();
-                    foreach (var user in Input.SelectedUsers) 
-                    {
-                        var selUsr = await _context.HelpdeskUsers
-                            .Where(x => x.IdentityUserId == user.UserId)
-                            .FirstOrDefaultAsync();
-                        if (selUsr == null)
-                        {
-                            continue;
-                        }
-                        var seliUsr = await _context.Users
-                            .Where(x => x.Id == selUsr.IdentityUserId)
-                            .FirstOrDefaultAsync();
-                        if (seliUsr == null)
-                        {
-                            continue;
-                        }
-                        foreach (var rsp in Input.SelectedResps)
-                        {
-                            SupervisorResponsibility? dbResp;
-                            if (!RespCache.TryGetValue(rsp.RespId, out dbResp))
-                            {
-                                var selRsp = await _context.SupervisorResponsibilities
-                                    .Where(x => x.Id == rsp.RespId)
-                                    .FirstOrDefaultAsync();
-                                if (selRsp == null)
-                                {
-                                    continue;
-                                }
-                                dbResp = selRsp;
-                                RespCache.Add(rsp.RespId, dbResp);
-                            }
-                            var existTeam = await _context.TeamMembers
-                                .Where(x => x.Supervisor.IdentityUserId == Input.UserId &&
-                                            x.Subordinate.IdentityUserId == selUsr.IdentityUserId)
-                                .Include(y => y.SupervisorResponsibilities)
-                                .FirstOrDefaultAsync();
+            //if (string.IsNullOrEmpty(AddUserId) && string.IsNullOrEmpty(AddRespId))
+            //{
+            //    // save changes to the database.
+            //    if (Input.SelectedUsers != null && Input.SelectedUsers.Count() > 0 &&
+            //        Input.SelectedResps != null && Input.SelectedResps.Count() > 0)
+            //    {
+            //        var hUser = await _context.HelpdeskUsers
+            //            .Where(x => x.IdentityUserId == Input.UserId)
+            //            .FirstOrDefaultAsync();
+            //        if (hUser == null)
+            //        {
+            //            return RedirectToPage("./People/Index");
+            //        }
+            //        Dictionary<int, SupervisorResponsibility> RespCache = new Dictionary<int, SupervisorResponsibility>();
+            //        foreach (var user in Input.SelectedUsers) 
+            //        {
+            //            var selUsr = await _context.HelpdeskUsers
+            //                .Where(x => x.IdentityUserId == user.UserId)
+            //                .FirstOrDefaultAsync();
+            //            if (selUsr == null)
+            //            {
+            //                continue;
+            //            }
+            //            var seliUsr = await _context.Users
+            //                .Where(x => x.Id == selUsr.IdentityUserId)
+            //                .FirstOrDefaultAsync();
+            //            if (seliUsr == null)
+            //            {
+            //                continue;
+            //            }
+            //            foreach (var rsp in Input.SelectedResps)
+            //            {
+            //                SupervisorResponsibility? dbResp;
+            //                if (!RespCache.TryGetValue(rsp.RespId, out dbResp))
+            //                {
+            //                    var selRsp = await _context.SupervisorResponsibilities
+            //                        .Where(x => x.Id == rsp.RespId)
+            //                        .FirstOrDefaultAsync();
+            //                    if (selRsp == null)
+            //                    {
+            //                        continue;
+            //                    }
+            //                    dbResp = selRsp;
+            //                    RespCache.Add(rsp.RespId, dbResp);
+            //                }
+            //                var existTeam = await _context.TeamMembers
+            //                    .Where(x => x.Supervisor.IdentityUserId == Input.UserId &&
+            //                                x.Subordinate.IdentityUserId == selUsr.IdentityUserId)
+            //                    .Include(y => y.SupervisorResponsibilities)
+            //                    .FirstOrDefaultAsync();
 
-                            if (existTeam == null)
-                            {
-                                existTeam = new TeamMember()
-                                {
-                                    Supervisor = hUser,
-                                    Subordinate = selUsr
-                                };
-                                _context.TeamMembers.Add(existTeam);
-                                await _context.SaveChangesAsync();                                
-                            }
-                            if (!existTeam.SupervisorResponsibilities.Contains(dbResp))
-                            {
-                                existTeam.SupervisorResponsibilities.Add(dbResp);
-                                await _context.SaveChangesAsync();
-                            }
-                        }
-                    }
-                }
-            }
+            //                if (existTeam == null)
+            //                {
+            //                    existTeam = new TeamMember()
+            //                    {
+            //                        Supervisor = hUser,
+            //                        Subordinate = selUsr
+            //                    };
+            //                    _context.TeamMembers.Add(existTeam);
+            //                    await _context.SaveChangesAsync();                                
+            //                }
+            //                if (!existTeam.SupervisorResponsibilities.Contains(dbResp))
+            //                {
+            //                    existTeam.SupervisorResponsibilities.Add(dbResp);
+            //                    await _context.SaveChangesAsync();
+            //                }
+            //            }
+            //        }
+            //    }
+            //}
 
             await BuildUserList();
             await BuildRespList();

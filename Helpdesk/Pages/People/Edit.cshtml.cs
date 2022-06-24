@@ -57,6 +57,23 @@ namespace Helpdesk.Pages.People
 
             public List<LicenseItem> Licenses { get; set; }
             public List<UserRoleItem> UserRoles { get; set; }
+
+            public List<TeamMbr> Supervisors { get; set; }
+            public List<TeamMbr> Subordinates { get; set; }
+        }
+
+        public class TeamMbr
+        {
+            public int Id { get; set; }
+            [Display(Name = "Name")]
+            public string DisplayName { get; set; }
+            public List<TeamMbrResp> Responsibilities { get; set; }
+        }
+
+        public class TeamMbrResp
+        {
+            public int Id { get; set; }
+            public string Display { get; set; }
         }
 
         public class LicenseItem
@@ -162,6 +179,8 @@ namespace Helpdesk.Pages.People
                 Group = hUser.Group?.Name
             };
             await PopulateLicenses(iUser);
+            await PopulateSupervisors(iUser);
+            await PopulateSubordinates(iUser);
             if (ShowUserRoleAdmin)
             {
                 await PopulateUserRoles(iUser);
@@ -280,6 +299,8 @@ namespace Helpdesk.Pages.People
             if (iUser == null)
             {
                 await PopulateLicenses(iUser);
+                await PopulateSupervisors(iUser);
+                await PopulateSubordinates(iUser);
                 return NotFound();
             }
 
@@ -314,6 +335,8 @@ namespace Helpdesk.Pages.People
             if (failValidation)
             {
                 await PopulateLicenses(iUser);
+                await PopulateSupervisors(iUser);
+                await PopulateSubordinates(iUser);
                 return Page();
             }
 
@@ -485,6 +508,61 @@ namespace Helpdesk.Pages.People
             //await PopulateUserRoles(iUser);
             //await PopulateLicenses(iUser);
             return RedirectToPage("/People/Edit", new { id = iUser.Id });
+        }
+
+
+        private async Task PopulateSupervisors(IdentityUser iUser)
+        {
+            Input.Supervisors = new List<TeamMbr>();
+            var team = await _context.TeamMembers
+                .Where(x => x.Subordinate.IdentityUserId == iUser.Id)
+                .Include(x => x.Supervisor)
+                .Include(x => x.Responsibilities)
+                .ThenInclude(y => y.Responsibility)
+                .ToListAsync();
+            foreach (var t in team)
+            {
+                var teamMember = new TeamMbr();
+                teamMember.Id = t.Id;
+                teamMember.DisplayName = t.Supervisor.DisplayName;
+                teamMember.Responsibilities = new List<TeamMbrResp>();
+                foreach (var r in t.Responsibilities)
+                {
+                    teamMember.Responsibilities.Add(new TeamMbrResp()
+                    {
+                        Id = r.Id,
+                        Display = string.Format("{0} ({1})", r.Responsibility.Name, r.Responsibility.Description)
+                    });
+                }
+                Input.Supervisors.Add(teamMember);
+            }
+        }
+
+        private async Task PopulateSubordinates(IdentityUser iUser)
+        {
+            Input.Subordinates = new List<TeamMbr>();
+            var team = await _context.TeamMembers
+                .Where(x => x.Supervisor.IdentityUserId == iUser.Id)
+                .Include(x => x.Subordinate)
+                .Include(x => x.Responsibilities)
+                .ThenInclude(y => y.Responsibility)
+                .ToListAsync();
+            foreach (var t in team)
+            {
+                var teamMember = new TeamMbr();
+                teamMember.Id = t.Id;
+                teamMember.DisplayName = t.Subordinate.DisplayName;
+                teamMember.Responsibilities = new List<TeamMbrResp>();
+                foreach (var r in t.Responsibilities)
+                {
+                    teamMember.Responsibilities.Add(new TeamMbrResp()
+                    {
+                        Id = r.Id,
+                        Display = string.Format("{0} ({1})", r.Responsibility.Name, r.Responsibility.Description)
+                    });
+                }
+                Input.Subordinates.Add(teamMember);
+            }
         }
     }
 }

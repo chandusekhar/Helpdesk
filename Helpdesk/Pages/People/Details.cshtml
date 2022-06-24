@@ -13,7 +13,7 @@
     <li class="nav-item" role="presentation">
         <button class="nav-link active" id="userprofile-tab" data-bs-toggle="tab" data-bs-target="#userprofile" type="button" role="tab" aria-controls="userprofile" aria-selected="true">User&nbsp;Profile</button>
     </li>
-    @if (@Model.Input.Team != null && @Model.Input.Team.Count() > 0)
+    @if ((@Model.Input.Supervisors != null && @Model.Input.Supervisors.Count() > 0) || (@Model.Input.Subordinates != null && @Model.Input.Subordinates.Count() > 0))
     {
         <li class="nav-item" role="presentation">
             <button class="nav-link" id="team-tab" data-bs-toggle="tab" data-bs-target="#team" type="button" role="tab" aria-controls="team" aria-selected="true">Team</button>
@@ -106,40 +106,73 @@
                 </div>
         </div>
     </div>
-    @if (@Model.Input.Team != null && @Model.Input.Team.Count() > 0)
+    @if ((@Model.Input.Supervisors != null && @Model.Input.Supervisors.Count() > 0) || (@Model.Input.Subordinates != null && @Model.Input.Subordinates.Count() > 0))
     {
         <div class="tab-pane fade" id="team" role="tabpanel" aria-labelledby="team-tab">
             <div class="border container" style="padding:30px;">
                 <div class="row">
                     <div class="col-md-12">
                         <span class="h3">Team Members</span>
-                        <p>List of employees managed by this supervisor.</p>
+                        <p></p>
                     </div>
                 </div>
                 <br />
-                <div class="accordion" id="teamaccordion">
-                    @for(int i = 0; i < @Model.Input.Team.Count(); i++)
-                    {
-                        string heading = string.Format("heading{0}", i.ToString());
-                        string collapse = string.Format("collapse{0}", i.ToString());
-                        string hashcollapse = string.Format("#collapse{0}", i.ToString());
-                        <div class="accordion-item">
-                            <h2 class="accordion-header" id="@heading">
-                                <button class="accordion-button" type="button" data-bs-toggle="@collapse" data-bs-target="@hashcollapse" aria-expanded="false" aria-controls="@collapse">
-                                    <text>@Model.Input.Team[i].DisplayName</text>
-                                </button>
-                            </h2>
-                        </div>
-                        <div id="@collapse" class="accordion-collapse collapse" aria-labelledby="@heading" data-bs-parent="#teamaccordion">
-                            <div class="accordion-body">
-                                @foreach (var item in @Model.Input.Team[i].Responsibilities)
-                                {
-                                    <p>@item</p>
-                                }
+                @if (@Model.Input.Supervisors != null && @Model.Input.Supervisors.Count() > 0)
+                {
+                    <h4>@Model.Input.DisplayName's Supervisors</h4>
+                    <div class="accordion accordion-flush" id="supaccordion">
+                        @for (int i = 0; i < @Model.Input.Supervisors.Count(); i++)
+                        {
+                            string heading = string.Format("flush-headingsup{0}", i.ToString());
+                            string collapse = string.Format("collapsesup{0}", i.ToString());
+                            string hashcollapse = string.Format("#collapsesup{0}", i.ToString());
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="@heading">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="@hashcollapse" aria-expanded="false" aria-controls="@collapse">
+                                        <text>@Model.Input.Supervisors[i].DisplayName</text>
+                                    </button>
+                                </h2>
                             </div>
-                        </div>
-                    }
-                </div>
+                            <div id="@collapse" class="accordion-collapse collapse" aria-labelledby="@heading" data-bs-parent="#supaccordion">
+                                <div class="accordion-body">
+                                    <p>This supervisor's responsibilities</p>
+                                    @foreach (var item in @Model.Input.Supervisors[i].Responsibilities)
+                                    {
+                                        <p>@item.Display</p>
+                                    }
+                                </div>
+                            </div>
+                        }
+                    </div>
+                    <br />
+                }
+                @if (@Model.Input.Subordinates != null && @Model.Input.Subordinates.Count() > 0)
+                {
+                    <h4>@Model.Input.DisplayName Supervises the following people</h4>
+                    <div class="accordion accordion-flush" id="subaccordian">
+                        @for (int i = 0; i < @Model.Input.Subordinates.Count(); i++)
+                        {
+                            string heading = string.Format("heading{0}", i.ToString());
+                            string collapse = string.Format("collapse{0}", i.ToString());
+                            string hashcollapse = string.Format("#collapse{0}", i.ToString());
+                            <div class="accordion-item">
+                                <h2 class="accordion-header" id="@heading">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="@hashcollapse" aria-expanded="false" aria-controls="@collapse">
+                                        <text>@Model.Input.Subordinates[i].DisplayName</text>
+                                    </button>
+                                </h2>
+                            </div>
+                            <div id="@collapse" class="accordion-collapse collapse" aria-labelledby="@heading" data-bs-parent="#subaccordian">
+                                <div class="accordion-body">
+                                    @foreach (var item in @Model.Input.Subordinates[i].Responsibilities)
+                                    {
+                                        <p>@item.Display</p>
+                                    }
+                                </div>
+                            </div>
+                        }
+                    </div>
+                }
             </div>
         </div>
     }
