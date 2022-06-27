@@ -37,7 +37,7 @@ namespace Helpdesk.Pages.TicketStatuses
             }
             if (_context.TicketStatuses != null)
             {
-                TicketStatus = await _context.TicketStatuses.ToListAsync();
+                TicketStatus = await _context.TicketStatuses.OrderBy(x => x.DisplayOrder).ToListAsync();
             }
             return Page();
         }

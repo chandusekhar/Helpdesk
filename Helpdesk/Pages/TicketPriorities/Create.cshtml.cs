@@ -45,6 +45,9 @@ namespace Helpdesk.Pages.TicketPriorities
             public string Name { get; set; }
             [Required]
             public string Description { get; set; }
+            [Required]
+            [Display(Name = "Display Order")]
+            public int DisplayOrder { get; set; }
         }
 
         [BindProperty]
@@ -79,7 +82,8 @@ namespace Helpdesk.Pages.TicketPriorities
             {
                 Name = TicketPriority.Name,
                 Description = TicketPriority.Description,
-                IsSystemType = false
+                IsSystemType = false,
+                DisplayOrder = TicketPriority.DisplayOrder,
             };
             _context.TicketPriority.Add(tp);
             await _context.SaveChangesAsync();

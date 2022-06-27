@@ -89,6 +89,7 @@ namespace Helpdesk.Pages.TicketStatuses
             ts.Description = TicketStatus.Description;
             ts.IsCompleted = TicketStatus.IsCompleted;
             ts.Archived = TicketStatus.Archived;
+            ts.DisplayOrder = TicketStatus.DisplayOrder;
 
             _context.TicketStatuses.Update(ts);
             

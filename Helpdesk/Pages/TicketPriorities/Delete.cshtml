@@ -24,6 +24,12 @@
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.TicketPriority.Description)
         </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.TicketPriority.DisplayOrder)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.TicketPriority.DisplayOrder)
+        </dd>
     </dl>
     
     <form method="post">

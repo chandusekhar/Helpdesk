@@ -87,6 +87,7 @@ namespace Helpdesk.Pages.TicketPriorities
             }
             tp.Name = TicketPriority.Name;
             tp.Description = TicketPriority.Description;
+            tp.DisplayOrder = TicketPriority.DisplayOrder;
             _context.TicketPriority.Update(tp);
             await _context.SaveChangesAsync();
             return RedirectToPage("./Index");

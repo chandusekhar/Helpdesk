@@ -349,6 +349,7 @@ namespace Helpdesk.Data
                                 {
                                     Name = s.Name,
                                     Description = s.Description,
+                                    DisplayOrder = s.DisplayOrder,
                                     IsSystemType = s.IsSystemType,
                                     IsCompleted = s.IsCompleted,
                                     Archived = s.Archived
@@ -361,6 +362,30 @@ namespace Helpdesk.Data
                     }
                 }
 
+                // Ticket Priority
+                foreach (var item in TicketPriorityCatalog.Catalog)
+                {
+                    if (item.Version == dbVersion.Value)
+                    {
+                        foreach (var s in item.Templates)
+                        {
+                            var st = await context.TicketPriority.Where(x => x.Name == s.Name).FirstOrDefaultAsync();
+                            if (st == null)
+                            {
+                                st = new TicketPriority()
+                                {
+                                    Name = s.Name,
+                                    Description = s.Description,
+                                    DisplayOrder = s.DisplayOrder,
+                                    IsSystemType = s.IsSystemType,
+                                };
+                                context.TicketPriority.Add(st);
+                                await context.SaveChangesAsync();
+                                context.Entry(st).State = EntityState.Detached;
+                            }
+                        }
+                    }
+                }
 
                 // site settings.
                 var rollup = ConfigOptRollupCatalog.RollupIndex.Where(x => x.Version == dbVersion.Value).FirstOrDefault();
@@ -1654,6 +1679,54 @@ namespace Helpdesk.Data
         };
     }
 
+    public class TicketPriorityVersion
+    {
+        public string Version { get; set; }
+        public List<TicketPriority> Templates { get; set; }
+    }
+
+    public static class TicketPriorityCatalog
+    {
+        public static List<TicketPriorityVersion> Catalog = new List<TicketPriorityVersion>()
+        {
+            new TicketPriorityVersion()
+            {
+                Version = "",
+                Templates = new List<TicketPriority>()
+                {
+                    new TicketPriority()
+                    {
+                        Name = "Low",
+                        Description = "Low Priority",
+                        DisplayOrder = 100,
+                        IsSystemType = true
+                    },
+                    new TicketPriority()
+                    {
+                        Name = "Medium",
+                        Description = "Medium Priority",
+                        DisplayOrder = 200,
+                        IsSystemType = true
+                    },
+                    new TicketPriority()
+                    {
+                        Name = "High",
+                        Description = "High Priority",
+                        DisplayOrder = 300,
+                        IsSystemType = true
+                    },
+                    new TicketPriority()
+                    {
+                        Name = "Critical",
+                        Description = "Critical Priority",
+                        DisplayOrder = 400,
+                        IsSystemType = true
+                    }
+                }
+            }
+        };
+    }
+
     public class TicketStatusVersion
     {
         public string Version { get; set; }
@@ -1673,6 +1746,7 @@ namespace Helpdesk.Data
                     {
                         Name = TicketStatusStrings.NewTicket,
                         Description = "New Ticket",
+                        DisplayOrder = 100,
                         IsSystemType = true,
                         IsCompleted = false,
                         Archived = false
@@ -1681,6 +1755,7 @@ namespace Helpdesk.Data
                     {
                         Name = TicketStatusStrings.OpenTicket,
                         Description = "Assigned to an agent",
+                        DisplayOrder = 200,
                         IsSystemType = true,
                         IsCompleted = false,
                         Archived = false
@@ -1689,6 +1764,7 @@ namespace Helpdesk.Data
                     {
                         Name = TicketStatusStrings.OnHoldTicket,
                         Description = "Waiting for response from submitter",
+                        DisplayOrder = 300,
                         IsSystemType = true,
                         IsCompleted = false,
                         Archived = false
@@ -1697,6 +1773,7 @@ namespace Helpdesk.Data
                     {
                         Name = TicketStatusStrings.PendingTicket,
                         Description = "Waiting for internal response",
+                        DisplayOrder = 400,
                         IsSystemType = true,
                         IsCompleted = false,
                         Archived = false
@@ -1705,6 +1782,7 @@ namespace Helpdesk.Data
                     {
                         Name = TicketStatusStrings.CompleteTicket,
                         Description = "Ticket is completed",
+                        DisplayOrder = 500,
                         IsSystemType = true,
                         IsCompleted = true,
                         Archived = false
@@ -1713,6 +1791,7 @@ namespace Helpdesk.Data
                     {
                         Name = TicketStatusStrings.RejectedTicket,
                         Description = "Ticket will not be completed",
+                        DisplayOrder = 600,
                         IsSystemType = true,
                         IsCompleted = true,
                         Archived = false
@@ -1721,6 +1800,7 @@ namespace Helpdesk.Data
                     {
                         Name = TicketStatusStrings.ClosedTicket,
                         Description = "Ticket has been closed",
+                        DisplayOrder = 700,
                         IsSystemType = true,
                         IsCompleted = true,
                         Archived = true

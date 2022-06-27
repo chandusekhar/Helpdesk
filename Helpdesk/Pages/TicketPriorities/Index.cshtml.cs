@@ -38,7 +38,7 @@ namespace Helpdesk.Pages.TicketPriorities
             }
             if (_context.TicketPriority != null)
             {
-                TicketPriority = await _context.TicketPriority.ToListAsync();
+                TicketPriority = await _context.TicketPriority.OrderBy(x => x.DisplayOrder).ToListAsync();
             }
             return Page();
         }
