@@ -10,5 +10,7 @@ namespace Helpdesk.Data
         public string Name { get; set; }
         [Required]
         public string Description { get; set; }
+        [Required]
+        public bool IsSystemType { get; set; }
     }
 }

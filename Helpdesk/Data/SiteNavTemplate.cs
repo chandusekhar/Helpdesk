@@ -87,10 +87,16 @@ namespace Helpdesk.Data
         public bool LocationsLink { get; set; }
 
         /// <summary>
-        /// Shows the ActionStatuses link on the Configuration menu
+        /// Shows the TaskStatuses link on the Configuration menu
         /// </summary>
         [Required]
         public bool TaskStatusesLink { get; set; }
+
+        /// <summary>
+        /// Shows the TicketPriorities link on the Configuration menu
+        /// </summary>
+        [Required]
+        public bool TicketPrioritiesLink { get; set; }
 
         /// <summary>
         /// Shows the TicketStatuses link on the Configuration menu

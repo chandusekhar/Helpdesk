@@ -150,6 +150,10 @@ namespace Helpdesk.Infrastructure
                             {
                                 viewData.Add("NavbarShowSuperRespLink", "true");
                             }
+                            if (_currentHelpdeskUser.SiteNavTemplate.TicketPrioritiesLink)
+                            {
+                                viewData.Add("NavbarShowTicketPrioritiesLink", "true");
+                            }
                             if (_currentHelpdeskUser.SiteNavTemplate.TicketStatusesLink)
                             {
                                 viewData.Add("NavbarShowTicketStatusesLink", "true");

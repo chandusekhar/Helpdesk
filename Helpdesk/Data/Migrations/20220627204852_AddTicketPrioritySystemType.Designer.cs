@@ -4,6 +4,7 @@ using Helpdesk.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Helpdesk.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220627204852_AddTicketPrioritySystemType")]
+    partial class AddTicketPrioritySystemType
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -616,9 +618,6 @@ namespace Helpdesk.Data.Migrations
                         .HasColumnType("bit");
 
                     b.Property<bool>("TicketMenu")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("TicketPrioritiesLink")
                         .HasColumnType("bit");
 
                     b.Property<bool>("TicketStatusesLink")
