@@ -9,6 +9,8 @@ using Helpdesk.Data;
 using Helpdesk.Infrastructure;
 using Microsoft.AspNetCore.Identity;
 using Helpdesk.Authorization;
+using System.ComponentModel.DataAnnotations;
+using System.Globalization;
 
 namespace Helpdesk.Pages.Tickets
 {
@@ -21,7 +23,27 @@ namespace Helpdesk.Pages.Tickets
             : base(dbContext, userManager, signInManager)
         { }
 
-        public IList<TicketMaster> TicketMaster { get;set; } = default!;
+        public class TicketView
+        {
+            public string Id { get; set; }
+            public string Title { get; set; }
+            [Display(Name = "Type")]
+            public string Type { get; set; }
+            [Display(Name = "Submit Date")]
+            public string SubmitDate { get; set; }
+            public string RequesterId { get; set; }
+            public string Requester { get; set; }
+            public string HandlerId { get; set; }
+            public string Handler { get; set; }
+            public string Status { get; set; }
+            public string Priority { get; set; }
+            [Display(Name = "Last Update")]
+            public string LastUpdate { get; set; }
+            [Display(Name = "Due Date")]
+            public string DueDate { get; set; }
+        }
+
+        public IList<TicketView> Tickets { get;set; } = default!;
 
         public async Task<IActionResult> OnGetAsync()
         {
@@ -38,10 +60,39 @@ namespace Helpdesk.Pages.Tickets
             {
                 return Forbid();
             }
-            if (_context.TicketMasters != null)
+            Tickets = new List<TicketView>();
+
+            var tickets = await _context.TicketMasters
+                .Where(x => !x.TicketStatus.Archived &&
+                            (x.TicketWatchers.Any(y => y.User.IdentityUserId == _currentHelpdeskUser.IdentityUserId) ||
+                             x.Requester.IdentityUserId == _currentHelpdeskUser.IdentityUserId ||
+                             (x.Handler != null && x.Handler.IdentityUserId == _currentHelpdeskUser.IdentityUserId)))
+                .Include(x => x.TicketStatus)
+                .Include(x => x.Requester)
+                .Include(x => x.Handler)
+                .Include(x => x.TicketType)
+                .Include(x => x.TicketPriority)
+                .OrderBy(x => x.CreationDate)
+                .ToListAsync();
+            foreach (var ticket in tickets)
             {
-                TicketMaster = await _context.TicketMasters.ToListAsync();
+                Tickets.Add(new TicketView()
+                {
+                    Id = ticket.Id,
+                    Title = ticket.Title,
+                    Type = ticket.TicketType?.Name ?? "",
+                    SubmitDate = ticket.CreationDate.ToString("f", CultureInfo.GetCultureInfo("en-US")),
+                    Requester = ticket.Requester.DisplayName,
+                    RequesterId = ticket.Requester.IdentityUserId,
+                    Handler = ticket.Handler?.DisplayName ?? "",
+                    HandlerId = ticket.Handler?.IdentityUserId ?? "",
+                    Status = ticket.TicketStatus.Name,
+                    Priority = ticket.TicketPriority.Name,
+                    LastUpdate = ticket.LastUpdate?.ToString("f", CultureInfo.GetCultureInfo("en-US")) ?? "",
+                    DueDate = ticket.DueDate?.ToString("f", CultureInfo.GetCultureInfo("en-US")) ?? ""
+                });
             }
+
             return Page();
         }
     }

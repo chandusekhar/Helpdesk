@@ -47,10 +47,19 @@ namespace Helpdesk.Data
         /// </summary>
         public DateTime? DueDate { get; set; }
         /// <summary>
+        /// When was this ticket or any of the tasks in it last updated
+        /// </summary
+        public DateTime? LastUpdate { get; set; }
+        /// <summary>
         /// What status is this ticket
         /// </summary>
         [Required]
         public TicketStatus TicketStatus { get; set; }
+        /// <summary>
+        /// Priority of the ticket
+        /// </summary>
+        [Required]
+        public TicketPriority TicketPriority { get; set; }
         /// <summary>
         /// Actions that have been created for this ticket
         /// </summary>

@@ -14,39 +14,63 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.TicketMaster[0].Title)
+                @Html.DisplayNameFor(model => model.Tickets[0].Title)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.TicketMaster[0].Description)
+                @Html.DisplayNameFor(model => model.Tickets[0].Type)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.TicketMaster[0].CreationDate)
+                @Html.DisplayNameFor(model => model.Tickets[0].SubmitDate)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.TicketMaster[0].DueDate)
+                @Html.DisplayNameFor(model => model.Tickets[0].Requester)
             </th>
-            <th></th>
+            <th>
+                @Html.DisplayNameFor(model => model.Tickets[0].Handler)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Tickets[0].Status)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Tickets[0].Priority)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Tickets[0].LastUpdate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Tickets[0].DueDate)
+            </th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model.TicketMaster) {
+@foreach (var item in Model.Tickets) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.Title)
+                <a href="/Tickets/Details?id=@item.Id">@item.Title</a>
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Description)
+                @Html.DisplayFor(modelItem => item.Type)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.CreationDate)
+                @Html.DisplayFor(modelItem => item.SubmitDate)
+            </td>
+            <td>
+                <a href="/People/Details?id=@item.RequesterId">@item.Requester</a>
+            </td>
+            <td>
+                <a href="/People/Details?id=@item.HandlerId">@item.Handler</a>
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Status)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Priority)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.LastUpdate)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.DueDate)
-            </td>
-            <td>
-                <a asp-page="./Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-page="./Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-page="./Delete" asp-route-id="@item.Id">Delete</a>
             </td>
         </tr>
 }

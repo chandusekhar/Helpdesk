@@ -119,6 +119,10 @@ namespace Helpdesk.Data
         /// </summary>
         public DbSet<TicketMaster> TicketMasters { get; set; }
         /// <summary>
+        /// Priority of a ticket
+        /// </summary>
+        public DbSet<TicketPriority> TicketPriority { get; set; }
+        /// <summary>
         /// Status of an task, such as new, complete, rejected, etc.
         /// </summary>
         public DbSet<TaskStatus> TaskStatuses { get; set; }
