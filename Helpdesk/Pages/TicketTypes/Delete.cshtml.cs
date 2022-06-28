@@ -62,6 +62,34 @@ namespace Helpdesk.Pages.TicketTypes
                 }
                 _context.TicketTypes.Remove(tickettype);
                 await _context.SaveChangesAsync();
+
+                if (!string.IsNullOrEmpty(tickettype.ViewClaim))
+                {
+                    var claim = await _context.HelpdeskClaims.Where(x => x.Name == tickettype.ViewClaim).FirstOrDefaultAsync();
+                    if (claim != null)
+                    {
+                        _context.HelpdeskClaims.Remove(claim);
+                        await _context.SaveChangesAsync();
+                    }
+                }
+                if (!string.IsNullOrEmpty(tickettype.EditClaim))
+                {
+                    var claim = await _context.HelpdeskClaims.Where(x => x.Name == tickettype.EditClaim).FirstOrDefaultAsync();
+                    if (claim != null)
+                    {
+                        _context.HelpdeskClaims.Remove(claim);
+                        await _context.SaveChangesAsync();
+                    }
+                }
+                if (!string.IsNullOrEmpty(tickettype.CreationClaim))
+                {
+                    var claim = await _context.HelpdeskClaims.Where(x => x.Name == tickettype.CreationClaim).FirstOrDefaultAsync();
+                    if (claim != null)
+                    {
+                        _context.HelpdeskClaims.Remove(claim);
+                        await _context.SaveChangesAsync();
+                    }
+                }
             }
 
             return RedirectToPage("./Index");

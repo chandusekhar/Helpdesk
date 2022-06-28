@@ -10,16 +10,16 @@
 <h4>HelpdeskRole</h4>
 <hr />
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-12">
         <form method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="HelpdeskRole.Id" />
-            <div class="form-group">
+            <div class="form-group col-md-4">
                 <label asp-for="HelpdeskRole.Name" class="control-label"></label>
                 <input asp-for="HelpdeskRole.Name" class="form-control" />
                 <span asp-validation-for="HelpdeskRole.Name" class="text-danger"></span>
             </div>
-            <div class="form-group">
+            <div class="form-group col-md-4">
                 <label asp-for="HelpdeskRole.Description" class="control-label"></label>
                 <input asp-for="HelpdeskRole.Description" class="form-control" />
                 <span asp-validation-for="HelpdeskRole.Description" class="text-danger"></span>

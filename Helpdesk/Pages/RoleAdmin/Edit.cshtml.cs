@@ -91,7 +91,7 @@ namespace Helpdesk.Pages.RoleAdmin
             var allClaims = await RightsManagement.GetAllClaims(_context);
             var heldClaims = await RightsManagement.GetRoleClaims(_context, helpdeskrole.Name);
             List<RoleClaim> claims = new List<RoleClaim>();
-            foreach (var claim in allClaims.OrderBy(x => x.Name))
+            foreach (var claim in allClaims.OrderByDescending(x => x.IsSystemType).ThenBy(x => x.Name))
             {
                 bool held = heldClaims.Where(x => x.Name == claim.Name).Any();
                 claims.Add(new RoleClaim()

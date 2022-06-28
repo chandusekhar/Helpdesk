@@ -37,7 +37,10 @@ namespace Helpdesk.Pages.RoleAdmin
             }
             if (_context.HelpdeskRoles != null)
             {
-                HelpdeskRole = await _context.HelpdeskRoles.ToListAsync();
+                HelpdeskRole = await _context.HelpdeskRoles
+                    .OrderByDescending(x => x.IsSuperAdmin)
+                    .ThenBy(x => x.Name)
+                    .ToListAsync();
             }
             return Page();
         }
