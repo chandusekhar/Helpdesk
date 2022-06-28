@@ -1,0 +1,59 @@
+﻿@page
+@model Helpdesk.Pages.TicketTypes.CreateModel
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>TicketType</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="TicketType.Category" class="control-label"></label>
+                <input asp-for="TicketType.Category" class="form-control" />
+                <span asp-validation-for="TicketType.Category" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TicketType.Name" class="control-label"></label>
+                <input asp-for="TicketType.Name" class="form-control" />
+                <span asp-validation-for="TicketType.Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TicketType.Description" class="control-label"></label>
+                <input asp-for="TicketType.Description" class="form-control" />
+                <span asp-validation-for="TicketType.Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TicketType.CreationClaim" class="control-label"></label>
+                <input asp-for="TicketType.CreationClaim" class="form-control" />
+                <span asp-validation-for="TicketType.CreationClaim" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TicketType.EditClaim" class="control-label"></label>
+                <input asp-for="TicketType.EditClaim" class="form-control" />
+                <span asp-validation-for="TicketType.EditClaim" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TicketType.ViewClaim" class="control-label"></label>
+                <input asp-for="TicketType.ViewClaim" class="form-control" />
+                <span asp-validation-for="TicketType.ViewClaim" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-page="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

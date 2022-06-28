@@ -158,6 +158,10 @@ namespace Helpdesk.Infrastructure
                             {
                                 viewData.Add("NavbarShowTicketStatusesLink", "true");
                             }
+                            if (_currentHelpdeskUser.SiteNavTemplate.TicketTypeLink)
+                            {
+                                viewData.Add("NavbarShowTicketTypeLink", "true");
+                            }
                             if (_currentHelpdeskUser.SiteNavTemplate.TaskStatusesLink)
                             {
                                 viewData.Add("NavbarShowTaskStatusesLink", "true");

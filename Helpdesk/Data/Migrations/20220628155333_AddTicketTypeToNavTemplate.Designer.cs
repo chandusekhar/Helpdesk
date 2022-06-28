@@ -4,6 +4,7 @@ using Helpdesk.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Helpdesk.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220628155333_AddTicketTypeToNavTemplate")]
+    partial class AddTicketTypeToNavTemplate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -921,6 +923,9 @@ namespace Helpdesk.Data.Migrations
 
                     b.Property<string>("EditClaim")
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("IsSystemType")
+                        .HasColumnType("bit");
 
                     b.Property<string>("Name")
                         .IsRequired()

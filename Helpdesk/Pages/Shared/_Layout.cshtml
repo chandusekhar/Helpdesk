@@ -139,6 +139,10 @@
                                     {
                                         <li><a class="dropdown-item" asp-area="" asp-page="/TicketStatuses/Index">Ticket&nbsp;Statuses</a></li>
                                     }
+                                    @if (@ViewData.ContainsKey("NavbarShowTicketTypeLink"))
+                                    {
+                                        <li><a class="dropdown-item" asp-area="" asp-page="/TicketTypes/Index">Ticket&nbsp;Types</a></li>
+                                    }
                                 </ul>
                             </li>
                         }

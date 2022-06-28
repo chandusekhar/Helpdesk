@@ -1,0 +1,58 @@
+﻿@page
+@model Helpdesk.Pages.TicketTypes.DeleteModel
+
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<h1>Delete</h1>
+
+<h3>Are you sure you want to delete this?</h3>
+<div>
+    <h4>TicketType</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.TicketType.Category)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.TicketType.Category)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.TicketType.Name)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.TicketType.Name)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.TicketType.Description)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.TicketType.Description)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.TicketType.CreationClaim)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.TicketType.CreationClaim)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.TicketType.EditClaim)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.TicketType.EditClaim)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.TicketType.ViewClaim)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.TicketType.ViewClaim)
+        </dd>
+    </dl>
+    
+    <form method="post">
+        <input type="hidden" asp-for="TicketType.Id" />
+        <input type="submit" value="Delete" class="btn btn-danger" /> |
+        <a asp-page="./Index">Back to List</a>
+    </form>
+</div>

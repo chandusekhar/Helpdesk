@@ -111,6 +111,7 @@ namespace Helpdesk.Data
                             temp.TicketLink = item.SiteNavTemplate.TicketLink;
                             temp.TicketStatusesLink = item.SiteNavTemplate.TicketStatusesLink;
                             temp.TicketPrioritiesLink = item.SiteNavTemplate.TicketPrioritiesLink;
+                            temp.TicketTypeLink = item.SiteNavTemplate.TicketTypeLink;
                             temp.TicketMenu = item.SiteNavTemplate.TicketMenu;
 
                             context.SiteNavTemplates.Update(temp);
@@ -829,6 +830,7 @@ namespace Helpdesk.Data
                     LocationsLink = true,
                     TaskStatusesLink = true,
                     TicketPrioritiesLink = true,
+                    TicketTypeLink = true,
                     TicketStatusesLink = true,
                     RoleAdminLink = true,
                     DocumentTypesLink = true,
@@ -858,6 +860,7 @@ namespace Helpdesk.Data
                     TaskStatusesLink = false,
                     TicketStatusesLink = false,
                     TicketPrioritiesLink = false,
+                    TicketTypeLink = false,
                     RoleAdminLink = false,
                     DocumentTypesLink = false,
                     FileManagerLink = false,
@@ -886,6 +889,7 @@ namespace Helpdesk.Data
                     TaskStatusesLink = false,
                     TicketStatusesLink = false,
                     TicketPrioritiesLink = false,
+                    TicketTypeLink = false,
                     RoleAdminLink = false,
                     DocumentTypesLink = false,
                     FileManagerLink = false,

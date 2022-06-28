@@ -11,7 +11,7 @@ namespace Helpdesk.Data
         [Required]
         public string Description { get; set; }
         [Required]
-        public bool IsSystemType { get; set; }
+        public string Category { get; set; }
 
         /// <summary>
         /// HelpdeskClaim that must be held for a user to create a ticket of this type

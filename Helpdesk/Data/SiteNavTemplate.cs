@@ -99,6 +99,12 @@ namespace Helpdesk.Data
         public bool TicketPrioritiesLink { get; set; }
 
         /// <summary>
+        /// Shows the Ticket Type link on the Configuration menu
+        /// </summary>
+        [Required]
+        public bool TicketTypeLink { get; set; }
+
+        /// <summary>
         /// Shows the TicketStatuses link on the Configuration menu
         /// </summary>
         [Required]
