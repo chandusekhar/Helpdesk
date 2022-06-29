@@ -171,6 +171,10 @@ namespace Helpdesk.Infrastructure
                     }
                 }
             }
+            else
+            {
+                viewData.Add("ShowNoUserWelcome", "true");
+            }
 
             ConfigOpt? opt = await _context.ConfigOpts
                 .Where(x => x.Category == ConfigOptConsts.Branding_SiteName.Category &&

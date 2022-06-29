@@ -1,11 +1,21 @@
 ﻿@page
+@using Helpdesk.Infrastructure
 @model IndexModel
 @{
     ViewData["Title"] = "Home page";
 }
-
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Welcome to the Helpdesk site. Please log in or register for a new account.</p>
-    @ViewData["SiteName"]
-</div>
+@if (@ViewData.ContainsKey("ShowNoUserWelcome"))
+{
+    <div class="text-center">
+        <h1 class="display-4">Welcome</h1>
+        <p>Welcome to @ViewData[@ViewDataStrings.Brand_SiteName]. Please log in or register for a new account.</p>
+    </div>
+}
+else
+{
+    // show announcements
+    <div class="text-center">
+        <h1 class="display-4">Hello @ViewData["IdentityUserName"]</h1>
+        <p>There are no recent announcements to show.</p>
+    </div>
+}
