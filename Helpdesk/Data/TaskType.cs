@@ -2,14 +2,14 @@
 
 namespace Helpdesk.Data
 {
-    public class TicketTaskType
+    public class TaskType
     {
         [Key]
         public int Id { get; set; }
-        public string Name { get; set; }
-        public string Description { get; set; }
         [Required]
-        public bool IsSystemType { get; set; }
+        public string Name { get; set; }
+        [Required]
+        public string Description { get; set; }
 
         /// <summary>
         /// HelpdeskClaim that must be held for a user to add an action of this type to a ticket
@@ -25,5 +25,7 @@ namespace Helpdesk.Data
         /// Make sure you add this claim if you are going to grant CreationClaim or EditClaim
         /// </summary>
         public string? ViewClaim { get; set; }
+
+        public ICollection<FieldType> TaskFields { get; set; }
     }
 }

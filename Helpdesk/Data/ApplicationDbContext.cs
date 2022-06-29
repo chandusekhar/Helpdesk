@@ -129,11 +129,22 @@ namespace Helpdesk.Data
         /// <summary>
         /// Kinds of tasks that can be assigned to a ticket. 
         /// </summary>
-        public DbSet<TicketTaskType> TicketTaskTypes { get; set; }
+        public DbSet<TaskType> TaskTypes { get; set; }
         /// <summary>
-        /// Tatsl that is required or performed for a ticket.
+        /// Defines the type of fields that can be added to assets, tickets, tasks, etc.
+        /// </summary>
+        public DbSet<FieldType> FieldTypes { get; set; }
+        /// <summary>
+        /// Task that is required or performed for a ticket.
         /// </summary>
         public DbSet<TicketTask> TicketTasks { get; set; }
+
+        public DbSet<FieldDataBoolean> FieldDataBooleans { get; set; }
+        public DbSet<FieldDataInteger> FieldDataIntegers { get; set; }
+        public DbSet<FieldDataNumber> FieldDataNumbers { get; set; }
+        public DbSet<FieldDataString> FieldDataStrings { get; set; }
+        public DbSet<FieldDataDatetime> FieldDataDatetimes { get; set; }
+        public DbSet<FieldDataEntityId> FieldDataEntityIds { get; set; }
 
     }
 }
