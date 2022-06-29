@@ -2,6 +2,9 @@
 
 namespace Helpdesk.Data
 {
+    /// <summary>
+    /// Defines a kind of ticket that can exist. 
+    /// </summary>
     public class TicketType
     {
         [Key]
@@ -28,6 +31,6 @@ namespace Helpdesk.Data
         /// </summary>
         public string? ViewClaim { get; set; }
 
-        public ICollection<TaskType> DefaultTasks { get; set; }
+        
     }
 }

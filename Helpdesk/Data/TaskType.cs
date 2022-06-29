@@ -2,6 +2,9 @@
 
 namespace Helpdesk.Data
 {
+    /// <summary>
+    /// Defines the kind of tasks that can be added to a ticket.
+    /// </summary>
     public class TaskType
     {
         [Key]
@@ -25,7 +28,5 @@ namespace Helpdesk.Data
         /// Make sure you add this claim if you are going to grant CreationClaim or EditClaim
         /// </summary>
         public string? ViewClaim { get; set; }
-
-        public ICollection<FieldType> TaskFields { get; set; }
     }
 }

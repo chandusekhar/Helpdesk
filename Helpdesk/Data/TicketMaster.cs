@@ -61,8 +61,9 @@ namespace Helpdesk.Data
         [Required]
         public TicketPriority TicketPriority { get; set; }
         /// <summary>
-        /// Actions that have been created for this ticket
+        /// Tasks that have been added to this ticket
         /// </summary>
-        public ICollection<TicketTask> TicketTasks { get; set; }
+        public ICollection<TicketTask> Tasks { get; set; }
+
     }
 }

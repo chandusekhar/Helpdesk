@@ -107,7 +107,7 @@ namespace Helpdesk.Data
         /// </summary>
         public DbSet<TicketStatus> TicketStatuses { get; set; }
         /// <summary>
-        /// Type of ticket that is used to filter access, as well as assign default tasks and fields for a ticket.
+        /// Type of tickets that can exist.
         /// </summary>
         public DbSet<TicketType> TicketTypes { get; set; }
         /// <summary>
@@ -127,24 +127,44 @@ namespace Helpdesk.Data
         /// </summary>
         public DbSet<TaskStatus> TaskStatuses { get; set; }
         /// <summary>
-        /// Kinds of tasks that can be assigned to a ticket. 
+        /// Defines the kind of tasks that can exist
         /// </summary>
         public DbSet<TaskType> TaskTypes { get; set; }
         /// <summary>
-        /// Defines the type of fields that can be added to assets, tickets, tasks, etc.
-        /// </summary>
-        public DbSet<FieldType> FieldTypes { get; set; }
-        /// <summary>
-        /// Task that is required or performed for a ticket.
+        /// Tasks the are required to be completed to complete a ticket.
         /// </summary>
         public DbSet<TicketTask> TicketTasks { get; set; }
+        /// <summary>
+        /// Defines the default tasks that are added to a ticket when it is created or has the type changed.
+        /// </summary>
+        public DbSet<TicketTypeDefaultTask> TicketTypeDefaultTasks { get; set; }
+        /// <summary>
+        /// Specifies the fields that are added to a ticket for a specified TicketType
+        /// </summary>
+        public DbSet<TicketTypeDefaultField> TicketTypeDefaultFields { get; set; }
 
-        public DbSet<FieldDataBoolean> FieldDataBooleans { get; set; }
-        public DbSet<FieldDataInteger> FieldDataIntegers { get; set; }
-        public DbSet<FieldDataNumber> FieldDataNumbers { get; set; }
-        public DbSet<FieldDataString> FieldDataStrings { get; set; }
-        public DbSet<FieldDataDatetime> FieldDataDatetimes { get; set; }
-        public DbSet<FieldDataEntityId> FieldDataEntityIds { get; set; }
 
+        /*
+        TO DO: 
+-- Ticket Definition Tables
+TicketType - Defines the types of tickets that can exist
+TicketTypeDefaultTask - Defines the tasks that will be added to a ticket when it is created (or type changed)
+TicketTypeDefaultField - Defines the fields that are added to a ticket when it is create (or type changed)
+TaskType - Defines the kind of tasks that can be added to a ticket.
+TaskTypeField - Defines the kind of fields that are added to a task
+FieldType - Defines the kind of data that a field will store (data type), or what it will reference
+
+
+-- Ticket Instance Tables
+TicketMaster - Instances of Tickets
+TicketField - Fields that are part of a ticket
+TicketTask - Tasks that are a assigned to a ticket
+TicketTaskField - Fields that are part of a task
+FieldData<type> - Stores data for TicketField and TicketTaskField records
+ 
+
+
+
+         */
     }
 }
