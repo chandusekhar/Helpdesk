@@ -143,6 +143,15 @@ namespace Helpdesk.Data
         /// </summary>
         public DbSet<TicketTypeDefaultField> TicketTypeDefaultFields { get; set; }
 
+        /// <summary>
+        /// placeholder
+        /// </summary>
+        public DbSet<FieldType> FieldTypes { get; set; }
+
+        /// <summary>
+        /// placeholder
+        /// </summary>
+        public DbSet<TaskTypeField> TaskTypeFields { get; set; }
 
         /*
         TO DO: 
