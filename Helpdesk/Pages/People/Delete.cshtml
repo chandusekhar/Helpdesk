@@ -2,10 +2,10 @@
 @model Helpdesk.Pages.People.DeleteModel
 
 @{
-    ViewData["Title"] = "Delete";
+    ViewData["Title"] = "Delete User";
 }
 
-<h1>Delete</h1>
+<h1>Delete @Model.Input.DisplayName</h1>
 
 <h3>Are you sure you want to delete this person?</h3>
 <p>This will remove all licenses and Roles assigned to this user, but will preserve tickets, assets, etc.</p>
